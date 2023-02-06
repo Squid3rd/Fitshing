@@ -1,0 +1,23 @@
+
+#delete-button:hover{
+    background-color: rgb(255, 68, 68);
+}
+.out{
+    background-color: #FAD6A5;
+     height: 600px;
+      width: 60%;
+}
+.inner{
+    background-color: rgb(240, 255, 246);
+    width: 80%;
+    height: 80%; 
+    margin-top: 60px;
+    margin-left: 10%;
+    border-radius: 1em;
+}
+.information-user{
+    margin: 2em 2em 2em 2em;
+}
+.button-payment:hover{
+    background-color: hsl(141, 71%, 48%);
+}
