@@ -1,6 +1,4 @@
-<template>
-  <Header1 />
-  <!DOCTYPE html>
+<!DOCTYPE html>
   <html lang="en">
     <head>
       <meta charset="UTF-8" />
@@ -14,16 +12,18 @@
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
       />
-      <title>SignUp</title>
+      <title>SignUp (User)</title>
+      <link rel="icon" type="images/x-icon" href="assets/logo.png" />
     </head>
     <body>
+    <?php include 'Header.php'; ?>
       <section class="hero is-fullheight">
         <div class="columns hero-body is-centered is-fullheight">
           <div class="column is-half">
             <form class="box p-5 m-5">
               <div class="box has-background-danger has-text-info-light">
                 <div class="field is-grouped is-grouped-left">
-                  <h1 class="is-size-3">SIGN UP</h1>
+                  <h1 class="is-size-3">SIGN UP (USER)</h1>
                 </div>
               </div>
               <div class="field">
@@ -123,9 +123,7 @@
               </div>
 
               <div class="field is-grouped is-grouped-right pt-2">
-                <RouterLink to="/login">
-                  <button class="button is-danger is-rounded">Back</button>
-                </RouterLink>
+                <a class="button is-danger is-rounded" href='selsign.php'>Back</a>
                 <span>
                   <RouterLink to="/">
                     <button class="button is-success is-rounded ml-5">Submit</button>
@@ -137,19 +135,6 @@
           </div>
         </div>
       </section>
-      <Footer1/>
+      <?php include 'Footer.html'; ?>
     </body>
   </html>
-</template>
-
-<script>
-import Header1 from "./Header.vue";
-import Footer1 from "./Footer.vue";
-export default {
-  name: "Signup",
-  components: {
-    Header1,
-    Footer1,
-  },
-};
-</script>

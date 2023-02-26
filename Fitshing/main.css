@@ -1,0 +1,68 @@
+.bor1 {
+  padding: 3em;
+}
+.bor2 {
+  padding: 10em;
+  background: rgb(194, 194, 39);
+}
+.bor3 {
+  padding: 10em;
+  background: rgb(143, 143, 97);
+}
+.bor4 {
+  padding: 10em;
+  background: rgb(102, 102, 45);
+}
+
+/* Product */
+
+
+#delete-button:hover{
+  background-color: rgb(255, 68, 68);
+}
+.out{
+  background-color: #FAD6A5;
+   height: 600px;
+    width: 60%;
+}
+.inner{
+  background-color: rgb(240, 255, 246);
+  width: 80%;
+  height: 80%; 
+  margin-top: 60px;
+  margin-left: 10%;
+  border-radius: 1em;
+}
+.information-user{
+  margin: 2em 2em 2em 2em;
+}
+.button-payment:hover{
+  background-color: hsl(141, 71%, 48%);
+}
+
+.product {
+  padding: 2em;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1em;
+}
+
+.product_items {
+  cursor: grab;
+  padding: 1em;
+}
+
+.product_items {
+  cursor: grab;
+}
+
+.product-img {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+/* Maine */
+
+/* image scroll */

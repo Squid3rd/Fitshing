@@ -1,5 +1,4 @@
-<template>
-  <Header1 />
+
   <!DOCTYPE html>
   <html lang="en">
     <head>
@@ -16,8 +15,10 @@
       />
 
       <title>SignIn</title>
+      <link rel="icon" type="images/x-icon" href="assets/logo.png" />
     </head>
     <body>
+        <?php include 'Header.php'; ?>
       <section class="hero is-fullheight">
         <div class="columns hero-body is-centered is-fullheight">
           <div class="column is-half">
@@ -57,11 +58,9 @@
               </div>
 
               <div class="field is-grouped is-grouped-right pt-2">
-                <button class="button is-primary is-rounded">Sign Up</button>
+              <button button class="button is-primary is-rounded">Login</button>
                 <span>
-                  <RouterLink to="/signup">
-                    <button class="button is-danger is-rounded ml-5">Sign in</button>
-                  </RouterLink>
+                  <a class="button is-danger is-rounded ml-5" href='selsign.php'>Sign in</a>
                 </span>
               </div>
               <div>
@@ -72,19 +71,6 @@
           </div>
         </div>
       </section>
-      <Footer1/>
+      <?php include 'Footer.html'; ?>
     </body>
   </html>
-</template>
-
-<script>
-import Header1 from "./Header.vue";
-import Footer1 from "./Footer.vue";
-export default {
-  name: "Login",
-  components: {
-    Header1,
-    Footer1,
-  },
-};
-</script>
