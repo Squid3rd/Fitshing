@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php include 'action.php' ?>
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="main.css">
     <title>Product</title>
     <link rel="icon" type="images/x-icon" href="assets/logo.png" />
@@ -20,51 +22,38 @@
             <div class="container" style="max-width: 60%;">
                 <div class='field has-addons has-addons-right'>
                     <form action="">
-                        <select name="sort" id="sort" class="button">
-                            <option value="01">บลา1</option>
-                            <option value="02">บลา2</option>
-                            <option value="03">บลา3</option>
+                        <select name="sort1" id="sort1" class="button">
+                            <option value="00">All product</option>
+                            <!-- <option value="01">Price</option>
+                            <option value="02">Name</option> -->
                         </select>
                     </form>
+                    <span>
+                        <form action="">
+                            <select name="sort2" id="sort2" class="button ml-3">
+                                <option value="00">Default</option>
+                                <option value="01">Price</option>
+                                <option value="02">Name</option>
+                            </select>
+                        </form>
+                    </span>
                 </div>
 
+
                 <?php
-                echo '<div class="product">';
-                for ($k = 0; $k < 10; $k++) {
-                    echo '<div class="card product_items ">
-                        <a href="cart.html"><img class="product-img" src="https://m.media-amazon.com/images/I/61bwq9ljJOL._AC_UF1000,1000_QL80_.jpg" alt=""></a>
-                        <p class="title is-6 m-3">OPTIMUM PLATINUM HYDROWHEY 100% Whey Protein Hydrolyzed - 3.5 Lbs</p>
-                        <p class="subtitle is-6 m-3">$100</p>
+
+                echo '<div class="product" id="productall">';
+                echo '<div class="card product_items" v-for="(item, index) in exdata" :key="index">
+                        <a href="cart.php"><img class="product-img" :src=item.pic alt=""></a>
+                        <p class="title is-6 m-3">{{item.name}}</p>
+                        <p class="subtitle is-6 m-3">{{item.price}}</p>
                         <div class="buttons is-centered">
-                            <a href="cart.html"><button class="button is-success">ซื้อ</button></a>
+                            <a href=""><button class="button is-success">ดูรายละเอียด</button></a>
+                            <span>
+                                <button class="button is-warning">Add in Cart</button>
+                            </span>
                         </div>
-                    </div></a>';
-                }
-                echo '</div>';
-                // for($k=0;$k<4;$k++){
-                //     echo '<div class="columns">';
-                //     for($i=0;$i<4;$i++){
-                //         echo '<div class="m-2 card column is-3 ">
-                //                 <div class="">
-                //                     <figure style="display:flex; justify-content: center; align-items: center;">
-                //                         <img src="https://m.media-amazon.com/images/I/61bwq9ljJOL._AC_UF1000,1000_QL80_.jpg" style="width:auto; height: 250px; " alt="">
-                //                     </figure>
-                //                 </div>
-                //         <div class="card-content">
-                //             <div class="media">
-                //                 <div class="media-content">
-                //                 <p class="title is-6">OPTIMUM PLATINUM HYDROWHEY 100% Whey Protein Hydrolyzed - 3.5 Lbs</p>
-                //                 <p class="subtitle is-6">$2999</p>
-                //                 </div>
-                //             </div>
-                //             <div class="buttons is-centered">
-                //                 <button class="button is-success">สั่งซื้อ</button>
-                //             </div>
-                //         </div>
-                //     </div>';
-                //     }
-                //     echo '</div>';
-                // }
+                    </div>';
                 ?>
 
             </div>
@@ -72,6 +61,9 @@
         </div>
     </section>
     <?php include 'Footer.html'; ?>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="./dataex.js">
+    </script>
 </body>
 
 </html>

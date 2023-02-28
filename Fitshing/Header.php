@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php include 'action.php' ?>
   <head>
     <!-- <link rel="icon" type="image/png" href="/logo.png"/> -->
     <meta charset="UTF-8" />
@@ -14,6 +15,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
     />
+    <link rel="icon" type="images/x-icon" href="assets/logo.png" />
     <title>Header</title>
   </head>
   <body>
@@ -54,7 +56,7 @@
 
                   <div class="navbar-dropdown">
                     <a class="navbar-item" href="product.php"> All Product </a>
-                    <a class="navbar-item"> Jobs </a>
+                    <a class="navbar-item"> Trainer </a>
                     <a class="navbar-item"> Contact </a>
                     <hr class="navbar-divider" />
                     <a class="navbar-item"> Report an issue </a>

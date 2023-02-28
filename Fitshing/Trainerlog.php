@@ -8,8 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="icon" type="images/x-icon" href="assets/logo.png" />
-  <title>User</title>
-  <link rel="icon" type="images/x-icon" href="assets/logo.png" />
+  <title>Document</title>
   <style>
     img {
       margin: 2em;
@@ -34,19 +33,19 @@
   <?php include 'Header.php'; ?>
   <section class="hero is-fullheight">
     <div class="columns hero-body is-fullheight">
-      <div class="container" style="width: 50%;">
-        <section class=" is-large has-background-danger" style="border-radius: 1em;">
+      <div class="container" style=" width: 50%; ">
+        <section class=" is-large has-background-success" style="border-radius: 1em;">
           <div class="columns p-5">
             <div class="column is-3">
               <img
-                src="https://img.freepik.com/free-vector/cute-koala-lay-pillow-cartoon-vector-icon-illustration-animal-nature-icon-concept-isolated_138676-5484.jpg?w=2000"
+                src="https://img.freepik.com/free-vector/cute-monster-kid-cartoon-vector-icon-illustration-monster-holiday-icon-concept-isolated-premium-vector-flat-cartoon-style_138676-3995.jpg?w=2000"
                 alt="">
               <a href="" class="subtitle is-4 link"><u>Subscribe</u></a>
             </div>
             <div class="column is-9 is-offset-1 name">
               <div class="field">
                 <label class="label">FirstName</label>
-                <span class="label" style="position: absolute; left: 65%; top: 75px;">LastName</span>
+                <span class="label" style="position: absolute; left: 65%; top: 95px;">LastName</span>
                 <div class="control">
                   <input class="input  title is-6" id="FirstName" type="text" style="width: 42%;" value="Jeerawat"
                     readonly>
@@ -54,7 +53,7 @@
                 </div>
                 <label class="label">Email</label>
                 <div class="control">
-                  <input class="input title is-6 Email" id="Email" type="text" style="width: 84.5%;"
+                  <input class="input title is-6 Phone" id="Phone" type="text" style="width: 84.5%;"
                     value="EXample@gmail.ac.ad.to.th" readonly>
                 </div>
               </div>
@@ -65,13 +64,6 @@
                     rows="10"></textarea>
                 </div>
               </div>
-              <!-- <div class="field">
-                <label class="label">Co_op</label>
-                <div class="control">
-                  <textarea class="" style="border: 0; border-radius: 0.4em;" name="Address" id="Address" cols="90"
-                    rows="5"></textarea>
-                </div>
-              </div> -->
             </div>
           </div>
         </section>
@@ -79,9 +71,6 @@
     </div>
   </section>
   <?php include 'Footer.html'; ?>
-  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-  <script src="./main.js">
-  </script>
 </body>
 
 </html>

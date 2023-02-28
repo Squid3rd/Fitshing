@@ -1,5 +1,5 @@
 
-  <!DOCTYPE html>
+<!DOCTYPE html>
   <html lang="en">
   <?php include 'action.php' ?>
     <head>
@@ -32,7 +32,7 @@
             is-flex is-justify-content-center is-align-items-center
           "
         >
-          <p class="title is-1">SUCCESS</p>
+          <p class="title is-1">Thank you for login</p>
         </div>
       </div>
       </div>
