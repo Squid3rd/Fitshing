@@ -3,8 +3,8 @@ var app = new Vue({
   el: "#productall",
   data: {
     sel: '',
-    exdata: dataex,
-    newdata: dataex,
+    // exdata: dataex,
+    // newdata: dataex,
     productex: [
       {
         id: 0,

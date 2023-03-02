@@ -5,26 +5,48 @@ var login1 = new Vue({
       password: "",
       email: "",
       logtype: "",
-      enpass: 'test1',
-      enemail: 'test1',
     },
+    enpass: false,
+    enemail: false,
   },
-  // validations() {
-  //   return {
-  //     password: { required },
-  //     email: { required },
-  //     logtype: { required },
-  //   };
-  // },
+  
   methods: {
-    checkvalid(){
-        if(this.email.length == 0){
+
+    // checkvalid(){
+    //     if(this.email.length == 0){
           
-        }
+    //     }
+    // },
+    // submitForm() {
+    //   // console.log("peter")
+    //   alert("petre");
+    // },
+    onSubmit(event) {
+      event.preventDefault()
+      console.log(event)
     },
-    submitForm() {
-      // console.log("peter")
-      alert("petre");
-    },
+    validateEmail(email) {
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+        return
+      } else {
+        alert("Email invalid!")
+      }
+    }
   },
+  computed:{
+    // check(){
+    //   if(this.form1.email.length == 2){
+    //     return enemail = true
+    //   }
+    //   if(this.form1.password.length == 2){
+    //     return enpass = true
+    //   }
+    // }
+  },
+  watch:{
+    email(value){
+      this.email = value;
+      this.validateEmail(value);
+    }
+  }
 });

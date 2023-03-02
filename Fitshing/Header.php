@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="style.css">
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -19,7 +19,7 @@
     <title>Header</title>
   </head>
   <body>
-    <header class="header has-background-success">
+    <header class="header has-background-warning">
       <div class="columns">
         <div class="column is-1"></div>
         <div class="column is-1">
@@ -40,10 +40,13 @@
         <div class="column is-5"></div>
         <div class="column is-1">
           <a href="cart.php">
-            <span class="icon has-text-info mt-6">
+            <p class="icon has-text-info mt-6">
               <i class="fa fa-shopping-cart is-size-1 has-text-light"></i>
-            </span>
+            </p>
           </a>
+          <span>
+            <p>(0)</p>
+          </span>
         </div>
         <div class="column is-1">
           <div class="columns mt-3">
@@ -52,14 +55,14 @@
                 class="navbar-item is-hoverable mt-3"
               >
                 <div class="navbar-item has-dropdown is-hoverable">
-                  <a class="navbar-link"> More </a>
+                  <a class="navbar-link">- - -</a>
 
                   <div class="navbar-dropdown">
                     <a class="navbar-item" href="product.php"> All Product </a>
-                    <a class="navbar-item"> Trainer </a>
+                    <a class="navbar-item" href="Trainer.php"> Trainer </a>
                     <a class="navbar-item"> Contact </a>
                     <hr class="navbar-divider" />
-                    <a class="navbar-item"> Report an issue </a>
+                    <a class="navbar-item"> Thank you </a>
                   </div>
                 </div>
               </div>

@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="icon" type="images/x-icon" href="assets/logo.png" />
   <title>User</title>
-  <link rel="icon" type="images/x-icon" href="assets/logo.png" />
+  <link rel="stylesheet" href="style.css">
   <style>
     img {
       margin: 2em;

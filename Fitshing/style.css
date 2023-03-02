@@ -1,5 +1,7 @@
+
 .bor1 {
-  padding: 3em;
+  padding: 10em;
+  background: rgb(228, 228, 154);
 }
 .bor2 {
   padding: 10em;
@@ -47,14 +49,21 @@
   gap: 1em;
 }
 
+.productmain {
+  padding: 2em;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1em;
+}
+
 .product_items {
   cursor: grab;
   padding: 1em;
 }
 
-.product_items {
+/* .product_items {
   cursor: grab;
-}
+} */
 
 .product-img {
   width: 100%;
@@ -63,12 +72,22 @@
   border-radius: 10px;
 }
 
-/* .product123 {
-  padding: 2em;
-  display: flex;
-  gap: 1em;
+.scrollXLeft {
+  overflow: hidden;
   overflow-x: auto;
-} */
+  width: 100%;
+}
+
+.scrollXLeft::-webkit-scrollbar {
+  width: 0px;
+  height: 2em;
+}
+
+.scrollXLeft::-webkit-scrollbar-thumb {
+  background: #5f4747;
+  /* border-radius: 10px; */
+  height: 0px;
+}
 
 #header{
   height:40vw;

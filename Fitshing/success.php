@@ -10,7 +10,7 @@
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
       />
-      <link rel="stylesheet" href="style.css" />
+      <link rel="stylesheet" href="style.css">
       <title>Success</title>
       <link rel="icon" type="images/x-icon" href="assets/logo.png" />
     </head>
