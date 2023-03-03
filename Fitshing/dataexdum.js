@@ -5,7 +5,7 @@ const dataex1 = JSON.parse(`
       "type": "Leg",
       "id": 0,
       "name": "ADIDAS C-16 AVEN Upright Bike",
-      "price": "24,900",
+      "price": "24900",
       "pic": "assets/EX/0.png",
       "info": "Let's burn your calories with this upright bike from ADIDAS,\
          proper in every levels of exercise. It's easy movement and use less\
@@ -18,7 +18,7 @@ const dataex1 = JSON.parse(`
       "type": "Leg",
       "id": 1,
       "name": "REEBOK EXERCISE Jet 300 Treadmill",
-      "price": "39,900",
+      "price": "39900",
       "pic": "assets/EX/1.png",
       "info": "The REEBOK Jet 300 treadmill features air motion technology which gives you effective cushioning to reduce the level of impact on your joints when running. Powered by a 2.5HP motor the REEBOK Jet 300 reaches a max speed of 20kph and can be set to 15 different incline levels for uphill training. With 27 programs in total, the Jet 300 gives you a wide range of workouts from high-intensity cardio to fat burning."
     },
@@ -64,7 +64,7 @@ const dataex1 = JSON.parse(`
       "type": "Leg",
       "id": 4,
       "name": "REEBOK EXERCISE ZJET 430 Elliptical Trainer",
-      "price": "25,415",
+      "price": "25415",
       "pic": "assets/EX/4.png",
       "info": "The REEBOK ZJET 430 elliptical trainer is equipped with a 5.5-inch LCD display screen, showing the speed, time, pulse rate, calories, and distance,\
          etc. Eight levels of manual resistance adjustment and six console functions provide all the tools for effective workouts.\
@@ -77,7 +77,7 @@ const dataex1 = JSON.parse(`
       "type": "Abdomen",
       "id": 5,
       "name": "ADIDAS ADBE-10238 Sit-Up Bench",
-      "price": "16,110",
+      "price": "16110",
       "pic": "assets/EX/5.png",
       "info": "The ADIDAS ADBE-10238 sit-up bench is made from strong and durable materials with\
        sturdy construction. It has a 4 cm thick seat cushion that can adjust the degree in 3\
@@ -124,7 +124,7 @@ const dataex1 = JSON.parse(`
       "type": "Leg",
       "id": 8,
       "name": "SOLE SC200 (2016) Eliptical",
-      "price": "52,425",
+      "price": "52425",
       "pic": "assets/EX/8.png",
       "info": "The SOLE SC200 (2016) stepper with a 16.8Lbs Flywheel features\
        a 6.5-inch LCD display screen showing the time, viscosity level, pulse rate,\
@@ -142,7 +142,7 @@ const dataex1 = JSON.parse(`
       "type": "Hand",
       "id": 9,
       "name": "YORK 2429 20Kg Dumbbell Set",
-      "price": "1,795",
+      "price": "1795",
       "pic": "assets/EX/9.png",
       "info": "The YORK 2429 20 kg dumbbell set comes with a plastic \
       carry case with a handle for easy storage and portability and \
@@ -157,7 +157,7 @@ const dataex1 = JSON.parse(`
       "type": "Leg",
       "id": 10,
       "name": "HORIZON Comfort 3 Exercise Bike",
-      "price": "19,900",
+      "price": "19900",
       "pic": "assets/EX/10.png",
       "info": "The HORIZON Comfort 3 upright bike with a 7kg Flywheel\
        features a 5.5-inch LCD screen display and ECB Magnetic Brake\
@@ -204,7 +204,7 @@ const dataex1 = JSON.parse(`
       "type": "Hand, Abdomen, Leg",
       "id": 14,
       "name": "S SPORTS SC-LHG6001A Weight Bench",
-      "price": "2,796",
+      "price": "2796",
       "pic": "assets/EX/14.png",
       "info": "S SPORTS SC-LHG6001A Weight Bench comes \
       with high-quality steel structure, included high-density\
@@ -287,7 +287,7 @@ const dataex1 = JSON.parse(`
       "type": "Hand",
       "id": 20,
       "name": "FUSEN T-United B-4000 Home Gym",
-      "price": "23,715",
+      "price": "23715",
       "pic": "assets/EX/20.png",
       "info": "The FUSEN T-United B-4000 multifunctional\
        home gym features an innovative and sturdy steel\

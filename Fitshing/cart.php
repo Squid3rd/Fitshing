@@ -19,15 +19,10 @@
       <div class="columns hero-body is-fullheight is-centered">
         <!-- <div class="box"> -->
         <div class="container p-4">
-          <div class= "has-text-right ">
-            
-            <a href="product.php"><button @click="clear()" class="button" >กลับไปหน้าเลือกสินค้า</button></a>
-            <button @click="cart = []" class="button has-background-danger">clear</button>
-          </div>
           <h1 class="subtitle is-3">รายการสินค้า</h1>
-
           <hr />
-          <div style="" class="column is-3 is-offset-9 has-background-light p-5 has-round">
+          <div style="position: absolute; left: 72.5%; top: 15%; width: 27.5%"
+            class="has-background-light p-5 has-round">
             <p class="subtitle is-5">สรุปบิล</p>
             <!-- <div class="columns">
               <p class="column is-8">
@@ -52,7 +47,8 @@
               <p>{{ item.price }} x {{ item.quantity }}</p>
             </div>
             <div class="column is-1">
-              <button @click.prevent='removeFrom(item)' id="delete-button" class="delete" style="left: 110%; bottom: 21.5px" key="false"></button>
+              <button @click.prevent='removeFrom(item)' id="delete-button" class="delete"
+                style="left: 110%; bottom: 21.5px" key="false" ></button>
             </div>
           </div>
 
@@ -79,14 +75,12 @@
         removeFrom(n) {
           if (n.quantity > 1) {
             n.quantity--
-          } else {
+          }
+          else {
             this.cart.splice(this.cart.indexOf(n), 1)
           }
           localStorage.setItem("cart", JSON.stringify(this.cart))
         },
-        clear(){
-          localStorage.removeItem("cart");
-        }
       },
       computed: {
         totalPrice() {
@@ -95,7 +89,7 @@
             0
           );
         },
-
+      
       },
       watch: {
 
@@ -104,6 +98,7 @@
         this.cart = JSON.parse(localStorage.cart);
       },
     });
+
   </script>
 </body>
 

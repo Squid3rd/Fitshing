@@ -30,7 +30,7 @@
                                 <option>Leg</option>
                             </select>
                         </form>
-                        <span>
+                        <!-- <span>
                             <form action="">
                                 <select name="sort2" id="sort2" class="button ml-3">
                                     <option class="has-text-centered">Default</option>
@@ -38,7 +38,7 @@
                                     <option class="has-text-centered">Name</option>
                                 </select>
                             </form>
-                        </span>
+                        </span> -->
                     </div>
 
 
@@ -50,7 +50,7 @@
                         <p class="title is-6 m-3">{{item.name}}</p>
                         <p class="subtitle is-6 m-3">฿ {{item.price}}</p>
                         <div class="buttons is-right">
-                            <a href="PreviewProduct.php"><button class="button is-success">ดูรายละเอียด</button></a>
+                            <a @click="gotopre(item.id), goto()"><button class="button is-success">ดูรายละเอียด</button></a>
                             <span>
                                 <button class="button is-warning" @click="addToCart(item)">Add in Cart</button>
                             </span></div>
@@ -76,25 +76,33 @@
                 dataex: dataex1,
                 sortdata: dataex1,
                 cart: [],
+                previewid: '',
             },
             methods: {
-                addToCart(n){
-                    if(this.cart.includes(n)){
+                gotopre(n) {
+                    this.previewid = n
+                    localStorage.setItem("preview", this.previewid)
+                },
+                goto() {
+                    window.location.href = "./PreviewProduct.php";
+                },
+                addToCart(n) {
+                    if (this.cart.includes(n)) {
                         this.cart[this.cart.indexOf(n)].quantity++
                     }
-                    else{
+                    else {
                         n.quantity = 1
                         this.cart.push(n)
-                        
+
                     }
                     localStorage.setItem("cart", JSON.stringify(this.cart))
                 },
-                removeFromCart(n){
+                removeFromCart(n) {
                     console.log(n.quantity)
-                    if(n.quantity > 1){
+                    if (n.quantity > 1) {
                         n.quantity--
                     }
-                    else{
+                    else {
                         this.cart.splice(this.cart.indexOf(n), 1)
                     }
                     localStorage.setItem("cart", JSON.stringify(this.cart))
@@ -111,13 +119,15 @@
                 },
             },
             watch: {
-                sel(newSel){
+                sel(newSel) {
                     this.type1
                 }
             },
-            created(){
+            created() {
                 this.cart = JSON.parse(localStorage.cart)
-                
+                this.previewid = localStorage.preview
+
+
             },
         });
     </script>

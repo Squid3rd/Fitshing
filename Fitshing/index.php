@@ -37,7 +37,7 @@
             <p class="title is-6 m-3">{{item.name}}</p>
             <p class="subtitle is-6 m-3">฿ {{item.price}}</p>
             <div class="buttons is-right">
-                <a href=""><button class="button is-success">ดูรายละเอียด</button></a>
+            <a @click="gotopre(item.id), goto()"><button class="button is-success">ดูรายละเอียด</button></a>
                 
             </div>
             </div></div></div></div>';
@@ -56,7 +56,7 @@
             <p class="title is-6 m-3">{{item.name}}</p>
             <p class="subtitle is-6 m-3">฿ {{item.price}}</p>
             <div class="buttons is-right">
-                <a href="PreviewProduct.php"><button class="button is-success">ดูรายละเอียด</button></a>
+                <a @click="gotopre(item.id), goto()"><button class="button is-success">ดูรายละเอียด</button></a>
                 
             </div>
             </div></div>
@@ -92,7 +92,6 @@
             <!-- <img src="./Table example.png" /> -->
             <hr />
             <table id="order-table" style="width: 100%" class="table is-bordered" class="has-background-grey">
-              <!-- ใส่ข้อมูลของ table ไว้ในนี้ -------------------------------------------->
               <tr>
                 <th colspan="6" style="text-align: center" class='has-text-danger is-size-4'>Profile</th>
               </tr>
@@ -121,7 +120,10 @@
                 <td colspan="6">- {{initem}}</td>
               </tr>
             </table>
-            <button class="button is-warning">Add</button>
+            <button :class="['button', 'is-success']" @click='addTrain(item)' v-show='already == true'>Add</button>
+            <button :class="['button', 'is-warning']" v-show='already == false'>Already have
+              Trainer</button>
+            <button :class="['button', 'is-danger']" v-show='already == false' @click='delTrain(item)'>Cancel Trainer</button>
           </section>
         </div>
       </div>
@@ -142,26 +144,64 @@
         dataex1: dataex1,
         datatr1: traindata,
         recommend: [
-          3,8,7,15
+          19, 9, 7, 17, 20
         ],
         recommendT: [
-          0,2,3,4
+          0, 2, 3, 4
         ],
+        previewid: null,
         modal_do_train: false,
         show_modal: false,
         show1: null,
+        already: '',
+        accpet: '',
+        select1: []
         // sortdata: dataex1,
       },
       methods: {
-        // rec(numbers){
-        //   return numbers.filter(x => x.)
-        // }
+        gotopre(n) {
+          this.previewid = n
+          localStorage.setItem("preview", this.previewid)
+        },
+        goto() {
+          window.location.href = "./PreviewProduct.php";
+        },
+        addTrain(n) {
+          // console.log("pter")
+          // console.log(localStorage.already1)
+          // this.already = false
+          this.select1.push(n)
+          // localStorage.setItem("already2", JSON.stringify(this.already))
+          localStorage.setItem("selectsave1", JSON.stringify(this.select1))
+        },
+        delTrain(n) {
+          // console.log("pter")
+          // console.log(localStorage.already1)
+          // this.already = true
+          this.select1.splice(0)
+          // localStorage.setItem("already2", JSON.stringify(this.already))
+          localStorage.setItem("selectsave1", JSON.stringify(this.select1))
+        },
       },
+
       computed: {
 
       },
       watch: {
-
+        select1(){
+          if(this.select1.length != 0){
+            this.already = false
+          }
+          else{
+            this.already = true
+          }
+        }
+      },
+      created() {
+        this.previewid = localStorage.preview
+        this.select1 = JSON.parse(localStorage.selectsave1)
+        // this.already = Boolean(localStorage.alread/y2)
+        // this.accept = Boolean(localStorage.accept1)
       }
     });
   </script>

@@ -50,10 +50,11 @@
                                 <img class="product-img" src='./assets/user.png' alt="">
                                 <!-- <img src="./Table example.png" /> -->
                                 <hr />
-                                <table id="order-table" style="width: 100%" class="table is-bordered" class="has-background-grey">
-                                    <!-- ใส่ข้อมูลของ table ไว้ในนี้ -------------------------------------------->
+                                <table id="order-table" style="width: 100%" class="table is-bordered"
+                                    class="has-background-grey">
                                     <tr>
-                                        <th colspan="6" style="text-align: center" class='has-text-danger is-size-4'>Profile</th>
+                                        <th colspan="6" style="text-align: center" class='has-text-danger is-size-4'>
+                                            Profile</th>
                                     </tr>
                                     <tr>
                                         <td colspan="3">Name : {{item.name}}</td>
@@ -67,20 +68,27 @@
                                         <th colspan="6" style="text-align: center">ข้อมูล</th>
                                     </tr> -->
                                     <tr>
-                                        <th colspan="6" style="text-align: center" class='has-text-info is-size-4'>Certificate
+                                        <th colspan="6" style="text-align: center" class='has-text-info is-size-4'>
+                                            Certificate
                                         </th>
                                     </tr>
                                     <tr v-for='(initem, index) in item.info.certificate'>
                                         <td colspan="6">- {{initem}}</td>
                                     </tr>
                                     <tr>
-                                        <th colspan="6" style="text-align: center" class='has-text-info is-size-4'>Special</th>
+                                        <th colspan="6" style="text-align: center" class='has-text-info is-size-4'>
+                                            Special</th>
                                     </tr>
                                     <tr v-for='(initem, index) in item.info.special'>
                                         <td colspan="6">- {{initem}}</td>
                                     </tr>
                                 </table>
-                                <button class="button is-warning">Add</button>
+                                <button :class="['button', 'is-success']" @click='addTrain(item)'
+                                    v-show='already == true'>Add</button>
+                                <button :class="['button', 'is-warning']" v-show='already == false'>Already have
+                                    Trainer</button>
+                                <button :class="['button', 'is-danger']" v-show='already == false'
+                                    @click='delTrain(item)'>Cancel Trainer</button>
                             </section>
                         </div>
 
@@ -105,13 +113,29 @@
                 modal_do_train: false,
                 show_modal: false,
                 show1: null,
-                selecttrain: [
-                    
-                ]
-                // sortdata: dataex1,
+                select1: [],
+                accept: '',
+                already: ''
+                // sortdata: dataex1, 
             },
             methods: {
+                addTrain(n) {
+                    // console.log("pter")
+                    // console.log(localStorage.already1)
+                    // this.already = !this.already
+                    this.select1.push(n)
+                    // localStorage.setItem("already0", JSON.stringify(this.already))
+                    localStorage.setItem("selectsave1", JSON.stringify(this.select1))
+                },
+                delTrain(n) {
+                    // console.log("pter")
+                    // console.log(localStorage.already1)
+                    // this.already = !this.already
+                    this.select1.splice(0)
 
+                    // localStorage.setItem("already2", JSON.stringify(this.already))
+                    localStorage.setItem("selectsave1", JSON.stringify(this.select1))
+                },
             },
             computed: {
                 type1() {
@@ -124,7 +148,20 @@
                     // if(this.sel == "All product"){
                     this.type1
                     // }
+                },
+                select1() {
+                    if (this.select1.length != 0) {
+                        this.already = false
+                    }
+                    else {
+                        this.already = true
+                    }
                 }
+            },
+            created() {
+                this.select1 = JSON.parse(localStorage.selectsave1)
+                // this.already = Boolean(localStorage.already1)
+                // this.accept = Boolean(localStorage.accept1)
             }
         });
     </script>

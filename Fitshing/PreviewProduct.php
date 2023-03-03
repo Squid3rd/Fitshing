@@ -40,61 +40,102 @@
 </head>
 
 <body>
-<?php include 'Header.php'; ?>
-    <section class="hero is-fullheight">
-        <div class="columns hero-body is-centered is-fullheight">
-            <div class="container mt-6 mb-6" style="max-width: 60%;">
-                <section class="is-large has-background-info">
-                    <div class="columns">
-                        <div class="column is-5">
-                            <div class=" card is-relative p-2 " style="left:75px; top:75px; max-width:65%;">
-                                <img src="https://image.makewebeasy.net/makeweb/0/k7p5FZEpV/DefaultData/o_1gi1s8a0r1mgtdsk1f441fle4ccf.jpg?v=202012190947"
-                                    alt="แก้วน้ำ">
-                            </div>
-                            <div>
-                                <div class="card has-background-white is-relative another-pic1 p-1">
-                                    <img src="https://image.makewebeasy.net/makeweb/0/k7p5FZEpV/DefaultData/%E0%B8%A3%E0%B8%B9%E0%B8%9B%E0%B8%A0%E0%B8%B2%E0%B8%9E_31_12_65_17_29_03.jpg?v=202012190947"
-                                        alt="">
+    <?php include 'Header.php'; ?>
+    <div id='pre1'>
+        <section class="hero is-fullheight">
+            <div class="columns hero-body is-centered is-fullheight">
+                <div class="container mt-6 mb-6" style="max-width: 60%;" v-for='(item, index) in dataex1'
+                    v-if='item.id == previewid'>
+                    <section class="is-large has-background-info">
+                        <div class="columns">
+                            <div class="column is-5">
+                                <div class=" card is-relative p-2 " style="left:75px; top:75px; max-width:65%;">
+                                    <img :src=item.pic alt="แก้วน้ำ">
                                 </div>
-                                <div class="card has-background-white is-relative another-pic2 p-1">
-                                    <img src="https://image.makewebeasy.net/makeweb/0/k7p5FZEpV/DefaultData/%E0%B8%A3%E0%B8%B9%E0%B8%9B%E0%B8%A0%E0%B8%B2%E0%B8%9E_31_12_65_17_28_30.jpg?v=202012190947"
-                                        alt="">
-                                </div>
-                                <div class="card has-background-white is-relative another-pic3 p-1">
-                                    <img src="https://image.makewebeasy.net/makeweb/0/k7p5FZEpV/DefaultData/%E0%B8%A3%E0%B8%B9%E0%B8%9B%E0%B8%A0%E0%B8%B2%E0%B8%9E_31_12_65_17_28_13.jpg?v=202012190947"
-                                        alt="">
-                                </div>
-                                <div class="card has-background-white is-relative another-pic4 p-1">
-                                    <img src="https://image.makewebeasy.net/makeweb/0/k7p5FZEpV/DefaultData/mutant_shaker_cup_28oz_iconic_rocket_pop_info_image_02.jpeg?v=202012190947"
-                                        alt="">
+                                <div>
+                                    <div class="card has-background-white is-relative another-pic1 p-1">
+                                        <img :src=item.pic alt="">
+                                    </div>
+                                    <div class="card has-background-white is-relative another-pic2 p-1">
+                                        <img :src=item.pic alt="">
+                                    </div>
+                                    <div class="card has-background-white is-relative another-pic3 p-1">
+                                        <img :src=item.pic alt="">
+                                    </div>
+                                    <div class="card has-background-white is-relative another-pic4 p-1">
+                                        <img :src=item.pic alt="">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="column is-6 is-relative" style="top:100px;">
-                            <p class="title is-4 has-text-white">Mutant Iconic Shaker Cup 0.8L Rocket Pop 360</p>
-                            <p class="title is-4 has-text-white">$199</p>
-                            <input type="number" class="input" style="width: 20%;" value="1" min="1" max="5">
-                            <button class="button has-background-success"
-                                style="position: relative; top:70px; right:20.6%; width:40%; border:0; color:white;">Add
-                                Order</button>
+                            <div class="column is-6 is-relative" style="top:100px;">
+                                <p class="title is-4 has-text-white">{{ item.name }}</p>
+                                <p class="title is-4 has-text-white">฿ {{item.price}}</p>
+                                <input type="number" class="input" style="width: 20%;" value="1" min="1" max="5" Disabled>
+                                <button class="button has-background-success"
+                                    style="position: relative; top:70px; right:20.6%; width:40%; border:0; color:white;"
+                                    @click="addToCart(item)">Add Order
+                                </button>
 
+                            </div>
                         </div>
-                    </div>
-                    <div class="cloumns is-relative" style="left:42.5%; bottom:250px;">
-                        <div class="card column is-5 has-background-white">
-                            <p>description</p>
-                            <hr>
-                            <p>detail</p>
-                            <hr>
-                            <p>about</p>
-                            <hr>
+                        <div class="cloumns is-relative" style="left:42.5%; bottom:150px;">
+                            <div class="card column is-5 has-background-white">
+                                <table id="order-table" style="width: 100%" class="table is-bordered"
+                                    class="has-background-grey">
+                                    <tr>
+                                        <th colspan="6" style="text-align: center" class='has-text-danger is-size-4'>
+                                            Description</th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6">{{item.info}}</td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
     <?php include 'Footer.html'; ?>
+    <script src="./dataexdum.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+        var app1 = new Vue({
+            el: "#pre1",
+            data: {
+                dataex1: dataex1,
+                previewid: null,
+                cart: []
+
+            },
+            methods: {
+                addToCart(n) {
+                    if (this.cart.includes(n)) {
+                        this.cart[this.cart.indexOf(n)].quantity++
+                    }
+                    else {
+                        n.quantity = 1
+                        this.cart.push(n)
+
+                    }
+                    localStorage.setItem("cart", JSON.stringify(this.cart))
+                },
+            },
+            computed: {
+
+            },
+            watch: {
+                dd() {
+                    console.log(previewid)
+                }
+            },
+            created() {
+                this.cart = JSON.parse(localStorage.cart)
+                this.previewid = localStorage.preview
+            }
+        });
+    </script>
 </body>
 
 </html>

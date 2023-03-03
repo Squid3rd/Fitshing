@@ -33,6 +33,10 @@
           "
         >
           <p class="title is-1">Thank you for login</p>
+          <div id='te1' class="title is-1"></div>
+          <div>
+          <button class="ml-5 button is-warning" onclick="location.href = 'login.php'">Back</button>
+          </div>
         </div>
       </div>
       </div>
@@ -45,5 +49,12 @@
   </html>
 
   <script>
-    setTimeout(function(){location.href="login.php"} , 3000);   
+  var time = 10, x = setInterval(function () {
+  console.log(--time);
+  document.getElementById('te1').innerHTML = "(" + time + ")";
+  if (time === 0) {
+    location.href = 'login.php'
+    clearInterval(x);
+  }
+  }, 1000);
   </script>
