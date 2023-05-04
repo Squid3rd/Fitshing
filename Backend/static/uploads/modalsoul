@@ -10,19 +10,9 @@
           class="columns"
           style="background-color: transparent; border-bottom: 3px solid white"
         >
-          <!-- <div class="column has-text-left">
-            <button class="buttom nonebackbutton">
-              <a class="is-size-4" @click="show_edit = !show_edit">Cancel</a>
-            </button>
-          </div> -->
                 <div>
                   <p class="title">Create New Product</p>
                 </div>
-          <!-- <div class="column has-text-right">
-            <button class="buttom nonebackbutton">
-              <a class="is-size-4" @click="show_edit = !show_edit">Done</a>
-            </button>
-          </div> -->
         </div>
         <div class="columns p-6">
           <div class="column has-text-centered">

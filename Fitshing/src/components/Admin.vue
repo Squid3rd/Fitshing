@@ -11,11 +11,11 @@ export default {
   name: "admin1",
   data() {
     return {
-      show_edit: false,
-      ex_name:"",
-      ex_info:"",
-      amount:0,
-      ex_price:0,
+      // show_edit: false,
+      // ex_name:"",
+      // ex_info:"",
+      // amount:0,
+      // ex_price:0,
     };
   },
   methods:{

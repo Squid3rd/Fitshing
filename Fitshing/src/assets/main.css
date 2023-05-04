@@ -149,6 +149,22 @@
   border: none;
 }
 
+#two {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  background-color: transparent;
+  border: none;
+}
+
+#three {
+  position: fixed;
+  bottom: 180px;
+  right: 20px;
+  background-color: transparent;
+  border: none;
+}
+
 /* Preview */
 
 .another-pic1 {
@@ -253,4 +269,17 @@
 .btn-1:hover {
   box-shadow: 0 4px darken(#f79159, 10%);
   top: 2px;
+}
+
+.is-custom{
+  width: 1600px;
+  max-width: 100%;
+}
+
+@media screen and (min-width: 769px){
+.modal-card, .modal-content {
+    margin: 0 auto;
+    max-height: calc(100vh - 40px);
+    width: 800px;
+}
 }

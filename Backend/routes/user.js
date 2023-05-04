@@ -12,7 +12,7 @@ router = express.Router();
 // SET STORAGE
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
-      callback(null, "./uploads/user");
+      callback(null, "./static/uploads/user");
     },
     filename: function (req, file, callback) {
       callback(
@@ -77,6 +77,7 @@ router.post('/register', upload.single('images'), async (req, res, next) => {
     const gender = req.body.gender
     const role = req.body.role
 
+    
     try {
         await conn.query(
             'INSERT INTO users(username, password, fname, lname, email, phone, gender, image, status, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?)',
@@ -85,13 +86,14 @@ router.post('/register', upload.single('images'), async (req, res, next) => {
 
         conn.commit()
         res.status(201).send()
+        res.json({ message: "Register Complete" })
     } catch (err) {
         conn.rollback()
         res.status(400).json(err.toString());
     } finally {
         conn.release()
     }
-})
+});
 
 // const loginSchema = Joi.object({
 //          username: Joi.string().required(),
@@ -149,7 +151,7 @@ router.post('/register', upload.single('images'), async (req, res, next) => {
      } finally {
              conn.release()
      }
- })
+ });
 
 //  router.get('/user/me', isLoggedIn, async (req, res, next) => {
 //      // req.user ถูก save ข้อมูล user จาก database ใน middleware function "isLoggedIn"

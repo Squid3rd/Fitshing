@@ -45,8 +45,8 @@ export default {
       }
     },
     shortTitle(content) {
-      if (content.length > 30) {
-        return content.substring(0, 27) + "...";
+      if (content.length > 25) {
+        return content.substring(0, 23) + "...";
       }
       return content;
     },
