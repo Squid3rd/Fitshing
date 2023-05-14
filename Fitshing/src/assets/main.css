@@ -283,3 +283,49 @@
     width: 800px;
 }
 }
+
+.num-in {
+	background: #FFFFFF;
+	box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
+	border-radius: 10px;
+	height: 40px;
+	width: 110px;
+  float: left;
+}
+
+.num-in	span {
+  width: 40%;
+  display: block;
+  height: 40px;
+  float: left;
+  position: relative;
+}
+
+.num-in span:before, .num-in span:after {
+  content: '';
+  position: absolute;
+  background-color: #667780;
+  height: 2px;
+  width: 10px;
+  top: 50%;
+  left: 50%;
+  margin-top: -1px;
+  margin-left: -5px;
+}
+
+.num-in span.plus:after {
+  transform: rotate(90deg);
+}
+
+.num-in input {
+		float: left;
+		width: 20%;
+		height: 40px;
+		border: none;
+		text-align: center;
+}
+.last-payment:hover{
+  transition: all 0.2s;
+  transform:scale(1.1,1.1);
+  box-shadow: 0.2em 0.2em 0.2em #0005;
+}

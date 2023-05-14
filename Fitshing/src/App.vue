@@ -109,10 +109,12 @@ export default {
   data() {
     return {
       user: null,
+      cart:[],
     };
   },
   created() {
     this.onAuthChange();
+    this.cart = JSON.parse(localStorage.cart);
   },
   methods: {
     onAuthChange() {
@@ -131,6 +133,8 @@ export default {
     },
     async logout() {
       // this.$router.go({ name: '/home' });
+      this.cart = []
+      localStorage.setItem("cart", JSON.stringify(this.cart));
       location.reload()
       localStorage.setItem("token", null);
       // this.$router.push("/login");

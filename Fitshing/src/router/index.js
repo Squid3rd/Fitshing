@@ -64,6 +64,11 @@ const router = createRouter({
       name: 'editprofile',
       component: () => import('../views/Profile/EditProfile.vue')
     },
+    {
+      path: '/bill',
+      name: 'bill',
+      component: () => import('../views/payment/BillView.vue')
+    },
   ]
 })
 
