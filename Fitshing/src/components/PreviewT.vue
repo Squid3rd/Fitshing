@@ -1,7 +1,7 @@
 
 <template>
   <!-- Add Trainer -->
-  <!-- <div class="modal" v-bind:class="{ 'is-active': modal_do_request }">
+  <div class="modal" v-bind:class="{ 'is-active': modal_do_request }">
     <div class="modal-background"></div>
     <div class="modal-card" style="max-width: 960px; width: 90%">
       <section class="modal-card-body">
@@ -42,7 +42,7 @@
         </div>
       </section>
     </div>
-  </div> -->
+  </div>
 
   <!-- Preview Section -->
   <section class="hero is-fullheight">
@@ -83,14 +83,14 @@
                 Subscribe
               </button>
             </div>
-            <!-- <div v-else-if="user.role === 'user' && user.status === 2">
+            <div v-else-if="user.role === 'user' && user.status === 2">
               <button
                 class="button ml-2 add-cart is-success"
                 disabled
               >
                 Subscribe
               </button>
-            </div> -->
+            </div>
             <div v-else>
               <button class="button ml-2 add-cart is-danger">
                 Delete Trainer

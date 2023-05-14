@@ -380,7 +380,7 @@ export default {
         alert("Please select Height");
       } else if (!this.age) {
         alert("Please select Age");
-      } else if (this.phone < 8 || !!this.phone.match(/0[0-9]{9}/) || isNaN(this.phone)) {
+      } else if (this.phone < 8 ||  isNaN(this.phone)) {
         alert("Invalid Phone Number");
       } else if (!this.images) {
         alert("Please fill Image Profile");
