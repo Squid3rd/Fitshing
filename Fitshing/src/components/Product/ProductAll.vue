@@ -129,7 +129,7 @@ export default {
     };
   },
   mounted() {
-    this.cart = JSON.parse(localStorage.cart);
+    // this.cart = JSON.parse(localStorage.cart);
     this.getProduct();
   },
   methods: {

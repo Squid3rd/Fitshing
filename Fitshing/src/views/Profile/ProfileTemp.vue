@@ -1,7 +1,6 @@
 <template>
-
   <!-- Add Trainer -->
-  <div class="modal" v-bind:class="{ 'is-active': modal_do_train }">
+  <div class="modal" v-bind:class="{ 'is-active': modal_do_train }" v-if="user">
     <div class="modal-background"></div>
     <div class="modal-card" style="max-width: 960px; width: 90%">
       <section class="modal-card-body">
@@ -59,9 +58,10 @@
           </div>
         </div>
         <hr />
-        <!-- <button class="button is-success">Submit</button> -->
         <div class="field is-grouped is-grouped-right pt-2">
-          <button class="button is-success mr-3" @click="addTrainer()">Submit</button>
+          <button class="button is-success mr-3" @click="addTrainer()">
+            Submit
+          </button>
           <button
             class="button is-danger"
             @click="modal_do_train = !modal_do_train"
@@ -69,7 +69,194 @@
             Back
           </button>
         </div>
-        <!-- <button class="button is-success" @click="modal_do_train = !modal_do_train">Back</button> -->
+      </section>
+    </div>
+  </div>
+
+  <!-- View Trainer get Request -->
+  <div class="modal" v-bind:class="{ 'is-active': modal_do_req }" v-if="user">
+    <div class="modal-background"></div>
+    <div class="modal-card" style="max-width: 960px; width: 90%">
+      <section class="modal-card-body">
+        <div class="box has-background-info has-text-info-light">
+          <div class="field is-grouped is-grouped-centered">
+            <h1 class="is-size-3 has-text-weight-bold">Request Info</h1>
+          </div>
+        </div>
+        <div class="columns"></div>
+        <div
+          class="tile is-vertical"
+          v-for="items in request"
+          :key="items.r_id"
+        >
+          <div class="tile">
+            <div class="tile is-parent is-vertical">
+              <article class="tile is-child">
+                <div
+                  :class="
+                    items.status_r === 1
+                      ? 'field box has-background-success'
+                      : 'field box has-background-grey'
+                  "
+                >
+                  <div class="columns is-centered px-3">
+                    <div class="column is-3">
+                      <div class="columns is-centered m-3">
+                        <figure class="image is-128x128">
+                          <img
+                            class="is-rounded"
+                            :src="imagePath(items.image)"
+                            alt="Placeholder image"
+                          />
+                        </figure>
+                      </div>
+                      <div class="columns is-centered m-3">
+                        <p class="title">
+                          {{ items.fname + " " + items.lname }}
+                        </p>
+                      </div>
+
+                      <!-- <p>Peter {{ items.r_id }}</p> -->
+                    </div>
+                    <div class="column is-7 box">
+                      <div class="column" v-if="items.status_r === 1">
+                        <div class="label">Phone</div>
+                        <input
+                          class="input title is-6"
+                          id="phone"
+                          type="text"
+                          v-model="items.phone"
+                          :readonly="editoff"
+                        />
+                      </div>
+                      <div class="column">
+                        <div class="label">Request</div>
+                        <textarea
+                          class="input title is-6"
+                          v-model="items.request_info"
+                          :readonly="editoff"
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="column is-1">
+                      <button
+                        class="button is-success is-pulled-right"
+                        v-if="items.status_r === 0"
+                        @click="acceptRequest(items.u_id)"
+                      >
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                    <div class="column is-1">
+                      <button
+                        class="button is-danger is-pulled-right"
+                        @click="rejectRequest(items.u_id), this.$router.go(0)"
+                      >
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="field is-grouped is-grouped-right pt-2">
+          <button
+            class="button is-danger"
+            @click="modal_do_req = !modal_do_req"
+          >
+            Back
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- View Trainer Subscribe -->
+  <div class="modal" v-bind:class="{ 'is-active': modal_do_sub }" v-if="user">
+    <div class="modal-background"></div>
+    <div class="modal-card" style="max-width: 960px; width: 90%">
+      <section class="modal-card-body">
+        <div class="box has-background-info has-text-info-light">
+          <div class="field is-grouped is-grouped-centered">
+            <h1 class="is-size-3 has-text-weight-bold">Trainer Info</h1>
+          </div>
+        </div>
+        <div class="columns"></div>
+        <div
+          class="tile is-vertical"
+          v-for="items in userreq"
+          :key="items.t_id"
+        >
+          <div class="tile">
+            <div class="tile is-parent is-vertical">
+              <article class="tile is-child">
+                <div
+                  :class="
+                    items.status_r === 1
+                      ? 'field box has-background-success'
+                      : 'field box has-background-grey'
+                  "
+                >
+                  <div class="columns is-centered px-3">
+                    <div class="column is-3">
+                      <div class="columns is-centered m-3">
+                        <figure class="image is-128x128">
+                          <img
+                            class="is-rounded"
+                            :src="imagePath(items.image)"
+                            alt="Placeholder image"
+                          />
+                        </figure>
+                      </div>
+                      <div class="columns is-centered m-3">
+                        <p class="subtitle is-5">
+                          {{ items.fname + " " + items.lname }}
+                        </p>
+                      </div>
+
+                      <!-- <p>Peter {{ items.r_id }}</p> -->
+                    </div>
+                    <div class="column is-7 box">
+                      <div class="column" v-if="items.status_r === 1">
+                        <div class="label">Phone</div>
+                        <input
+                          class="input title is-6"
+                          id="phone"
+                          type="text"
+                          v-model="items.phone"
+                          :readonly="editoff"
+                        />
+                      </div>
+                      <div v-else>
+                        <p class="title">Wait for Trainer Accept</p>
+                      </div>
+                    </div>
+                    <div class="column is-2">
+                      <button
+                        class="button is-danger is-pulled-right"
+                        @click="rejectRequest(items.t_id), this.$router.go(0)"
+                      >
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="field is-grouped is-grouped-right pt-2">
+          <button
+            class="button is-danger"
+            @click="modal_do_sub = !modal_do_sub"
+          >
+            Back
+          </button>
+        </div>
       </section>
     </div>
   </div>
@@ -104,14 +291,13 @@
     </div>
   </section>
 
-<!-- Show Profile -->
+  <!-- Show Profile -->
   <section class="hero is-fullheight" v-if="user">
     <div class="columns hero-body is-fullheight">
       <div class="container" style="width: 50%">
         <section
           class="is-large has-background-grey-light"
           style="border-radius: 1em"
-          
         >
           <div class="columns p-5">
             <div class="column is-3">
@@ -242,25 +428,33 @@
                 <button class="button is-success" disabled>
                   {{ user.role }}
                 </button>
-                <button class="button is-info ml-3">Subscribe</button>
+                <button
+                  class="button is-info ml-3"
+                  @click="modal_do_sub = !modal_do_sub"
+                >
+                  Subscribe
+                </button>
               </div>
               <div v-else-if="user.role === 'trainer'" class="column">
                 <button class="button is-info" disabled>{{ user.role }}</button>
                 <span v-if="user.status === 0">
                   <button
-                  class="button is-warning ml-3"
-                  @click="modal_do_train = !modal_do_train"
-                >
-                  Add Trainer
-                </button>
+                    class="button is-warning ml-3"
+                    @click="modal_do_train = !modal_do_train"
+                  >
+                    Add Trainer
+                  </button>
                 </span>
                 <span v-else>
+                  <button class="button is-danger ml-3" disabled>
+                    Add Trainer
+                  </button>
                   <button
-                  class="button is-danger ml-3"
-                  disabled
-                >
-                  Add Trainer
-                </button>
+                    class="button ml-3"
+                    @click="modal_do_req = !modal_do_req"
+                  >
+                    Check
+                  </button>
                 </span>
               </div>
             </div>
@@ -292,39 +486,92 @@ export default {
       specialize: "",
       certificate: "",
       modal_do_train: false,
-      modal_do_request: false,
+      modal_do_sub: false,
+      modal_do_req: false,
+      request: [],
+      userreq: [],
       // user: null
     };
   },
   beforeRouteEnter(to, from, next) {
-    if (to.path === '`/profile/${this.params.id}`' && !this.reloadFlag) {
+    if (to.path === "`/profile/${this.params.id}`" && !this.reloadFlag) {
       window.location.reload();
-      next(vm => {
+      next((vm) => {
         vm.reloadFlag = true;
       });
     } else {
       next();
     }
   },
+  mounted() {
+    this.getRequest(this.$route.params.id);
+    this.getAccept(this.$route.params.id);
+  },
   methods: {
+    getRequest(rid) {
+      axios
+        .get(`/request/${rid}`)
+        .then((response) => {
+          this.request = response.data.request;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getAccept() {
+      axios
+        .get(`/request/gotit/${this.$route.params.id}`)
+        .then((response) => {
+          this.userreq = response.data.userreq;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     imagePath(file_path) {
       return "http://localhost:3000/" + file_path;
     },
-    async addTrainer(){
+    async addTrainer() {
+      axios
+        .put(`/trainer/${this.$route.params.id}`, {
+          specialize: this.specialize,
+          certificate: this.certificate,
+          info: this.info,
+        })
+        .then((response) => {
+          console.log(response.data);
+          location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    async acceptRequest(u_id) {
+      axios
+        .put(`/request/accept/${this.$route.params.id}`, { t_id: u_id })
+        .then((response) => {
+          console.log(response.data);
+          location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    async rejectRequest(u_id) {
+      const result = confirm(`Are you sure you want to delete Request`);
+      if (result) {
         axios
-          .put(`/trainer/${this.$route.params.id}`, {
-                specialize: this.specialize,
-                certificate: this.certificate,
-                info: this.info,
-            })
+          .delete(`/request/delete/${u_id}`)
           .then((response) => {
-            console.log(response.data);
-            location.reload()
+            console.log("Delete Request Complete");
+            return axios.put(`/request/delete/${this.$route.params.id}`, {
+          another : u_id,
+        });
           })
-          .catch((err) => {
-            console.log(err);
-            
+          .catch((error) => {
+            alert(error);
           });
+      }
     },
   },
 };

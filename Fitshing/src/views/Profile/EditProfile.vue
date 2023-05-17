@@ -400,6 +400,7 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.$router.go(-1)
+          // location.reload()
         })
         .catch((err) => {
           console.log(err);

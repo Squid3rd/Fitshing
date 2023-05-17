@@ -32,7 +32,7 @@
         </div>
         <hr />
         <div class="field is-grouped is-grouped-right pt-2">
-          <button class="button is-success mr-3">Submit</button>
+          <button class="button is-success mr-3" @click="addRequest(`${this.trainer.id}`), modal_do_request = !modal_do_request, this.$router.go(-1);">Submit</button>
           <button
             class="button is-danger"
             @click="modal_do_request = !modal_do_request"
@@ -55,7 +55,8 @@
           </div>
         </div>
         <div class="column is-5 is-offset-1">
-          <p class="title is-3">{{ trainer.fname + " " + trainer.lname }}</p>
+          <p class="title is-3">Name :{{ trainer.fname + " " + trainer.lname }}</p>
+          <p class="title is-3">id : {{ trainer.u_id }}</p>
           <div
             class="description has-background-white m-2"
             style="border: 1px solid #0004; border-radius: 2px; height: 200px"
@@ -75,18 +76,19 @@
             {{ trainer.info }}
           </div>
           <div v-if="user">
-            <div v-if="user.role === 'user'">
+            <div v-if="user.role === 'user' && user.status === 2">
               <button
                 class="button ml-2 add-cart is-success"
-                @click="modal_do_request = !modal_do_request"
+                disabled
               >
                 Subscribe
               </button>
             </div>
-            <div v-else-if="user.role === 'user' && user.status === 2">
+            <div v-else-if="user.role === 'user'">
               <button
                 class="button ml-2 add-cart is-success"
-                disabled
+                @click="modal_do_request = !modal_do_request"
+                
               >
                 Subscribe
               </button>
@@ -110,7 +112,7 @@
   <script>
 import axios from "@/plugins/axios";
 export default {
-  name: "preview",
+  name: "previewT",
   props: ["user"],
   data() {
     return {
@@ -124,7 +126,7 @@ export default {
   },
   methods: {
     imagePath(file_path) {
-      return "http://localhost:3000/" + file_path;
+      return "http://localhost:3000" + file_path;
     },
     getDetailTrainer(TrainerId) {
       axios
@@ -135,6 +137,21 @@ export default {
         .catch((error) => {
           this.error = error.response.data.message;
         });
+    },
+    addRequest(TrainerId){
+      axios
+          .post(`/request/${TrainerId}`, {
+            requestinfo: this.requestinfo,
+            u_id: this.user.id,
+          })
+          .then((res) => {
+            this.$router.go(-1);
+            console.log(res.data);
+            // this.$router.push({ name: 'login' });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
     },
   },
 };

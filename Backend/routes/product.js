@@ -121,61 +121,6 @@ router.post("/product",  upload.single('images'), async function (req, res, next
   
     }
   });
-
-  //insert to payment
-  router.post("/payment", async function (req, res, next) {
-    // console.log(req)
-    // try {
-    //   await addproductSchema.validateAsync(req.body, { abortEarly: false })
-    // } catch (err) {
-    //   console.log(err)
-    //   return res.status(400).json(err.message)
-  
-    // }
-  
-      // const images = req.file.path.substr(6);
-    
-      const slip_info = req.body.slip_info;
-      const total_price = req.body.total_price;
-      const u_id = req.body.u_id;
-      const type = req.body.type;
-      // const type1 = req.body.type1;
-    
-      console.log(slip_info)
-      console.log(total_price)
-      console.log(u_id)
-      console.log(type)
-      // console.log(type1)
-  
-      const conn = await pool.getConnection();
-      await conn.beginTransaction();
-    
-      try {
-        let [rows,fields] = await conn.query(
-          "INSERT INTO payment(slip_info,date, total_price, u_id, type) " +
-          "VALUES(?,  CURRENT_TIMESTAMP, ?, ?, ?);",
-          [slip_info, total_price, u_id, type]
-        );
-  
-        // const exerciseId = results[0].insertId;
-  
-        // await conn.query(
-        //   "INSERT INTO ex_image(ex_id, file_path, date) VALUES(?, ?, CURRENT_TIMESTAMP)",
-        //   [exerciseId, images]
-        // );
-        console.log(rows)
-    
-          await conn.commit()
-          res.status(201).send()
-      } catch (err) {
-          console.log(err)
-          await conn.rollback();
-          res.status(400).json(err.toString());
-      } finally {
-          conn.release()
-    
-      }
-    });
   
   // Delete Product
   router.delete("/product/:id", async function (req, res, next) {
@@ -340,6 +285,106 @@ router.post("/product",  upload.single('images'), async function (req, res, next
   });
 
 
+//insert to payment
+router.post("/payment", async function (req, res, next) {
+  // console.log(req)
+  // try {
+  //   await addproductSchema.validateAsync(req.body, { abortEarly: false })
+  // } catch (err) {
+  //   console.log(err)
+  //   return res.status(400).json(err.message)
 
+  // }
+
+    // const images = req.file.path.substr(6);
+  
+    const slip_info = req.body.slip_info;
+    const total_price = req.body.total_price;
+    const u_id = req.body.u_id;
+    const type = req.body.type;
+    // const type1 = req.body.type1;
+  
+    console.log(slip_info)
+    console.log(total_price)
+    console.log(u_id)
+    console.log(type)
+    // console.log(type1)
+
+    const conn = await pool.getConnection();
+    await conn.beginTransaction();
+  
+    try {
+      let [rows,fields] = await conn.query(
+        "INSERT INTO payment(slip_info,date, total_price, u_id, type) " +
+        "VALUES(?,  CURRENT_TIMESTAMP, ?, ?, ?);",
+        [slip_info, total_price, u_id, type]
+      );
+
+      // const exerciseId = results[0].insertId;
+
+      // await conn.query(
+      //   "INSERT INTO ex_image(ex_id, file_path, date) VALUES(?, ?, CURRENT_TIMESTAMP)",
+      //   [exerciseId, images]
+      // );
+      console.log(rows)
+  
+        await conn.commit()
+        res.status(201).send()
+    } catch (err) {
+        console.log(err)
+        await conn.rollback();
+        res.status(400).json(err.toString());
+    } finally {
+        conn.release()
+  
+    }
+  });
+
+// Delete Product
+router.delete("/product/:id", async function (req, res, next) {
+
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+
+  try {
+    //Delete files from the upload folder
+    const [images,imageFields] = await conn.query(
+      "SELECT * FROM ex_image WHERE ex_id = ?",
+      [req.params.id]
+    );
+
+    const appDir = path.dirname(require.main.filename); 
+    images.forEach((e) => {
+      const p = path.join(appDir, 'static', e.file_path);
+      fs.unlinkSync(p);
+    });
+
+    // Delete images
+    await conn.query("DELETE FROM ex_image WHERE ex_id = ?", [
+      req.params.id,
+    ]);
+
+    // Delete the Product
+    const [
+      rows2,
+      fields2,
+    ] = await conn.query("DELETE FROM exercise WHERE ex_id = ?", [
+      req.params.id,
+    ]);
+
+    if (rows2.affectedRows === 1) {
+      await conn.commit();
+      res.status(204).send();
+    } else {
+      throw "Cannot delete the Product";
+    }
+  } catch (err) {
+    console.log(err)
+    await conn.rollback();
+    return res.status(500).json(err);
+  } finally {
+    conn.release();
+  }
+});
 
 exports.router = router;

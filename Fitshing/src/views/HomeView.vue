@@ -38,7 +38,7 @@ import CardTrainer from "../components/CardTrainer.vue";
     Trainer
   </h1>
   <div class="bor4">
-    <div class="task-container columns px-6 py-6 is-mobile is-multiline">
+    <div class="px-6 py-6 product">
       <CardTrainer v-for="item in trainer.slice(0, 4)" :item="item" />
     </div>
   </div>

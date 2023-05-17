@@ -114,7 +114,7 @@ export default {
   },
   created() {
     this.onAuthChange();
-    this.cart = JSON.parse(localStorage.cart);
+    // this.cart = JSON.parse(localStorage.cart);
   },
   methods: {
     onAuthChange() {
