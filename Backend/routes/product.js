@@ -293,17 +293,37 @@ router.post("/payment", async function (req, res, next) {
     const total_price = req.body.total_price;
     const u_id = req.body.u_id;
     const type = req.body.type;
+    // const type1 = req.body.type1;
+    // console.log(slip_info)
+    // console.log(total_price)
+    // console.log(u_id)
+    // console.log(type)
+    // console.log(type1)
+    // let results = await conn.query(
+    //   "UPDATE exercise SET ex_name=?, ex_info=?, amount=?, ex_price=?, type1=? WHERE ex_id=?",
+    //   [ex_name, ex_info, amount, ex_price, type1, req.params.id]
+    // )
+    // let [rowsEx,fieldsEx] = await pool.query("SELECT * FROM exercise");
+
     const conn = await pool.getConnection();
     await conn.beginTransaction();
   
     try {
       let [rows,fields] = await conn.query(
-        "INSERT INTO payment(slip_info,date,amount, total_price, u_id, type) " +
-        "VALUES(?,  CURRENT_TIMESTAMP,?,?, ?, ?);",
-        [slip_info,quantity, total_price, u_id, type]
+        "INSERT INTO payment(slip_info,date, amount, total_price, u_id, type) " +
+        "VALUES(?,  CURRENT_TIMESTAMP, ?, ?, ?, ?);",
+        [slip_info, quantity, total_price, u_id, type]
       );
       let [rowsEx,fieldsEx] = await conn.query(
         "UPDATE exercise SET amount = amount - ? WHERE ex_id=?",[quantity,ex_id]);
+
+      // const exerciseId = results[0].insertId;
+
+      // await conn.query(
+      //   "INSERT INTO ex_image(ex_id, file_path, date) VALUES(?, ?, CURRENT_TIMESTAMP)",
+      //   [exerciseId, images]
+      // );
+      // console.log(rows)
         await conn.commit()
         res.status(201).send()
     } catch (err) {

@@ -16,7 +16,7 @@
           v-for="image in images"
           :key="image.ex_id"
         >
-          <div class="card p-2 " style="max-width: 95%">
+          <div class="card p-2" style="max-width: 95%">
             <img :src="imagePath(image.file_path)" alt="Placeholder image" />
           </div>
         </div>
@@ -69,12 +69,12 @@
   </section>
   <div v-if="user">
     <div v-if="user.role === 'admin'">
-      <div id="three">
+      <div id="four">
         <router-link :to="{ name: 'editproduct', params: { id: `${this.$route.params.id}` } }">
           <button class="button is-size-4 has-background-info">Edit Product</button>
         </router-link>
       </div>
-      <div id="two">
+      <div id="three">
         <button class="button is-size-4 has-background-danger" @click="deleteproduct">Delete Product</button>
       </div>
     </div>

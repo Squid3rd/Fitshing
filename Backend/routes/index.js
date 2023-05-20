@@ -34,6 +34,17 @@ router.get("/preview/:id", async function (req, res, next) {
   }
 });
 
+// admin get payment
+router.get("/payment", async function (req, res, next) {
+  try {
+    const [rows, fields] = await pool.query('SELECT * FROM payment')
+    return res.json(rows)
+  } catch (err) {
+    console.log(err);
+    next(err)
+  }
+});
+
 
 
 exports.router = router;

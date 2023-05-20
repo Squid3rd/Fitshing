@@ -4,6 +4,11 @@
       <button class="button is-size-4 has-background-success">Add Product</button>
     </router-link>
   </div>
+  <div id="two">
+    <router-link to="/payment/adminview">
+      <button class="button is-size-4 has-background-warning">View Payment</button>
+    </router-link>
+  </div>
 </template>
 
 <script>

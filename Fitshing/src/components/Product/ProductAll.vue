@@ -33,29 +33,25 @@
         <div class="columns is-mobile">
           <div class="column is-12">
             <div class="columns is-multiline">
-              <!-- แต่ละ product  -->
-              <div class="column is-3 has-text-centered cart-item" v-for="(item, index) in product" key="item.ex_id">
-                <div class="card has-text-centered" style="max-width:300px;height:350px;">
-                  <div class="">
-                  <figure class="image" >
-                    <img :src="imagePath(item.file_path)" style="object-fit: contain; width:300px; height:200px;"  alt="Placeholder image" />
-                  </figure>
-                  </div>
+              <div class="column is-3" v-for="(item, index) in product" key="item.ex_id">
+                <div class="card">
+                <figure class="image is-4by3">
+                  <img :src="imagePath(item.file_path)" alt="Placeholder image" />
+                </figure>
                   <p class="title is-6 m-3">{{item.ex_name}}</p>
                   <p class="subtitle is-6 m-3">฿ {{ item.ex_price }}</p>
-                  <div></div>
                   <div class="columns">
-                    <div class="column ">
+                    <div class="column is-6 has-text-centered">
                       <router-link :to='`/product/preview/${item.ex_id}`' >
                       <button class="button b-detail is-success">detail</button>
                       </router-link>
                     </div>
-                    <div class="column is-fullwidth" style="width:100px;">
+                    <div class="column is-6 has-text-centered">
                       <button v-if="check(item)"
                         class="button b-addcart"
                         disabled
                       >
-                        In Cart
+                      In Cart
                       </button>
                       <button v-else-if="item.amount <= 0"
                         class="button b-addcart"
@@ -64,7 +60,7 @@
                         Sold out
                       </button>
                       <button v-else
-                        class="button b-addcart is-warning"  style="width:100px;"
+                      class="button b-addcart is-warning"  style="width:100px;"
                         @click="AddCart(item)"
                       >
                         Add
@@ -140,12 +136,13 @@ export default {
       } else {
         this.cart.push(product);
         product.quantity = 1;
+
       }
       localStorage.setItem("cart", JSON.stringify(this.cart));
     },
     removeFromCart(product) {
       this.cart.splice(this.cart.indexOf(product), 1)
-      localStorage.setItem("cart", JSON.stringify(this.cart));
+    localStorage.setItem("cart", JSON.stringify(this.cart));
     },
   },
   computed: {

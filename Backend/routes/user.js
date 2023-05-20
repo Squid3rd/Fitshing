@@ -100,7 +100,7 @@ router.post('/register', upload.single('images'), async (req, res, next) => {
 
         if(role == 'trainer'){
             await conn.query(
-                'INSERT INTO trainer(certificate, specialize, info, u_id) VALUES ("-", "-", "-", ?)',
+                'INSERT INTO trainer(certificate, specialize, info, amount_t, u_id) VALUES ("-", "-", "-", 0, ?)',
                 [userId]
             )
         }

@@ -3,7 +3,7 @@
     <div class="m-6">
       <div class="columns is-gapless">
         <div class="column is-3">
-          <p class="subtitle is-3">Cart </p>
+          <p class="subtitle is-3">Cart</p>
           <hr class="" style="background-color: rgb(184, 184, 184)" />
         </div>
         <div class="column is-5 has-text-right">
@@ -38,7 +38,7 @@
                 <!-- content -->
               </div>
               <div class="column is-2">
-                  <div class="num-block">
+                  <div class="num-block ">
                     <div class="num-in">
                       <span  class="minus dis" @click="disFromCart(items)"></span>
                       <input type="text" class="in-num" :value="items.quantity" />
@@ -82,7 +82,9 @@
                 <div class="columns">
                   <div class="column has-text-centered" v-if="user">
                     <router-link to="/bill">
-                      <button class="button is-success is-light is-fullwidth">
+                      <button
+                        class="button is-success is-light is-fullwidth"
+                      >
                         ชำระเงิน
                       </button>
                     </router-link>
@@ -109,14 +111,12 @@ import axios from "@/plugins/axios";
 export default {
   props: ['user'],
   data() {
-    
     return {
       cart: [],
-
-
     };
   },
   created() {
+    this.cart = JSON.parse(localStorage.cart);
     this.getProduct();
   },
   methods: {
@@ -131,6 +131,7 @@ export default {
         });
         this.cart = JSON.parse(localStorage.cart);
     },
+    
     imagePath(file_path) {
       if (file_path) {
         return "http://localhost:3000/" + file_path;
@@ -140,6 +141,7 @@ export default {
     },
     plusFromCart(product) {
       if (this.cart.includes(product) && product.quantity  < product.amount) {
+
         product.quantity = product.quantity + 1;
         localStorage.setItem("cart", JSON.stringify(this.cart));
       }

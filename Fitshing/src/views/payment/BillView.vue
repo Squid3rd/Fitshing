@@ -1,5 +1,5 @@
 <template>
-    <section class="hero p-6 is-info  is-max-desktop mb-6">
+    <section class="hero is-info  is-max-desktop mb-6">
       <div class="columns is-mobile is-centered">
         <div class="column is-half">
           <p class="title is-3">วิธีการชำระเงิน</p>
@@ -84,9 +84,9 @@
                   type: this.type,})
             .then((res) => this.$router.push({ name: "home" }))
             .catch((e) => console.log(e.response.data));
-        }
-        this.cart = []
+            this.cart = []
         localStorage.setItem("cart", JSON.stringify(this.cart));
+        }
       },
     },
     computed: {

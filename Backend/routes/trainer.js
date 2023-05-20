@@ -20,7 +20,7 @@ router = express.Router();
 // Get trainer
 router.get("/trainer", async function (req, res, next) {
   try {
-    const [rows, fields] = await pool.query('SELECT * FROM trainer RIGHT OUTER JOIN users on (users.id = trainer.u_id) where status=1;')
+    const [rows, fields] = await pool.query('SELECT * FROM trainer RIGHT OUTER JOIN users on (users.id = trainer.u_id) where status=1 and amount_t != 0;')
     return res.json(rows)
   } catch (err) {
     console.log(err);
@@ -31,7 +31,7 @@ router.get("/trainer", async function (req, res, next) {
 // View Preview
 router.get("/trainer/:id", function (req, res, next) {
 
-  const promise1 = pool.query("SELECT * FROM trainer RIGHT OUTER JOIN users on (users.id = trainer.u_id) where status=1 and t_id = ?;", [
+  const promise1 = pool.query("SELECT * FROM trainer RIGHT OUTER JOIN users on (users.id = trainer.u_id) where status=1 and amount_t != 0 and t_id = ?;", [
     req.params.id
   ]);
 
@@ -54,14 +54,15 @@ router.put("/trainer/:id", async function (req, res, next) {
     const specialize = req.body.specialize;
     const certificate = req.body.certificate;
     const info = req.body.info;
+    const amount_t = req.body.amount_t;
   
     const conn = await pool.getConnection();
     await conn.beginTransaction();
   
     try {
       let results = await conn.query(
-        "Update trainer set specialize=?, certificate=?, info=? where u_id = ?",
-        [specialize, certificate, info, req.params.id]
+        "Update trainer set specialize=?, certificate=?, info=?, amount_t=? where u_id = ?",
+        [specialize, certificate, info, amount_t, req.params.id]
       );
 
       let results1 = await conn.query(

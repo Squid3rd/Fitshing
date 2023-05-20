@@ -32,7 +32,7 @@
         </div>
         <hr />
         <div class="field is-grouped is-grouped-right pt-2">
-          <button class="button is-success mr-3" @click="addRequest(`${this.trainer.id}`), modal_do_request = !modal_do_request, this.$router.go(-1);">Submit</button>
+          <button class="button is-success mr-3" @click="addRequest(`${this.trainer.id}`, `${this.trainer.amount_t}`), modal_do_request = !modal_do_request, this.$router.go(-1);">Submit</button>
           <button
             class="button is-danger"
             @click="modal_do_request = !modal_do_request"
@@ -57,6 +57,9 @@
         <div class="column is-5 is-offset-1">
           <p class="title is-3">Name :{{ trainer.fname + " " + trainer.lname }}</p>
           <p class="title is-3">id : {{ trainer.u_id }}</p>
+          <p class="title is-3">Member left: 
+          {{ trainer.amount_t }}
+        </p>
           <div
             class="description has-background-white m-2"
             style="border: 1px solid #0004; border-radius: 2px; height: 200px"
@@ -138,11 +141,12 @@ export default {
           this.error = error.response.data.message;
         });
     },
-    addRequest(TrainerId){
+    addRequest(TrainerId, amount){
       axios
           .post(`/request/${TrainerId}`, {
             requestinfo: this.requestinfo,
             u_id: this.user.id,
+            count: amount,
           })
           .then((res) => {
             this.$router.go(-1);

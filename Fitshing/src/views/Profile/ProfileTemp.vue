@@ -39,6 +39,20 @@
                   </div>
                 </div>
               </article>
+              <article class="tile is-child">
+                <div class="field box">
+                  <label class="label">Number of Member</label>
+                  <div class="control">
+                    <div class="select">
+                      <select name="amount_t" v-model="amount_t">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                    </select>
+                    </div>
+                  </div>
+                </div>
+              </article>
             </div>
             <div class="tile is-parent">
               <article class="tile is-child">
@@ -55,6 +69,7 @@
                 </div>
               </article>
             </div>
+            
           </div>
         </div>
         <hr />
@@ -150,7 +165,7 @@
                     <div class="column is-1">
                       <button
                         class="button is-danger is-pulled-right"
-                        @click="rejectRequest(items.u_id), this.$router.go(0)"
+                        @click="rejectRequestTrainer(items.u_id), this.$router.go(0)"
                       >
                         <i class="fa fa-times" aria-hidden="true"></i>
                       </button>
@@ -237,7 +252,7 @@
                     <div class="column is-2">
                       <button
                         class="button is-danger is-pulled-right"
-                        @click="rejectRequest(items.t_id), this.$router.go(0)"
+                        @click="rejectRequestUser(items.t_id), this.$router.go(0)"
                       >
                         <i class="fa fa-times" aria-hidden="true"></i>
                       </button>
@@ -485,6 +500,7 @@ export default {
       info: "",
       specialize: "",
       certificate: "",
+      amount_t: 0,
       modal_do_train: false,
       modal_do_sub: false,
       modal_do_req: false,
@@ -493,16 +509,16 @@ export default {
       // user: null
     };
   },
-  beforeRouteEnter(to, from, next) {
-    if (to.path === "`/profile/${this.params.id}`" && !this.reloadFlag) {
-      window.location.reload();
-      next((vm) => {
-        vm.reloadFlag = true;
-      });
-    } else {
-      next();
-    }
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   if (to.path === "`/profile/${this.params.id}`" && !this.reloadFlag) {
+  //     window.location.reload();
+  //     next((vm) => {
+  //       vm.reloadFlag = true;
+  //     });
+  //   } else {
+  //     next();
+  //   }
+  // },
   mounted() {
     this.getRequest(this.$route.params.id);
     this.getAccept(this.$route.params.id);
@@ -537,6 +553,7 @@ export default {
           specialize: this.specialize,
           certificate: this.certificate,
           info: this.info,
+          amount_t: this.amount_t
         })
         .then((response) => {
           console.log(response.data);
@@ -557,15 +574,31 @@ export default {
           console.log(err);
         });
     },
-    async rejectRequest(u_id) {
+    async rejectRequestUser(u_id) {
       const result = confirm(`Are you sure you want to delete Request`);
       if (result) {
         axios
-          .delete(`/request/delete/${u_id}`)
+          .delete(`/request/delete/user/${this.$route.params.id}`)
           .then((response) => {
             console.log("Delete Request Complete");
             return axios.put(`/request/delete/${this.$route.params.id}`, {
-          another : u_id,
+            another : `${u_id}`,
+        });
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      }
+    },
+    async rejectRequestTrainer(u_id) {
+      const result = confirm(`Are you sure you want to delete Request`);
+      if (result) {
+        axios
+          .delete(`/request/delete/trainer/${u_id}`)
+          .then((response) => {
+            console.log("Delete Request Complete");
+            return axios.put(`/request/delete/${u_id}`, {
+            another : `${this.$route.params.id}`,
         });
           })
           .catch((error) => {
