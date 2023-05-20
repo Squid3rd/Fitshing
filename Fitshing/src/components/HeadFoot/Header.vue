@@ -17,6 +17,7 @@
           <p class="is-size-2 has-text-left has-text-weight-semibold application">
             <router-link to="/product"><button>All Product</button></router-link>
           </p>
+          
         </div>
 
         <div class="column is-1 is-offset-3">
@@ -26,6 +27,7 @@
             </p>
           </router-link>
         </div>
+
         <div class="navbar-end">
       <div class="navbar-item has-dropdown is-hoverable has-text-centered">
         <div class="navbar-link">
@@ -55,7 +57,18 @@
 </template>
 
 <script>
-export default {};
+// import axios from "@/plugins/axios";
+export default {
+  data() {
+    return {
+      cart: [],
+      set:0,
+    };
+  },
+  created() {
+    this.cart = JSON.parse(localStorage.cart);
+  },
+};
 </script>
 
 <style>

@@ -42,7 +42,7 @@
                     <div class="num-in">
                       <span  class="minus dis" @click="disFromCart(items)"></span>
                       <input type="text" class="in-num" :value="items.quantity" />
-                      <span class="plus" @click="AddCart(items)"></span>
+                      <span class="plus" @click="plusFromCart(items)"></span>
                     </div>
                   </div>
               </div>
@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/plugins/axios";
 export default {
   data() {
     return {
@@ -109,8 +109,19 @@ export default {
   },
   created() {
     this.cart = JSON.parse(localStorage.cart);
+    this.getProduct();
   },
   methods: {
+    getProduct() {
+      axios
+        .get("/product")
+        .then((response) => {
+          this.product = response.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     imagePath(file_path) {
       if (file_path) {
         return "http://localhost:3000/" + file_path;
@@ -118,12 +129,9 @@ export default {
         return "https://bulma.io/images/placeholders/640x360.png";
       }
     },
-    AddCart(product) {
-      if (this.cart.includes(product)) {
-        product.quantity = product.quantity + 1;
-        localStorage.setItem("cart", JSON.stringify(this.cart));
-      } else {
-        // this.cart.push(product);
+    plusFromCart(product) {
+      if (this.cart.includes(product) && product.quantity  < product.amount) {
+
         product.quantity = product.quantity + 1;
         localStorage.setItem("cart", JSON.stringify(this.cart));
       }

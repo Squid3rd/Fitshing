@@ -57,16 +57,14 @@
     </section>
   </template>
   
-  <script>
+<script>
   import axios from '@/plugins/axios';
   export default {
     name: "cardproduct",
     props: ['user'],
     data() {
-      
       return {
         type: "",
-        
         cart: [],
       };
     },
@@ -76,29 +74,21 @@
     methods: {
       submit() {
         for (let i = 0; this.cart.length > i; i++) {
-          // formData.append("slip_info", this.cart[i].ex_name);
-          // formData.append("total_price", this.cart[i].ex_price);
-          // formData.append("u_id", this.user.id);
-          // formData.append("type", this.type);
-          axios
-            .post("/payment", {
+          axios.post("/payment", {
+                  ex_id:this.cart[i].ex_id,
                   slip_info: this.cart[i].ex_name,
                   total_price: this.cart[i].ex_price,
                   u_id: this.user.id,
+                  quantity:this.cart[i].quantity,
                   type: this.type,})
             .then((res) => this.$router.push({ name: "home" }))
             .catch((e) => console.log(e.response.data));
         }
-        
       },
     },
     computed: {
       sumary() {
-        // this.total = this.cart.reduce((num, int) => num + int.price * int.quantity, 0);
-        return this.cart.reduce(
-          (num, int) => num + int.ex_price * int.quantity,
-          0
-        );
+        return this.cart.reduce((num, int) => num + int.ex_price * int.quantity,0);
       },
     },
   };
@@ -106,3 +96,4 @@
    
   <style>
   </style>
+           <!-- this.total = this.cart.reduce((num, int) => num + int.price * int.quantity, 0); -->

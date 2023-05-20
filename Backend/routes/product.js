@@ -287,28 +287,23 @@ router.post("/product",  upload.single('images'), async function (req, res, next
 
 //insert to payment
 router.post("/payment", async function (req, res, next) {
-  // console.log(req)
-  // try {
-  //   await addproductSchema.validateAsync(req.body, { abortEarly: false })
-  // } catch (err) {
-  //   console.log(err)
-  //   return res.status(400).json(err.message)
-
-  // }
-
-    // const images = req.file.path.substr(6);
-  
+  const quantity = req.body.quantity;
+  const ex_id = req.body.ex_id;
     const slip_info = req.body.slip_info;
     const total_price = req.body.total_price;
     const u_id = req.body.u_id;
     const type = req.body.type;
     // const type1 = req.body.type1;
-  
-    console.log(slip_info)
-    console.log(total_price)
-    console.log(u_id)
-    console.log(type)
+    // console.log(slip_info)
+    // console.log(total_price)
+    // console.log(u_id)
+    // console.log(type)
     // console.log(type1)
+    // let results = await conn.query(
+    //   "UPDATE exercise SET ex_name=?, ex_info=?, amount=?, ex_price=?, type1=? WHERE ex_id=?",
+    //   [ex_name, ex_info, amount, ex_price, type1, req.params.id]
+    // )
+    // let [rowsEx,fieldsEx] = await pool.query("SELECT * FROM exercise");
 
     const conn = await pool.getConnection();
     await conn.beginTransaction();
@@ -319,6 +314,8 @@ router.post("/payment", async function (req, res, next) {
         "VALUES(?,  CURRENT_TIMESTAMP, ?, ?, ?);",
         [slip_info, total_price, u_id, type]
       );
+      let [rowsEx,fieldsEx] = await conn.query(
+        "UPDATE exercise SET amount = amount - ? WHERE ex_id=?",[quantity,ex_id]);
 
       // const exerciseId = results[0].insertId;
 
@@ -326,8 +323,7 @@ router.post("/payment", async function (req, res, next) {
       //   "INSERT INTO ex_image(ex_id, file_path, date) VALUES(?, ?, CURRENT_TIMESTAMP)",
       //   [exerciseId, images]
       // );
-      console.log(rows)
-  
+      // console.log(rows)
         await conn.commit()
         res.status(201).send()
     } catch (err) {

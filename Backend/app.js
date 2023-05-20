@@ -11,13 +11,13 @@ const indexRouter = require('./routes/index')
 const productRouter = require('./routes/product')
 const userRouter = require('./routes/user')
 const trainerRouter = require('./routes/trainer')
-const requestRouter = require('./routes/request')
+// const requestRouter = require('./routes/request')
 
 app.use(indexRouter.router)
 app.use(productRouter.router)
 app.use(userRouter.router)
 app.use(trainerRouter.router)
-app.use(requestRouter.router)
+// app.use(requestRouter.router)
 
 
 app.listen(3000, () => {

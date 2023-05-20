@@ -1,6 +1,6 @@
 <template>
   <section class="hero" style="">
-    <div class="hero-body">
+    <div class="hero-body container">
       <div class="p-2">
         <div class="columns">
           <div class="field has-addons column is-offset-8">
@@ -19,10 +19,19 @@
             <button class="button ml-4 is-danger is-light" @click="clearCart()">
               Clear Cart
             </button>
+            <div style="display: flex; justify-content: space-between; font-size: 1.25rem; " >
+              <router-link to="/cart">
+              <button 
+                v-if="cart.length !=0"
+                class="button is-warning ml-4"
+                style="width: 100%"
+                >Cart ({{cart.length}})</button>
+                </router-link>
+            </div>
           </div>
         </div>
         <div class="columns is-mobile">
-          <div class="column is-9">
+          <div class="column is-12">
             <div class="columns is-multiline">
               <div class="column is-3" v-for="(item, index) in product" key="item.ex_id">
                 <div class="card">
@@ -33,11 +42,17 @@
                   <p class="subtitle is-6 m-3">฿ {{ item.ex_price }}</p>
                   <div class="columns">
                     <div class="column is-6 has-text-centered">
-                      <!-- <router-link to="/detail">
+                      <router-link :to='`/product/preview/${item.ex_id}`' >
                       <button class="button b-detail is-success">detail</button>
-                      </router-link> -->
+                      </router-link>
                     </div>
                     <div class="column is-6 has-text-centered">
+                      <button v-if="check(item)"
+                        class="button b-addcart is-warning"
+                        @click="AddCart(item)"
+                      >
+                        Add
+                      </button>
                       <button
                         class="button b-addcart is-warning"
                         @click="AddCart(item)"
@@ -50,62 +65,6 @@
               </div>
             </div>
           </div>
-            <div class="column is-3 pt-6 pl-0 cart ml-5 is-mobile">
-              <div style="display: flex; justify-content: space-between">
-                <span class="is-size-4 mb-4">ตะกร้า ({{ cart.length }})</span>
-              </div>
-
-              <!-- Card element start here ------------------------------------------>
-              <div v-for="products in cart" class="card mb-1 is-mobile">
-                <div class="card-content p-0">
-                  <div class="media">
-                    <div class="media-left">
-                      <figure class="image is-96x96 mt-2">
-                        <img :src="imagePath(products.file_path)" alt="Placeholder image" />
-                      </figure>
-                    </div>
-                    <div class="media-content pt-2">
-                      <p class="is-5">{{ products.ex_name }}</p>
-                      <p class="has-text-grey-light is-6">
-                        {{ products.brand }}
-                      </p>
-                      <div
-                        style="display: flex; justify-content: space-between"
-                      >
-                        <div>
-                          <!-- ราคาสินค้า------------------------------------------------ -->
-                          <span class="is-6 has-text-danger">{{products.ex_price}}</span>
-                          <!-- จำนวนสินค้า----------------------------------------------- -->
-                          <span>x{{ products.quantity }}</span>
-                        </div>
-                        <div>
-                          <!-- icon รูปถังขยะ------------------------------------------- -->
-                          <span class="icon mr-2">
-                            <i class="fa fa-trash" @click="removeFromCart(products)"></i>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!--  -->
-              <div
-                style="display: flex; justify-content: space-between; font-size: 1.25rem; " >
-                <span class="has-text-weight-bold">Total</span>
-                <!-- รวมราคาสินค้าาาาาาาาาาาาาาาาาาาาาาาา -->
-                <span id="totalPrice">{{sumary}}</span>
-              </div>
-
-              <!-- ปุ่ม Checkout ------------------------------------------------------------ -->
-                <router-link to="/cart">
-                <button 
-                  v-if="cart.length !=0"
-                  class="button is-warning mt-3"
-                  style="width: 100%"
-                  >Checkout</button>
-                  </router-link>
-            </div>
           </div>
         </div>
       </div>
@@ -129,10 +88,15 @@ export default {
     };
   },
   mounted() {
-    // this.cart = JSON.parse(localStorage.cart);
+    this.cart = JSON.parse(localStorage.cart);
     this.getProduct();
   },
   methods: {
+    check(product){
+        if(this.cart.includes(product)){
+          return false
+        }
+      },
     getProduct() {
       axios
         .get("/product")
@@ -162,13 +126,15 @@ export default {
     },
     AddCart(product) {
       if (this.cart.includes(product)) {
-        product.quantity = product.quantity+1;
-        localStorage.setItem("cart", JSON.stringify(this.cart));
+        alert("คุณมีสินค้านี้ในตระก้าแล้ว")
+        // product.quantity = product.quantity+1;
+        // localStorage.setItem("cart", JSON.stringify(this.cart));
       } else {
         this.cart.push(product);
         product.quantity = 1;
-        localStorage.setItem("cart", JSON.stringify(this.cart));
+        // localStorage.setItem("cart", JSON.stringify(this.cart));
       }
+      localStorage.setItem("cart", JSON.stringify(this.cart));
     },
     removeFromCart(product) {
     // if (product.quantity == 1) {
@@ -187,9 +153,6 @@ export default {
       }
     },
 };
-// <div class="product">
-//               <CardProductVue v-for="item in product" :item="item" />
-//           </div>
 </script>
 
 <script setup>
