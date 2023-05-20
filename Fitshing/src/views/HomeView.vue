@@ -51,13 +51,17 @@ export default {
   data() {
     return {
       product: [],
-      trainer: []
+      trainer: [],
+      cart:[],
       // numRandom: "",
     };
   },
   mounted() {
     this.getProduct();
     this.getTrainer();
+    if (localStorage.getItem("cart") === null) {
+        localStorage.setItem("cart", JSON.stringify(this.cart));
+    }
   },
   // created(){
   //   this.generateRandomNumber();

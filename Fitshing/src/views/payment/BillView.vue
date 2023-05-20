@@ -1,5 +1,5 @@
 <template>
-    <section class="hero is-info container is-max-desktop mb-6">
+    <section class="hero p-6 is-info  is-max-desktop mb-6">
       <div class="columns is-mobile is-centered">
         <div class="column is-half">
           <p class="title is-3">วิธีการชำระเงิน</p>
@@ -9,7 +9,7 @@
                 type="radio"
                 name="foobar"
                 value="Mobile Baanking"
-                v-model="type"
+                v-model="type"  checked
               />
               โอนเงินผ่านธนาคาร
             </label>
@@ -33,7 +33,7 @@
             </label>
           </div>
           <div class="title is-4">รายการสั่งซื้อ</div>
-          <div style="background-color: white; color: black">
+          <div style="background-color: white; color: black" class="p-5">
             <div class="columns">
               <div class="column is-10">
                 <p v-for="(item, index) in cart">{{ item.ex_name }}</p>
@@ -73,6 +73,7 @@
     },
     methods: {
       submit() {
+        alert("สั่งซื้อสำเร็จ")
         for (let i = 0; this.cart.length > i; i++) {
           axios.post("/payment", {
                   ex_id:this.cart[i].ex_id,
@@ -84,6 +85,8 @@
             .then((res) => this.$router.push({ name: "home" }))
             .catch((e) => console.log(e.response.data));
         }
+        this.cart = []
+        localStorage.setItem("cart", JSON.stringify(this.cart));
       },
     },
     computed: {

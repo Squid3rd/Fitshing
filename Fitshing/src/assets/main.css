@@ -203,17 +203,18 @@
 
 .logoes{
   transition: all 0.2s;
-  box-shadow: 0.4em 0.4em 0.3em #0006;
+  box-shadow: 0.4em 0.4em 0.3em #0005;
 }
 .logoes:hover{
   transform: rotateZ(-10deg) scale(1.1,1.1);
 }
 .bill{
   border: 1px solid #0004;
-  box-shadow: 0.2em 0.2em 0.2em ;
+  
+  box-shadow: 0.25em 0.25em 0.5em ;
 }
 .cart-product{
-  box-shadow: 0.2em 0.2em 0.2em ;
+  box-shadow: 0.25em 0.25em 0.5em ;
 }
 
 .b-addcart:hover{
@@ -294,7 +295,7 @@
 	box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
 	border-radius: 10px;
 	height: 40px;
-	width: 110px;
+	width: 90px;
   float: left;
 }
 
@@ -332,5 +333,17 @@
 .last-payment:hover{
   transition: all 0.2s;
   transform:scale(1.1,1.1);
-  box-shadow: 0.2em 0.2em 0.2em #0005;
+  box-shadow: 0.2em 0.2em 0.2em rgb(0, 0, 0);
+}
+.cart-item{
+  transition: all 0.3s;
+  &:hover{animation: dungding 0.3s alternate ease-in-out;}
+  
+}
+@keyframes dungding {
+  0%{transform: translate(0px,0px);}
+  100%{transform: translate(0px,-3px);}
+}
+.cancel:hover{
+  background-color: rgb(255, 85, 85) !important;
 }

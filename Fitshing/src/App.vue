@@ -18,7 +18,7 @@ import AdminVue from "./components/Admin.vue";
   <!-- Header -->
   <div
     class="columns p-3"
-    style="background-image: linear-gradient(to left, #567189, #7b8fa1)"
+    style="background-color: #567189;"
   >
     <div class="column is-1 is-offset-1">
       <router-link to="/">
@@ -114,7 +114,7 @@ export default {
   },
   created() {
     this.onAuthChange();
-    this.cart = JSON.parse(localStorage.cart);
+    // this.cart = JSON.parse(localStorage.cart);
   },
   methods: {
     onAuthChange() {

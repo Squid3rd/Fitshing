@@ -16,7 +16,7 @@
           v-for="image in images"
           :key="image.ex_id"
         >
-          <div class="card p-2" style="max-width: 95%">
+          <div class="card p-2 " style="max-width: 95%">
             <img :src="imagePath(image.file_path)" alt="Placeholder image" />
           </div>
         </div>

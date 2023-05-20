@@ -33,28 +33,38 @@
         <div class="columns is-mobile">
           <div class="column is-12">
             <div class="columns is-multiline">
-              <div class="column is-3" v-for="(item, index) in product" key="item.ex_id">
-                <div class="card">
-                <figure class="image is-4by3">
-                  <img :src="imagePath(item.file_path)" alt="Placeholder image" />
-                </figure>
+              <!-- แต่ละ product  -->
+              <div class="column is-3 has-text-centered cart-item" v-for="(item, index) in product" key="item.ex_id">
+                <div class="card has-text-centered" style="max-width:300px;height:350px;">
+                  <div class="">
+                  <figure class="image" >
+                    <img :src="imagePath(item.file_path)" style="object-fit: contain; width:300px; height:200px;"  alt="Placeholder image" />
+                  </figure>
+                  </div>
                   <p class="title is-6 m-3">{{item.ex_name}}</p>
                   <p class="subtitle is-6 m-3">฿ {{ item.ex_price }}</p>
+                  <div></div>
                   <div class="columns">
-                    <div class="column is-6 has-text-centered">
+                    <div class="column ">
                       <router-link :to='`/product/preview/${item.ex_id}`' >
                       <button class="button b-detail is-success">detail</button>
                       </router-link>
                     </div>
-                    <div class="column is-6 has-text-centered">
+                    <div class="column is-fullwidth" style="width:100px;">
                       <button v-if="check(item)"
-                        class="button b-addcart is-warning"
-                        @click="AddCart(item)"
+                        class="button b-addcart"
+                        disabled
                       >
-                        Add
+                        In Cart
                       </button>
-                      <button
-                        class="button b-addcart is-warning"
+                      <button v-else-if="item.amount <= 0"
+                        class="button b-addcart"
+                        disabled
+                      >
+                        Sold out
+                      </button>
+                      <button v-else
+                        class="button b-addcart is-warning"  style="width:100px;"
                         @click="AddCart(item)"
                       >
                         Add
@@ -94,7 +104,7 @@ export default {
   methods: {
     check(product){
         if(this.cart.includes(product)){
-          return false
+          return true
         }
       },
     getProduct() {
@@ -125,31 +135,22 @@ export default {
       localStorage.setItem("cart", JSON.stringify(this.cart));
     },
     AddCart(product) {
-      if (this.cart.includes(product)) {
+      if (this.cart.includes(product,-1)) {
         alert("คุณมีสินค้านี้ในตระก้าแล้ว")
-        // product.quantity = product.quantity+1;
-        // localStorage.setItem("cart", JSON.stringify(this.cart));
       } else {
         this.cart.push(product);
         product.quantity = 1;
-        // localStorage.setItem("cart", JSON.stringify(this.cart));
       }
       localStorage.setItem("cart", JSON.stringify(this.cart));
     },
     removeFromCart(product) {
-    // if (product.quantity == 1) {
       this.cart.splice(this.cart.indexOf(product), 1)
-    // }
-    // else {
-      // product.quantity -= 1
-      // localStorage.setItem("cart", JSON.stringify(this.cart));
-    // }
-    localStorage.setItem("cart", JSON.stringify(this.cart));
+      localStorage.setItem("cart", JSON.stringify(this.cart));
     },
   },
   computed: {
       sumary() {
-        return this.cart.reduce((num, int) => num + int.ex_price * int.quantity, 0)
+        return this.cart[0]==this.cart[1]
       }
     },
 };
