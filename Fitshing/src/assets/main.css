@@ -1,21 +1,21 @@
 
 .bor1 {
-  padding: 5em;
-  background: rgb(228, 228, 154);
+  /* opacity: 0.5; */
+  padding: 4em;
+  background: #ddc4a6;
 }
 .bor2 {
   padding: 5em;
   background: rgb(194, 194, 39);
 }
 .bor3 {
-  padding: 5em;
-  background: rgb(143, 143, 97);
+  padding: 4em;
+  background: #e0b88b;
 }
 .bor4 {
-  padding: 5em;
-  background: rgb(102, 102, 45);
+  padding: 4em;
+  background: #b3966f;
 }
-
 /* Product */
 
 
@@ -344,4 +344,11 @@
   transition: all 0.2s;
   transform:scale(1.1,1.1);
   box-shadow: 0.2em 0.2em 0.2em #0005;
+}
+.goto:hover{
+  color: rgb(58, 58, 58) !important;
+}
+.cardd:hover{
+  transition: all 0.2s;
+  transform: translate(0px, -7px);
 }

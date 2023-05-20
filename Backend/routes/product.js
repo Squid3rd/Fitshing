@@ -21,7 +21,7 @@ router.get("/product", async function (req, res, next) {
 // View Preview
 router.get("/product/:id", function (req, res, next) {
 
-  const promise1 = pool.query("SELECT * FROM exercise left outer join ex_type on (exercise.type1 = ex_type.id) WHERE ex_id=?", [
+  const promise1 = pool.query("SELECT * FROM exercise left outer join ex_type on (exercise.type1 = ex_type.id) LEFT OUTER JOIN ex_image using (ex_id) WHERE ex_id=?", [
     req.params.id,
   ]);
   const promise2 = pool.query("SELECT * FROM ex_image WHERE ex_id=?", [

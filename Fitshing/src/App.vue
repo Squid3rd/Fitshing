@@ -37,18 +37,22 @@ import AdminVue from "./components/Admin.vue";
       </p>
     </div>
 
-    <div class="column is-2 mt-2">
-      <p class="is-size-2 has-text-left has-text-weight-semibold application">
-        <router-link to="/product"
-          ><button class="button">All Product</button></router-link
-        >
-        <router-link to="/trainer"
-          ><button class="button">All Trainer</button></router-link
-        >
+    <div class="column is-2 mt-2 is-offset-2">
+      <p  class="is-size-4 has-text-right has-text-weight-semibold application" style="position:relative; top:18px;">
+        <router-link to="/product">
+        <p class="has-text-white goto">All Product</p>
+          </router-link>
+      </p>
+    </div>
+    <div class="column is-1 mt-2">
+      <p class="is-size-4 has-text-left has-text-weight-semibold application" style="position:relative; top:18px;">
+        <router-link to="/trainer">
+        <p class="has-text-white goto">All Trainer</p>
+          </router-link>
       </p>
     </div>
 
-    <div class="column is-1 is-offset-3">
+    <div class="column is-1 has-text-centered">
       <router-link to="/Cart">
         <p class="icon has-text-info mt-5">
           <i class="fa fa-shopping-cart is-size-1 has-text-light"></i>
@@ -71,7 +75,7 @@ import AdminVue from "./components/Admin.vue";
             }"
           ></i>
         </div>
-        <div class="navbar-dropdown">
+        <div class="navbar-dropdown is-mobile">
           <div v-if="!user" class="navbar-item">
             <router-link to="/login">
               <strong>Login</strong>

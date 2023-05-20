@@ -7,6 +7,7 @@ router = express.Router();
 
 // Add Request
 router.post("/request/:id", async (req, res, next) => {
+  console.log(req.body)
   //     try {
   //         await loginSchema.validateAsync(req.body, { abortEarly: false })
   // } catch (err) {

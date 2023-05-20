@@ -8,7 +8,7 @@
               <input
                 type="radio"
                 name="foobar"
-                value="Mobile Baanking"
+                value="Mobile Banking"
                 v-model="type"  checked
               />
               โอนเงินผ่านธนาคาร
@@ -64,7 +64,7 @@
     props: ['user'],
     data() {
       return {
-        type: "",
+        type: "Mobile Banking",
         cart: [],
       };
     },
@@ -84,9 +84,9 @@
                   type: this.type,})
             .then((res) => this.$router.push({ name: "home" }))
             .catch((e) => console.log(e.response.data));
-            this.cart = []
-        localStorage.setItem("cart", JSON.stringify(this.cart));
         }
+        this.cart = []
+        localStorage.setItem("cart", JSON.stringify(this.cart));
       },
     },
     computed: {
@@ -99,4 +99,5 @@
    
   <style>
   </style>
+
            <!-- this.total = this.cart.reduce((num, int) => num + int.price * int.quantity, 0); -->

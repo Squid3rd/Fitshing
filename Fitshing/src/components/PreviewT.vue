@@ -21,8 +21,8 @@
                     <textarea
                       v-model="requestinfo"
                       class="textarea"
-                      cols="20"
-                      rows="5"
+                      cols="5"
+                      rows="10"
                     ></textarea>
                   </div>
                 </div>
@@ -45,40 +45,52 @@
   </div>
 
   <!-- Preview Section -->
-  <section class="hero is-fullheight">
-    <div class="container is-max-widescreen has-background-success-light mt-6">
-      <div class="columns">
+  <section class="hero is-fullheight" >
+    <div class="container has-background-success-light mt-6 mb-6 p-5" style="border-radius: 10px; box-shadow:0.4em 0.4em 0.8em #0004;">
+      <div class="columns ">
         <!-- Trainer All Part -->
-        <div class="column is-4 is-offset-1">
-          <div class="card p-2" style="max-width: 95%">
+        <div class="column is-4 is-offset-1 mt-5">
+          <div class="card p-3" style="width: 100%">
             <img :src="imagePath(trainer.image)" alt="Placeholder image" />
           </div>
         </div>
-        <div class="column is-5 is-offset-1">
-          <p class="title is-3">Name :{{ trainer.fname + " " + trainer.lname }}</p>
-          <p class="title is-3">id : {{ trainer.u_id }}</p>
-          <p class="title is-3">Member left: 
+        <div class="column is-6 is-offset-1 mt-5">
+          <p class="title is-4">Name :{{ trainer.fname + " " + trainer.lname }}</p>
+          <p class="title is-4">id : {{ trainer.u_id }}</p>
+          <p class="title is-4">Member left: 
           {{ trainer.amount_t }}
         </p>
+        <label class="subtitle is-4" for="">certificate</label>
           <div
-            class="description has-background-white m-2"
+            class="has-background-white m-2"
             style="border: 1px solid #0004; border-radius: 2px; height: 200px"
           >
             {{ trainer.certificate }}
           </div>
+        </div>
+        
+      </div>
+      <div class="columns ">
+        <div class="column">
+          <label class="subtitle is-4" for="">specialize</label>
           <div
-            class="description has-background-white m-2"
+            class="has-background-white m-2"
             style="border: 1px solid #0004; border-radius: 2px; height: 200px"
           >
             {{ trainer.specialize }}
           </div>
+          </div>
+          <div class="column">
+          <label class="subtitle is-4" for="">info</label>
           <div
-            class="description has-background-white m-2"
+            class=" has-background-white m-2"
             style="border: 1px solid #0004; border-radius: 2px; height: 200px"
           >
             {{ trainer.info }}
           </div>
-          <div v-if="user">
+          </div>
+      </div>
+      <div v-if="user">
             <div v-if="user.role === 'user' && user.status === 2">
               <button
                 class="button ml-2 add-cart is-success"
@@ -102,8 +114,6 @@
               </button>
             </div>
           </div>
-        </div>
-      </div>
     </div>
   </section>
 </template>

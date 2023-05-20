@@ -1,5 +1,5 @@
 <template>
-      <div class="column has-background-warning">
+      <div class="column" style="background-color: #567189;">
         <div class="column">
           <br />
           <p class="is-size-3 has-text-weight-bold">MEMBER</p>

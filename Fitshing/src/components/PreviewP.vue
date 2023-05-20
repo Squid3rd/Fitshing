@@ -16,11 +16,11 @@
           v-for="image in images"
           :key="image.ex_id"
         >
-          <div class="card p-2" style="max-width: 95%">
+          <div class="card p-2 mt-6" style="max-width: 95%">
             <img :src="imagePath(image.file_path)" alt="Placeholder image" />
           </div>
         </div>
-        <div class="column is-5 is-offset-1">
+        <div class="column is-5 is-offset-1 mt-6">
           <p class="title is-3">{{ product.ex_name }}</p>
           <p class="title is-5">Type : {{ product.typeofproduct }}</p>
           <div
@@ -31,17 +31,38 @@
           </div>
 
           <p class="subtitle is-4">฿ {{ product.ex_price }}</p>
-          <input
-            class="input"
-            style="width: 20%"
-            type="number"
-            min="1"
-            :max="product.amount"
-            v-model="purchase_amount"
-          />
-          <button class="button ml-2 add-cart" type="submit">
-            Add to cart
-          </button>
+          <p class="subtitle is-5">จำนวนในคลัง : {{product.amount}}</p>
+          <!-- ซื้อได้หรือไม่ -->
+          <div v-if="check(product)">
+            <input
+              class="input"
+              style="width: 20%"
+              type="number"
+              min="1"
+              :max="product.amount"
+              v-model="purchase_amount" 
+            />
+            <router-link to="/cart">
+            <button class="button ml-2 add-cart" @click="AddCart(product)" type="submit">
+              Add to cart
+            </button>
+            </router-link>
+          </div>
+          <div v-else>
+            <input
+              class="input"
+              style="width: 20%"
+              type="number"
+              min="1"
+              :max="product.amount"
+              v-model="purchase_amount" disabled
+            />
+            <button class="button ml-2 add-cart" type="submit" disabled>
+              Sold out
+            </button>
+          </div>
+
+          <!-- ซื้อได้หรือไม่ -->
         </div>
       </div>
       <div class="columns">
@@ -50,7 +71,7 @@
         </div>
       </div>
       <div class="columns scroll">
-        <div class="column is-2 is-offset-1" v-for="index in 5">
+        <div class="column is-2 is-offset-1" v-for="(item,index) in type">
           <div>
             <img
               class=""
@@ -94,6 +115,8 @@ export default {
     return {
       product: {},
       images: [],
+      excerise:[],
+      type:[],
       error: null,
       purchase_amount: 1,
       showedit: false,
@@ -103,27 +126,46 @@ export default {
       ex_priceChange: "",
       ex_infoChange: "",
       type1Change: "",
+      cart:[],
     };
   },
   mounted() {
+    this.cart = JSON.parse(localStorage.cart);
     this.getDetailProduct(this.$route.params.id);
+    this.getProduct();
+    // for(let i=0;i<this.excerise.length;i++){
+    //       if(this.excerise[i].type1 == this.product.type1){
+    //         this.type.push(this.excerise[i])
+    //       }
+    //     }
   },
-  // created() {
-  //   axios
-  //     .get(`http://localhost:3000/product/${this.$route.params.id}`)
-  //     .then((response) => {
-  //       this.ex_nameChange = response.data.product.ex_name;
-  //       this.amountChange = response.data.product.amount;
-  //       this.ex_priceChange = response.data.product.ex_price;
-  //       this.ex_infoChange = response.data.product.ex_info;
-  //       this.type1Change = response.data.product.type1;
-  //       this.imageChange = response.data.images;
-  //     })
-  //     .catch((e) => {
-  //       console.log(e);
-  //     });
-  // },
   methods: {
+    getProduct() {
+      axios
+        .get("/product")
+        .then((response) => {
+          this.excerise = response.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        
+    },
+    check(product){
+        if(product.amount > 0){
+          return true
+        }
+    },
+    AddCart(product) {
+      if (this.cart.includes(product,-1)) {
+        alert("คุณมีสินค้านี้ในตระก้าแล้ว")
+      } else {
+        this.cart.push(product);
+        product.quantity = this.purchase_amount;
+
+      }
+      localStorage.setItem("cart", JSON.stringify(this.cart));
+    },
     selectImages(event) {
       this.imagesChange = event.target.files;
     },
@@ -160,41 +202,6 @@ export default {
           });
       }
     },
-    // async updateProduct() {
-    //   console.log(this.ex_nameChange);
-
-    //   let formData1 = new FormData();
-    //     formData1.append('ex_name', this.ex_nameChange);
-    //     formData1.append('ex_info', this.ex_infoChange);
-    //     formData1.append('amount', this.amountChange);
-    //     formData1.append('ex_price', this.ex_priceChange);
-    //     formData1.append('type1', this.type1Change);
-    //     formData1.append('images', this.imageChange);
-
-    //   console.log(formData1.get('ex_name'));
-
-    //   // const peter = {
-    //   //   ex_name: this.ex_nameChange,
-    //   //   ex_info: this.ex_infoChange,
-    //   //   amount: this.amountChange,
-    //   //   ex_price: this.ex_priceChange,
-    //   //   type1: this.type1Change,
-    //   // };
-
-    //   console.log(formData1);
-    //   axios
-    //     .put(`/product/` + this.$route.params.id , formData1, {
-    //       headers: {
-    //         "Content-Type": "multipart/form-data",
-    //       },
-    //     })
-    //     .then((response) => {
-    //       console.log(response.data);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // },
   },
 };
 </script>

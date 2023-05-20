@@ -1,5 +1,5 @@
 <template>
-    <div class="column px-3">
+    <div class="column is-multiline px-3 cardd">
       <div class="card">
         <div class="card-image">
             <figure class="image is-4by3">
