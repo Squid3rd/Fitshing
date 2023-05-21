@@ -364,3 +364,7 @@
   transition: all 0.2s;
   transform: translate(0px, -7px);
 }
+.cardd:hover{
+  transition: all 0.2s;
+  transform: translate(0px, -7px);
+}
