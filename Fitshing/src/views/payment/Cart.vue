@@ -10,7 +10,7 @@
           <hr class="" style="background-color: rgb(184, 184, 184)" />
         </div>
         <div class="column is-5 has-text-right">
-          <router-link to="/product">
+          <router-link to="/product" >
             <button class="button is-info is-light buttom2">All Product</button>
           </router-link>
           <button class="button is-danger is-light ml-1 buttom2" @click="clearCart()">
@@ -26,6 +26,11 @@
       <div class="tile is-ancestor">
         <div class="tile is-vertical is-8">
           <!-- สินค้าแต่ละชิ้น loop ตรงนี้-->
+          <div class="has-text-centered mb-5" v-if="checkCart()">
+            <router-link to="/product" >
+            <p class="has-text-danger subtitle is-3 mt-3">!! คุณยังไม่มีสินค้าในตะกร้าเลยนะคับ !!</p>
+            </router-link>
+          </div>
           <div class="m-2 cart-product" v-for="(items, index) of cart">
             <div class="tile is-parent columns">
               <div class="column is-3">
@@ -83,12 +88,21 @@
                   </div>
                 </div>
                 <div class="columns">
-                  <div class="column has-text-centered" v-if="user">
-                    <router-link to="/bill">
+                  <div class="column has-text-centered" v-if="checkCart()">
+                    <!-- <router-link to="/bill">
                       <button
                         class="button is-success is-light is-fullwidth buttom2"
                       >
                         ชำระเงิน
+                      </button>
+                    </router-link> -->
+                  </div>
+                  <div class="column has-text-centered" v-else-if="user">
+                    <router-link to="/bill">
+                      <button
+                        class="button is-success is-light is-fullwidth buttom2"
+                      >
+                        r
                       </button>
                     </router-link>
                   </div>
@@ -126,6 +140,11 @@ export default {
     this.getProduct();
   },
   methods: {
+    checkCart(){
+      if(this.cart.length == 0){
+        return true
+      }
+    },
     getProduct() {
       axios
         .get("/product")

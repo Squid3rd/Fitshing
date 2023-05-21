@@ -33,7 +33,7 @@ import AdminVue from "./components/Admin.vue";
     </div>
     <div class="column is-2 mt-2">
       <p class="is-size-2 has-text-left has-text-weight-semibold application" style="color: wheat">
-        <span class="has-background-light p-2 is has-text-link mr-2">F</span>ishing
+        <span class="has-background-light p-2 is has-text-link mr-2">F</span>itshing
       </p>
     </div>
 
