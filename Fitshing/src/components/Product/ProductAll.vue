@@ -33,11 +33,14 @@
         <div class="columns is-mobile">
           <div class="column is-12">
             <div class="columns is-multiline">
-              <div class="column is-3" v-for="(item, index) in product" key="item.ex_id">
-                <div class="card">
-                <figure class="image is-4by3">
-                  <img :src="imagePath(item.file_path)" alt="Placeholder image" />
-                </figure>
+              <!-- แต่ละproduct -->
+              <div class="column is-3 has-text-centered cart-item" v-for="(item, index) in product" key="item.ex_id">
+                <div class="card has-text-centered" style="max-width:300px;height:350px;">
+                  <div class="">
+                  <figure class="image" >
+                    <img :src="imagePath(item.file_path)" style="object-fit: contain; width:300px; height:200px;"  alt="Placeholder image" />
+                  </figure>
+                  </div>
                   <p class="title is-6 m-3">{{item.ex_name}}</p>
                   <p class="subtitle is-6 m-3">฿ {{ item.ex_price }}</p>
                   <div class="columns">
