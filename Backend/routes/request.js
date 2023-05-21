@@ -139,7 +139,7 @@ router.delete("/request/delete/trainer/:id", async function (req, res, next) {
   const conn = await pool.getConnection();
   await conn.beginTransaction();
 
-  console.log(req.params.id)
+  // console.log("Trainer = "+ req.params.id)
 
   try {
 
@@ -172,7 +172,7 @@ router.delete("/request/delete/user/:id", async function (req, res, next) {
   const conn = await pool.getConnection();
   await conn.beginTransaction();
 
-  console.log(req.params.id)
+  console.log("User = "+ req.params.id)
 
   try {
     // Delete the Request

@@ -1,89 +1,95 @@
 
 <template>
-  <section class="hero is-fullheight">
-    <div class="container is-max-widescreen has-background-success-light mt-6">
-      <div class="columns">
-        <!-- Admin Part -->
-        <div>
-          <!-- <button class="button is-danger" @click="deleteproduct">
-            Delete
-          </button> -->
-        </div>
-
-        <!-- User Part -->
-        <div
-          class="column is-4 is-offset-1"
-          v-for="image in images"
-          :key="image.ex_id"
-        >
-        <div class="card p-2 mt-6" style="max-width: 95%">
-            <img :src="imagePath(image.file_path)" style="object-fit: scale-down; width:320px; height:290px;" alt="Placeholder image" />
-          </div>
-        </div>
-        <div class="column is-5 is-offset-1 mt-6">
-          <p class="title is-3">{{ product.ex_name }}</p>
-          <p class="title is-5">Type : {{ product.typeofproduct }}</p>
+  <section class="hero container">
+    <div class="hero-body is-fullheight">
+      <div class="has-background-success-light mt-6">
+        <div class="columns">
           <div
-            class="has-background-white m-2"
-            style="border: 1px solid #0004; border-radius: 2px; height: 200px"
+            class="column is-4 is-offset-1 mt-5 p-5"
+            v-for="image in images"
+            :key="image.ex_id"
           >
-            {{ product.ex_info }}
+            <figure class="image is-1by1">
+              <img :src="imagePath(image.file_path)" alt="Placeholder image" />
+            </figure>
           </div>
+          <div class="column is-5 is-offset-1 mt-6">
+            <p class="title is-3">{{ product.ex_name }}</p>
+            <p class="title is-5">Type : {{ product.typeofproduct }}</p>
+            <div
+              class="has-background-white m-2"
+              style="border: 1px solid #0004; border-radius: 2px; height: 200px"
+            >
+              {{ product.ex_info }}
+            </div>
 
-          <p class="subtitle is-4">฿ {{ product.ex_price }}</p>
-          <p class="subtitle is-5">จำนวนในคลัง : {{product.amount}}</p>
-          <!-- ซื้อได้หรือไม่ -->
-          <div v-if="check(product)">
-            <input
-              class="input"
-              style="width: 20%"
-              type="number"
-              min="1"
-              :max="product.amount"
-              v-model="purchase_amount" 
-            />
-            <router-link to="/cart">
-            <button class="button ml-2 add-cart" @click="AddCart(product)" type="submit">
-              Add to cart
-            </button>
-            </router-link>
-          </div>
-          <div v-else>
-            <input
-              class="input"
-              style="width: 20%"
-              type="number"
-              min="1"
-              :max="product.amount"
-              v-model="purchase_amount" disabled
-            />
-            <button class="button ml-2 add-cart" type="submit" disabled>
-              Sold out
-            </button>
-          </div>
+            <p class="subtitle is-4">฿ {{ product.ex_price }}</p>
+            <p class="subtitle is-5">จำนวนในคลัง : {{ product.amount }}</p>
+            <!-- ซื้อได้หรือไม่ -->
+            <div v-if="check(product)">
+              <input
+                class="input"
+                style="width: 20%"
+                type="number"
+                min="1"
+                :max="product.amount"
+                v-model="purchase_amount"
+              />
+              <router-link to="/cart">
+                <button
+                  class="button ml-2 add-cart"
+                  @click="AddCart(product)"
+                  type="submit"
+                >
+                  Add to cart
+                </button>
+              </router-link>
+            </div>
+            <div v-else>
+              <input
+                class="input"
+                style="width: 20%"
+                type="number"
+                min="1"
+                :max="product.amount"
+                v-model="purchase_amount"
+                disabled
+              />
+              <button class="button ml-2 add-cart" type="submit" disabled>
+                Sold out
+              </button>
+            </div>
 
-          <!-- ซื้อได้หรือไม่ -->
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column is-offset-1">
-          <p class="title is-4">คุณอาจสนใจ</p>
-        </div>
-      </div>
-      <div class="columns scroll">
-        <div class="column is-2 is-offset-1" v-for="(item,index) in type">
-          <div>
-            <img
-              class=""
-              style="max-width: 300px; width: 100%"
-              src="https://img.freepik.com/free-vector/cute-bad-cat-wearing-suit-sunglasses-with-baseball-bat-cartoon-icon-illustration-animal-fashion-icon-concept-isolated-flat-cartoon-style_138676-2170.jpg?w=2000"
-              alt="สินค้าแนะนำ"
-            />
+            <!-- ซื้อได้หรือไม่ -->
           </div>
-          <div class="has-text-centered">
-            <p>Product Name</p>
-            <p>Price</p>
+        </div>
+        <div class="columns">
+          <div class="column is-offset-1">
+            <p class="title is-4">คุณอาจสนใจ</p>
           </div>
+        </div>
+        <div>
+
+    <div class="task-container columns px-6 py-6 is-mobile is-multiline is-centered">
+      <CardProductVue v-for="item in excerise.slice(random1, random2)" :item="item" style="max-width: 275px;" />
+      <!-- <CardProductVue v-for="item in productStore.dbproduct?.slice(0,4)" :item="item"/> -->
+    </div>
+
+          
+          <!-- <div class="column is-2 is-offset-1">
+            <div>
+              <img
+                class=""
+                style="max-width: 300px; width: 100%"
+                src="https://img.freepik.com/free-vector/cute-bad-cat-wearing-suit-sunglasses-with-baseball-bat-cartoon-icon-illustration-animal-fashion-icon-concept-isolated-flat-cartoon-style_138676-2170.jpg?w=2000"
+                alt="สินค้าแนะนำ"
+              />
+            </div>
+            <div class="has-text-centered">
+              <p>Product Name</p>
+              <p>Price</p>
+            </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -91,12 +97,24 @@
   <div v-if="user">
     <div v-if="user.role === 'admin'">
       <div id="four">
-        <router-link :to="{ name: 'editproduct', params: { id: `${this.$route.params.id}` } }">
-          <button class="button is-size-4 has-background-info">Edit Product</button>
+        <router-link
+          :to="{
+            name: 'editproduct',
+            params: { id: `${this.$route.params.id}` },
+          }"
+        >
+          <button class="button is-size-4 has-background-info">
+            Edit Product
+          </button>
         </router-link>
       </div>
       <div id="three">
-        <button class="button is-size-4 has-background-danger" @click="deleteproduct">Delete Product</button>
+        <button
+          class="button is-size-4 has-background-danger"
+          @click="deleteproduct"
+        >
+          Delete Product
+        </button>
       </div>
     </div>
   </div>
@@ -104,20 +122,23 @@
 
 
 <script setup>
+  import CardProductVue from './CardProduct.vue';
 </script>
 
 <script>
 import axios from "@/plugins/axios";
+
 export default {
   name: "preview",
-  props: ['user'],
+  props: ["user"],
   data() {
     return {
       product: {},
+      // product1: [],
       images: [],
-      excerise:[],
-      type:[],
-      cart:[],
+      excerise: [],
+      type: [],
+      cart: [],
       error: null,
       purchase_amount: 1,
       showedit: false,
@@ -127,13 +148,19 @@ export default {
       ex_priceChange: "",
       ex_infoChange: "",
       type1Change: "",
-      
+      random1: "",
+      random2: "",
     };
   },
   mounted() {
     this.cart = JSON.parse(localStorage.cart);
     this.getProduct();
+    // this.getProduct1();
     this.getDetailProduct(this.$route.params.id);
+  },
+  created() {
+    this.RandomNumber();
+    this.random2 = this.random1 + 4
   },
   // created() {
   //   axios
@@ -151,6 +178,9 @@ export default {
   //     });
   // },
   methods: {
+    RandomNumber() {
+      this.random1 = Math.floor(Math.random() * 15);
+    },
     getProduct() {
       axios
         .get("/product")
@@ -160,20 +190,18 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-        
     },
-    check(product){
-        if(product.amount > 0){
-          return true
-        }
+    check(product) {
+      if (product.amount > 0) {
+        return true;
+      }
     },
     AddCart(product) {
-      if (this.cart.includes(product,-1)) {
-        alert("คุณมีสินค้านี้ในตระก้าแล้ว")
+      if (this.cart.includes(product, -1)) {
+        alert("คุณมีสินค้านี้ในตระก้าแล้ว");
       } else {
         this.cart.push(product);
         product.quantity = this.purchase_amount;
-
       }
       localStorage.setItem("cart", JSON.stringify(this.cart));
     },
@@ -184,7 +212,11 @@ export default {
       return URL.createObjectURL(image);
     },
     imagePath(file_path) {
-      return "http://localhost:3000/" + file_path;
+      if (file_path) {
+        return "http://localhost:3000/" + file_path;
+      } else {
+        return "https://bulma.io/images/placeholders/640x360.png";
+      }
     },
     getDetailProduct(ProductId) {
       axios

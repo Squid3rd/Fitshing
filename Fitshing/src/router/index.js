@@ -75,9 +75,9 @@ const router = createRouter({
       component: () => import('../views/AdminPayment.vue')
     },
     {
-      path: '/payment/:id',
-      name: 'userpaymnet',
-      component: () => import('../views/UserPayment.vue')
+      path: '/editTrainer/:id',
+      name: 'editTrainer',
+      component: () => import('../views/EditTrainer.vue')
     },
   ]
 })

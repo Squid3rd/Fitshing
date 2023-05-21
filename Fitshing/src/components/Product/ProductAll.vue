@@ -1,5 +1,5 @@
 <template>
-  <section class="hero container" style="">
+   <section class="hero container" style="">
     <div class="hero-body ">
       <div class="">
         <div class="columns">
@@ -113,6 +113,7 @@
 
 
 <script setup>
+
 </script>
 
 <script>
@@ -123,21 +124,23 @@ export default {
     return {
       sort1: "",
       product: [],
-      cart: [],
-      filteredProduct: [],
+      cart:[],
+      filteredProduct: []
+      
+      
     };
   },
-
+  
   mounted() {
     this.cart = JSON.parse(localStorage.cart);
     this.getProduct();
   },
   methods: {
-    check(product) {
-      if (this.cart.includes(product)) {
-        return true;
-      }
-    },
+    check(product){
+        if(this.cart.includes(product)){
+          return true
+        }
+      },
     getProduct() {
       axios
         .get("/product")
@@ -166,32 +169,34 @@ export default {
       localStorage.setItem("cart", JSON.stringify(this.cart));
     },
     AddCart(product) {
-      if (this.cart.includes(product, -1)) {
-        alert("คุณมีสินค้านี้ในตระก้าแล้ว");
+      if (this.cart.includes(product,-1)) {
+        alert("คุณมีสินค้านี้ในตระก้าแล้ว")
       } else {
         this.cart.push(product);
         product.quantity = 1;
+
       }
       localStorage.setItem("cart", JSON.stringify(this.cart));
     },
     removeFromCart(product) {
-      this.cart.splice(this.cart.indexOf(product), 1);
-      localStorage.setItem("cart", JSON.stringify(this.cart));
+      this.cart.splice(this.cart.indexOf(product), 1)
+    localStorage.setItem("cart", JSON.stringify(this.cart));
     },
   },
   computed: {
-    sumary() {
-      return this.cart[0] == this.cart[1];
-    },
-    filteredProduct() {
-      if (this.sort1 === "") {
+      sumary() {
+        return this.cart[0]==this.cart[1]
+      },
+      filteredProduct() {
+
+      if (this.sort1 === '') {
         // Filter by item category
         return this.product;
       }
       // Return all items if no filter option is selected
-      return this.product.filter((item) => item.type1 === this.sort1);
+      return this.product.filter(item => item.type1 === this.sort1);
     },
-  },
+    },
 };
 </script>
 
@@ -200,4 +205,5 @@ import CardProductVue from "../CardProduct.vue";
 </script>
 
 <style>
+
 </style>

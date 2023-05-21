@@ -28,10 +28,10 @@ import CardTrainer from "../components/CardTrainer.vue";
   </h1>
   <div class="bor3">
     <div class="task-container columns px-6 py-6 is-mobile is-multiline">
-      <CardProductVue v-for="item in product.slice(0, 5)" :item="item" />
-      <!-- <CardProductVue v-for="item in productStore.dbproduct?.slice(0,4)" :item="item"/> -->
+      <CardProductVue v-for="item in product.slice(random1, random2)" :item="item" />
     </div>
   </div>
+  <!-- <CardProductVue v-for="item in productStore.dbproduct?.slice(0,4)" :item="item"/> -->
   <h1
     class="has-text-danger-dark has-background-info-light is-size-2 has-text-centered has-text-weight-bold"
   >
@@ -53,6 +53,8 @@ export default {
       product: [],
       trainer: [],
       cart:[],
+      random1: "",
+      random2: "",
       // numRandom: "",
     };
   },
@@ -63,13 +65,14 @@ export default {
         localStorage.setItem("cart", JSON.stringify(this.cart));
     }
   },
-  // created(){
-  //   this.generateRandomNumber();
-  // },
+  created(){
+    this.RandomNumber();
+    this.random2 = this.random1 + 5
+  },
   methods: {
-    // generateRandomNumber() {
-    //   this.numRandom = Math.floor(Math.random() * 10) + 1;
-    // },
+    RandomNumber() {
+      this.random1 = Math.floor(Math.random() * 15);
+    },
     getProduct() {
       axios
         .get("/product")
@@ -97,12 +100,12 @@ export default {
         return "https://bulma.io/images/placeholders/640x360.png";
       }
     },
-    // shortTitle(content) {
-    //   if (content.length > 30) {
-    //     return content.substring(0, 27) + "...";
-    //   }
-    //   return content;
-    // },
+    shortTitle(content) {
+      if (content.length > 30) {
+        return content.substring(0, 27) + "...";
+      }
+      return content;
+    },
   },
 };
 </script>

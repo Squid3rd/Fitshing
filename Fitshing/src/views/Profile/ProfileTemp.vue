@@ -541,6 +541,12 @@
                     Check
                   </button>
                 </span>
+                <button
+                  class="button is-warning ml-3"
+                  @click="modal_do_pay = !modal_do_pay"
+                >
+                  Payment
+                </button>
               </div>
             </div>
           </div>

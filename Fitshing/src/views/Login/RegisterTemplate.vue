@@ -378,7 +378,8 @@ export default {
         this.msg["username"] = "Please enter your Username";
       } else if (value.length < 5) {
         this.msg["username"] = "Must be 5 characters!";
-      } else {
+       }
+       else {
         this.msg["username"] = "";
       }
     },

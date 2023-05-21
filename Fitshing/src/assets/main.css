@@ -1,4 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500&display=swap');
 
+body{
+  font-family: 'Playfair Display', serif;
+}
+
+body * {
+  font-family: 'Playfair Display', serif;
+}
 .bor1 {
   /* opacity: 0.5; */
   padding: 4em;
@@ -69,6 +77,18 @@
   .locked-image {
     max-width: 200px;
     max-height: 200px; 
+    width: auto; 
+    height: auto;
+    object-fit: cover; 
+    border-radius: 50%; 
+  }
+  
+}
+
+.locked-image1 {
+  .locked-image {
+    max-width: 300px;
+    max-height: 300px; 
     width: auto; 
     height: auto;
     object-fit: cover; 
@@ -359,10 +379,6 @@
 }
 .goto:hover{
   color: rgb(58, 58, 58) !important;
-}
-.cardd:hover{
-  transition: all 0.2s;
-  transform: translate(0px, -7px);
 }
 .cardd:hover{
   transition: all 0.2s;

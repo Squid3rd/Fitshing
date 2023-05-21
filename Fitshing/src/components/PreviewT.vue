@@ -46,14 +46,16 @@
   </div>
 
   <!-- Preview Section -->
-  <section class="hero is-fullheight container " >
-    <div class="has-background-success-light mt-6 mb-6 p-5 m-6" style="border-radius: 10px; box-shadow:0.4em 0.4em 0.8em #0004;">
+  <section class="hero container" >
+    <div class=" has-background-success-light mt-6 mb-6 p-5" style="border-radius: 10px; box-shadow:0.4em 0.4em 0.8em #0004;">
       <div class="columns ">
         <!-- Trainer All Part -->
         <div class="column is-4 is-offset-1 mt-5">
-          <div style="max-width:400px; max-height:350px; position:relative; top:20px;">
-            <div class="card p-3">
-            <img :src="imagePath(trainer.image)" style="object-fit:contain; width:360px; height:250px;" alt="Placeholder image" />
+          <div class="card p-3" style="width: 100%">
+            <div class="card-image">
+              <figure class="image is-1by1">
+                <img :src="imagePath(trainer.image)" alt="Placeholder image" />
+              </figure>
             </div>
           </div>
         </div>
@@ -94,7 +96,12 @@
           </div>
       </div>
       <div v-if="user">
-            <div v-if="user.role === 'user' && user.status === 2">
+          <div v-if="user.role === 'admin'">
+            <div id="three">
+                <button class="button is-size-4 has-background-danger" @click="deleteTrainer(trainer.id)">Delete Trainer</button>
+              </div>
+          </div>
+            <div v-else-if="(user.role === 'user' && user.status === 2) || (user.role === 'user' && user.status === 3)">
               <button
                 class="button ml-2 add-cart is-success"
                 disabled
@@ -120,8 +127,13 @@
               </button>
             </div>
             <div v-else-if="user.id === trainer.id">
+              <div id="two">
+                <router-link :to="{ name: 'editTrainer', params: { id: `${trainer.id}` } }">
+                  <button class="button is-size-4 has-background-info">Edit Trainer</button>
+                </router-link>
+              </div>
               <div id="one">
-                <button class="button is-size-4 has-background-danger" @click="">Delete Trainer</button>
+                <button class="button is-size-4 has-background-danger" @click="deleteTrainer(trainer.id)">Delete Trainer</button>
               </div>
             </div>
           </div>
@@ -185,6 +197,22 @@ export default {
             console.log(err);
           });
         }
+    },
+    deleteTrainer(){
+      const result = confirm(
+        `Are you sure you want to delete Trainer id = ${this.trainer.id}`
+      );
+      if (result) {
+        axios
+          .put(`/request/deletetrainer/${this.trainer.id}`)
+          .then((response) => {
+            this.$router.go(-1);
+            console.log("Delete Complete");
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      }
     },
     validateReq(value) {
           if (value.length < 25) {

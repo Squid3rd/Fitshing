@@ -96,7 +96,7 @@ import AdminVue from "./components/Admin.vue";
     <div class="column is-1"></div>
   </div>
 
-  <RouterView @auth-change="onAuthChange" :user="user" />
+  <RouterView @auth-change="onAuthChange" :user="user" :key="$route.fullPath" />
 
   <div v-if="user">
     <div v-if="user.role === 'admin'">

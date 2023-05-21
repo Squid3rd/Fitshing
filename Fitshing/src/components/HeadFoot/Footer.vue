@@ -1,5 +1,4 @@
 <template>
-    <footer style="position: relative;bottom: 0; width:100%; ">
       <div class="column" style="background-color: #567189;">
         <div class="column">
           <br />
@@ -19,7 +18,6 @@
           ></a>
         </div>
       </div>
-      </footer>
 </template>
 
 <script>

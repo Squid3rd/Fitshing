@@ -4,16 +4,16 @@
         <div class="container has-background-black p-5" >
           <div class="field has-addons has-addons-right">
             <form action="">
-              <select name="sort1" id="sort1" class="button">
+              <select v-model="sort1" class="button">
                 <option value="">All Gender</option>
-                    <option value="1">Male</option>
-                    <option value="2">Female</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
               </select>
             </form>
           </div>
 
           <div class="product">
-              <CardTrainer v-for="item in trainer" :item="item" />
+              <CardTrainer v-for="item in filteredTrainer" :item="item" />
           </div>
         </div>
       </div>
@@ -31,7 +31,8 @@ export default {
     data(){
       return{
         sort1: '',
-        trainer: []
+        trainer: [],
+        filteredTrainer: []
       }
     },
     mounted() {
@@ -62,6 +63,20 @@ export default {
       return content;
     },
   },
+  computed: {
+      sumary() {
+        return this.cart[0]==this.cart[1]
+      },
+      filteredTrainer() {
+
+      if (this.sort1 === '') {
+        // Filter by item category
+        return this.trainer;
+      }
+      // Return all items if no filter option is selected
+      return this.trainer.filter(item => item.gender === this.sort1);
+    },
+    },
 }
 </script>
 

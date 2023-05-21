@@ -1,9 +1,9 @@
 <template>
-    <div class="column  is-multiline px-3 cardd">
+    <div class="column is-multiline px-3 cardd">
       <div class="card">
         <div class="card-image">
-            <figure class="image">
-                <img style="object-fit: scale-down; width:320px; height:290px;" :src="imagePath(item.file_path)" alt="Placeholder image" />
+            <figure class="image is-4by3">
+                <img :src="imagePath(item.file_path)" alt="Placeholder image" />
             </figure>
         </div>
         <div class="card-content">
@@ -12,7 +12,7 @@
         <footer class="card-footer p-1 is-flex justify-content-center">
           <div class="column">
             <router-link :to="`/product/preview/${item.ex_id}`">
-              <button class="button is-centered is-info">View Detail</button>
+              <button class="button is-centered is-info" >View Detail</button>
             </router-link>
           </div>
           <!-- <a href="#" class="card-footer-item">Save</a> -->
@@ -37,6 +37,9 @@ export default {
     };
   },
   methods:{
+    async reloadPage() {
+    window.location.reload();
+  },
     imagePath(file_path) {
       if (file_path) {
         return "http://localhost:3000/" + file_path;
@@ -45,9 +48,8 @@ export default {
       }
     },
     shortTitle(content) {
-      console.log(content)
-      if (content.length > 25) {
-        return content.substring(0, 23) + "...";
+      if (content.length > 19) {
+        return content.substring(0, 18) + "...";
       }
       return content;
     },

@@ -1,7 +1,8 @@
 <template>
-  <section class="hero is-info is-max-desktop mb-6">
-    <div class="columns is-mobile is-centered">
-      <div class="column is-half">
+  <section class="hero is-info is-medium m-5">
+    <div class="hero-body ">
+      <div class="columns is-mobile is-centered">
+      <div class="column is-half ">
         <p class="title is-3">วิธีการชำระเงิน</p>
         <div class="control">
           <label class="radio">
@@ -53,6 +54,7 @@
       >
         ชำระเงิน
       </button>
+    </div>
     </div>
   </section>
 </template>

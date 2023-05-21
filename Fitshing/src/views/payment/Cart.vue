@@ -1,5 +1,8 @@
 <template>
-  <div class="container">
+  <section class="hero container is-medium" style="">
+    <div class="hero-body">
+      <div class="columns">
+      <div class="container">
     <div class="m-6">
       <div class="columns is-gapless">
         <div class="column is-3">
@@ -104,6 +107,9 @@
       </div>
     </div>
   </div>
+      </div>
+    </div>
+      </section>
 </template>
 
 <script>
