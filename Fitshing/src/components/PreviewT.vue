@@ -66,33 +66,18 @@
           {{ trainer.amount_t }}
         </p>
         <label class="subtitle is-4" for="">certificate</label>
-          <div
-            class="has-background-white m-2"
-            style="border: 1px solid #0004; border-radius: 2px; height: 200px"
-          >
-            {{ trainer.certificate }}
-          </div>
+        <textarea class="textarea mt-3" cols="20" rows="7" v-model="trainer.certificate" readonly></textarea>
         </div>
         
       </div>
       <div class="columns ">
         <div class="column">
           <label class="subtitle is-4" for="">specialize</label>
-          <div
-            class="has-background-white m-2"
-            style="border: 1px solid #0004; border-radius: 2px; height: 200px"
-          >
-            {{ trainer.specialize }}
-          </div>
+          <textarea class="textarea mt-3" cols="20" rows="5" v-model="trainer.specialize" readonly></textarea>
           </div>
           <div class="column">
           <label class="subtitle is-4" for="">info</label>
-          <div
-            class=" has-background-white m-2"
-            style="border: 1px solid #0004; border-radius: 2px; height: 200px"
-          >
-            {{ trainer.info }}
-          </div>
+          <textarea class="textarea mt-3" cols="20" rows="5" v-model="trainer.info" readonly></textarea>
           </div>
       </div>
       <div v-if="user">

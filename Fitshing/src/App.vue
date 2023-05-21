@@ -32,22 +32,22 @@ import AdminVue from "./components/Admin.vue";
       </router-link>
     </div>
     <div class="column is-2 mt-2">
-      <p class="is-size-2 has-text-left has-text-weight-semibold application">
-        <span class="has-background-light p-1 is has-text-link">F</span>ishing
+      <p class="is-size-2 has-text-left has-text-weight-semibold application" style="color: wheat">
+        <span class="has-background-light p-2 is has-text-link mr-2">F</span>ishing
       </p>
     </div>
 
     <div class="column is-2 mt-2 is-offset-2">
       <p  class="is-size-4 has-text-right has-text-weight-semibold application" style="position:relative; top:18px;">
         <router-link to="/product">
-        <p class="has-text-white goto">All Product</p>
+        <p class="goto" style="color: wheat">All Product</p>
           </router-link>
       </p>
     </div>
     <div class="column is-1 mt-2">
       <p class="is-size-4 has-text-left has-text-weight-semibold application" style="position:relative; top:18px;">
         <router-link to="/trainer">
-        <p class="has-text-white goto">All Trainer</p>
+        <p class="goto" style="color: wheat">All Trainer</p>
           </router-link>
       </p>
     </div>

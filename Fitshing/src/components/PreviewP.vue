@@ -16,12 +16,8 @@
           <div class="column is-5 is-offset-1 mt-6">
             <p class="title is-3">{{ product.ex_name }}</p>
             <p class="title is-5">Type : {{ product.typeofproduct }}</p>
-            <div
-              class="has-background-white m-2"
-              style="border: 1px solid #0004; border-radius: 2px; height: 200px"
-            >
-              {{ product.ex_info }}
-            </div>
+            <textarea class="textarea mt-3" cols="20" rows="7" v-model="product.ex_info" readonly></textarea>
+
 
             <p class="subtitle is-4">฿ {{ product.ex_price }}</p>
             <p class="subtitle is-5">จำนวนในคลัง : {{ product.amount }}</p>
