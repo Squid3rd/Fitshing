@@ -164,7 +164,6 @@
   
   export default {
     name: "editproduct",
-  
     data() {
       return {
         ex_name: "",

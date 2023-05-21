@@ -37,7 +37,17 @@ import AdminVue from "./components/Admin.vue";
       </p>
     </div>
 
-    <div class="column is-2 mt-2 is-offset-2">
+    <div class="column is-1 mt-2 is-offset-2">
+      <p
+        class="is-size-4 has-text-right has-text-weight-semibold application"
+        style="position: relative; top: 18px"
+      >
+        <router-link to="/allvdo">
+          <p class="goto" style="color: wheat">All VDO</p>
+        </router-link>
+      </p>
+    </div>
+    <div class="column is-1 mt-2">
       <p  class="is-size-4 has-text-right has-text-weight-semibold application" style="position:relative; top:18px;">
         <router-link to="/product">
         <p class="goto" style="color: wheat">All Product</p>

@@ -13,6 +13,7 @@ const userRouter = require('./routes/user')
 const trainerRouter = require('./routes/trainer')
 const requestRouter = require('./routes/request')
 const paymentRouter = require('./routes/payment')
+const vdoRouter = require('./routes/vdo')
 
 app.use(indexRouter.router)
 app.use(productRouter.router)
@@ -20,6 +21,7 @@ app.use(userRouter.router)
 app.use(trainerRouter.router)
 app.use(requestRouter.router)
 app.use(paymentRouter.router)
+app.use(vdoRouter.router)
 
 
 app.listen(3000, () => {

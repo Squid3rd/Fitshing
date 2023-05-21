@@ -79,6 +79,26 @@ const router = createRouter({
       name: 'editTrainer',
       component: () => import('../views/EditTrainer.vue')
     },
+    {
+      path: '/addvdo/',
+      name: 'addvdo',
+      component: () => import('../views/AddVDO.vue')
+    },
+    {
+      path: '/editvdo/:id',
+      name: 'editvdo',
+      component: () => import('../views/EditVDO.vue')
+    },
+    {
+      path: '/preview/vdo/:id',
+      name: 'vdopreview',
+      component: () => import('../views/PreviewVDO.vue')
+    },
+    {
+      path: '/allvdo/',
+      name: 'vdoall',
+      component: () => import('../views/VDOAll.vue')
+    },
   ]
 })
 

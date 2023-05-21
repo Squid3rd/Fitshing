@@ -62,7 +62,7 @@ const upload = multer({ storage: storage,
 // Validate
 const addproductSchema = Joi.object({
   ex_name: Joi.string().required().max(150),
-  ex_info: Joi.string().required().max(150),
+  ex_info: Joi.string().required().max(240),
   ex_price: Joi.number().required(),
   amount: Joi.number().required(),
   type1: Joi.number().required(),
@@ -172,7 +172,7 @@ router.post("/product",  upload.single('images'), async function (req, res, next
   // Validate
   const updateproductSchema = Joi.object({
     ex_name: Joi.string().required().max(150),
-    ex_info: Joi.string().required().max(150),
+    ex_info: Joi.string().required().max(240),
     ex_price: Joi.number().required(),
     amount: Joi.number().required(),
     type1: Joi.number().required(),
@@ -245,7 +245,7 @@ router.post("/product",  upload.single('images'), async function (req, res, next
       fs.unlinkSync(p);
 
       console.log("ddd")
-    console.log
+    // console.log
       // Delete Data from Table images
       const [rows1, fields1] = await conn.query(
           'update `ex_image` set file_path = ? WHERE `ex_id`=?', [imagesC ,req.params.id]
@@ -327,17 +327,7 @@ router.post("/payment", async function (req, res, next) {
     const total_price = req.body.total_price;
     const u_id = req.body.u_id;
     const type = req.body.type;
-    // const type1 = req.body.type1;
-    // console.log(slip_info)
-    // console.log(total_price)
-    // console.log(u_id)
-    // console.log(type)
-    // console.log(type1)
-    // let results = await conn.query(
-    //   "UPDATE exercise SET ex_name=?, ex_info=?, amount=?, ex_price=?, type1=? WHERE ex_id=?",
-    //   [ex_name, ex_info, amount, ex_price, type1, req.params.id]
-    // )
-    // let [rowsEx,fieldsEx] = await pool.query("SELECT * FROM exercise");
+
 
     const conn = await pool.getConnection();
     await conn.beginTransaction();
