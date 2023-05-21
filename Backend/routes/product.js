@@ -169,9 +169,26 @@ router.post("/product",  upload.single('images'), async function (req, res, next
     }
   });
 
+  // Validate
+  const updateproductSchema = Joi.object({
+    ex_name: Joi.string().required().max(150),
+    ex_info: Joi.string().required().max(150),
+    ex_price: Joi.number().required(),
+    amount: Joi.number().required(),
+    type1: Joi.number().required(),
+  })
+
   // Update Product 
   router.put("/product/:id", async function (req, res, next) {
   
+    try {
+      await updateproductSchema.validateAsync(req.body, { abortEarly: false })
+    } catch (err) {
+      console.log(err)
+      return res.status(400).json(err.message)
+  
+    }
+
     const ex_name = req.body.ex_name;
     const ex_info = req.body.ex_info;
     const amount = req.body.amount;
@@ -284,11 +301,28 @@ router.post("/product",  upload.single('images'), async function (req, res, next
   }
   });
 
+const InserpaymentSchema = Joi.object({
+  type: Joi.string().valid('Mobile Banking', 'Credit/Debit', 'Cash on Delivery').required(),
+  quantity: Joi.number().required(),
+  ex_id: Joi.number().required(),
+  slip_info: Joi.string().required(),
+  total_price: Joi.number().required(),
+  u_id: Joi.number().required(),
+})
+
 
 //insert to payment
 router.post("/payment", async function (req, res, next) {
-  const quantity = req.body.quantity;
-  const ex_id = req.body.ex_id;
+
+  try {
+    await InserpaymentSchema.validateAsync(req.body, { abortEarly: false })
+  } catch (err) {
+    console.log(err)
+    return res.status(400).json(err.message)
+
+  }
+    const quantity = req.body.quantity;
+    const ex_id = req.body.ex_id;
     const slip_info = req.body.slip_info;
     const total_price = req.body.total_price;
     const u_id = req.body.u_id;

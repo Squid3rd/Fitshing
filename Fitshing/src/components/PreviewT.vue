@@ -24,6 +24,7 @@
                       cols="5"
                       rows="10"
                     ></textarea>
+                    <p class="help is-danger" v-if='msg.Request'>{{ msg.Request }}</p>
                   </div>
                 </div>
               </article>
@@ -32,7 +33,7 @@
         </div>
         <hr />
         <div class="field is-grouped is-grouped-right pt-2">
-          <button class="button is-success mr-3" @click="addRequest(`${this.trainer.id}`, `${this.trainer.amount_t}`), modal_do_request = !modal_do_request, this.$router.go(-1);">Submit</button>
+          <button class="button is-success mr-3" @click="addRequest(`${this.trainer.id}`, `${this.trainer.amount_t}`), modal_do_request = !modal_do_request, this.$router.go(0);">Submit</button>
           <button
             class="button is-danger"
             @click="modal_do_request = !modal_do_request"
@@ -103,15 +104,23 @@
               <button
                 class="button ml-2 add-cart is-success"
                 @click="modal_do_request = !modal_do_request"
-                
+                v-if="trainer.amount_t != 0"
+              >
+                Subscribe
+              </button>
+              <button
+                class="button ml-2 add-cart is-success"
+                @click="modal_do_request = !modal_do_request"
+                v-if="trainer.amount_t == 0"
+                disabled
               >
                 Subscribe
               </button>
             </div>
-            <div v-else>
-              <button class="button ml-2 add-cart is-danger">
-                Delete Trainer
-              </button>
+            <div v-else-if="user.id === trainer.id">
+              <div id="one">
+                <button class="button is-size-4 has-background-danger" @click="">Delete Trainer</button>
+              </div>
             </div>
           </div>
     </div>
@@ -132,6 +141,7 @@ export default {
       trainer: {},
       modal_do_request: false,
       requestinfo: "",
+      msg:[]
     };
   },
   mounted() {
@@ -152,22 +162,45 @@ export default {
         });
     },
     addRequest(TrainerId, amount){
-      axios
+      if (!this.requestinfo || this.requestinfo.length < 25 || this.requestinfo.length > 150) {
+          alert("Invalid Request");
+        } 
+        else{
+          axios
           .post(`/request/${TrainerId}`, {
             requestinfo: this.requestinfo,
             u_id: this.user.id,
             count: amount,
           })
           .then((res) => {
+            
+            // router.go(-1);
             this.$router.go(-1);
-            console.log(res.data);
-            // this.$router.push({ name: 'login' });
+            // console.log(res.data);
+            // this.$router.push({ name: 'home' });
           })
           .catch((err) => {
             console.log(err);
           });
+        }
+    },
+    validateReq(value) {
+          if (value.length < 25) {
+            this.msg['Request'] = 'Must be 25 characters! or more';
+          } 
+          else if(value.length > 150) {
+            this.msg['Request'] = 'Too much Character!';
+          } else {
+            this.msg['Request'] = '';
+          }
     },
   },
+  watch:{
+    requestinfo(value){
+      this.requestinfo = value;
+      this.validateReq(value);
+    },
+  }
 };
 </script>
   

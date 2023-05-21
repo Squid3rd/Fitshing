@@ -203,9 +203,28 @@ router.get("/user/:id", function (req, res, next) {
         });
   });
 
+  const updateSchema = Joi.object({
+    email: Joi.string().required().email(),
+    phone: Joi.string().required().pattern(/0[0-9]{9}/),
+    fname: Joi.string().required().max(150),
+    lname: Joi.string().required().max(150),
+    username: Joi.string().required().min(5).max(20),
+    gender: Joi.string().required(),
+    age: Joi.number().required(),
+    weight: Joi.number().required(),
+    height: Joi.number().required(),
+})
+
 // Update Profile
 router.put("/profile/edit/:id", async function (req, res, next) {
   
+  try {
+    await updateSchema.validateAsync(req.body, { abortEarly: false })
+} catch (err) {
+  console.log(err)
+    return res.status(400).send(err)
+}
+
   const email = req.body.email
   const fname = req.body.fname
   const lname = req.body.lname
@@ -240,10 +259,23 @@ router.put("/profile/edit/:id", async function (req, res, next) {
   return;
 });
 
+const passwordSchema = Joi.object({
+  password: Joi.string().required().custom(passwordValidator),
+  conpass: Joi.string().required().valid(Joi.ref('password')),
+})
+
 // Update Password
 router.put("/profile/edit/password/:id", async function (req, res, next) {
   
+  try {
+    await passwordSchema.validateAsync(req.body, { abortEarly: false })
+} catch (err) {
+  console.log(err)
+    return res.status(400).send(err)
+}
+
   const password = await bcrypt.hash(req.body.password, 5)
+  const conpass = req.body.con_password
 
   const conn = await pool.getConnection()
   await conn.beginTransaction();
@@ -274,6 +306,8 @@ router.put("/profile/edit/image/:id", upload.single('imagesC'), async function (
   const conn = await pool.getConnection()
   await conn.beginTransaction();
 
+  console.log(imagesC)
+
   try {
     // Get Path files from the upload folder
     const [
@@ -284,14 +318,12 @@ router.put("/profile/edit/image/:id", upload.single('imagesC'), async function (
         [req.params.id]
     );
 
-    // Update File from path
+    // // Update File from path
     const appDir = path.dirname(require.main.filename); // Get app root directory
     console.log(appDir)
     const p = path.join(appDir, 'static', images[0].image);
     fs.unlinkSync(p);
-
-    console.log("ddd")
-  console.log
+    
     // Delete Data from Table images
     const [rows1, fields1] = await conn.query(
         'update users set image = ? WHERE id=?', [imagesC ,req.params.id]

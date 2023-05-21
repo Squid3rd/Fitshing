@@ -31,7 +31,7 @@ router.get("/trainer", async function (req, res, next) {
 // View Preview
 router.get("/trainer/:id", function (req, res, next) {
 
-  const promise1 = pool.query("SELECT * FROM trainer RIGHT OUTER JOIN users on (users.id = trainer.u_id) where status=1 and amount_t != 0 and t_id = ?;", [
+  const promise1 = pool.query("SELECT * FROM trainer RIGHT OUTER JOIN users on (users.id = trainer.u_id) where status=1 and t_id = ?;", [
     req.params.id
   ]);
 

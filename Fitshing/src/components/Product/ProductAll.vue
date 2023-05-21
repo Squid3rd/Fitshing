@@ -6,12 +6,20 @@
           <div class="field has-addons column is-offset-8">
             <div style="display: flex" class="">
               <div class="control has-icons-left">
+                
                 <div class="select">
-                  <select>
+                  <select v-model="sort1">
                     <option value="">All</option>
-                    <option>Abdomen</option>
-                    <option>Hand</option>
-                    <option>Leg</option>
+                    <option value="1">Exercise bike</option>
+                    <option value="2">Rowing machine</option>
+                    <option value="3">Weight bench</option>
+                    <option value="4">Treadmill</option>
+                    <option value="5">Dumbbell</option>
+                    <option value="6">Body Weight</option>
+                    <option value="7">Rubber bands</option>
+                    <option value="8">Jump rope</option>
+                    <option value="9">Hula hoop</option>
+                    <option value="10">Gloves</option>
                   </select>
                 </div>
               </div>
@@ -31,14 +39,13 @@
           </div>
         </div>
         <div class="columns is-mobile">
-          <div class="column is-12">
             <div class="columns is-multiline">
               <!-- แต่ละproduct -->
-              <div class="column is-3 has-text-centered cart-item" v-for="(item, index) in product" key="item.ex_id">
+              <div class="column is-3 has-text-centered cardd" v-for="(item, index) in filteredProduct" key="item.ex_id">
                 <div class="card has-text-centered" style="max-width:300px;height:350px;">
-                  <div class="">
+                  <div class="column">
                   <figure class="image" >
-                    <img :src="imagePath(item.file_path)" style="object-fit: contain; width:300px; height:200px;"  alt="Placeholder image" />
+                    <img :src="imagePath(item.file_path)" style=" width:300px; height:200px;"  alt="Placeholder image" />
                   </figure>
                   </div>
                   <p class="title is-6 m-3">{{item.ex_name}}</p>
@@ -72,11 +79,12 @@
                   </div>
                 </div>
               </div>
-            </div>
+        
           </div>
           </div>
-        </div>
-      </div>
+            
+          </div>
+          </div>
   </section>
 </template>
 
@@ -91,11 +99,15 @@ export default {
   name: "productall",
   data() {
     return {
+      sort1: "",
       product: [],
       cart:[],
+      filteredProduct: []
+      
       
     };
   },
+  
   mounted() {
     this.cart = JSON.parse(localStorage.cart);
     this.getProduct();
@@ -124,8 +136,8 @@ export default {
       }
     },
     shortTitle(content) {
-      if (content.length > 15) {
-        return content.substring(0, 13) + "...";
+      if (content.length > 20) {
+        return content.substring(0, 18) + "...";
       }
       return content;
     },
@@ -151,7 +163,16 @@ export default {
   computed: {
       sumary() {
         return this.cart[0]==this.cart[1]
+      },
+      filteredProduct() {
+
+      if (this.sort1 === '') {
+        // Filter by item category
+        return this.product;
       }
+      // Return all items if no filter option is selected
+      return this.product.filter(item => item.type1 === this.sort1);
+    },
     },
 };
 </script>

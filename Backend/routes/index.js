@@ -45,6 +45,24 @@ router.get("/payment", async function (req, res, next) {
   }
 });
 
+// user get Payment
+router.get("/payment/:id", async function (req, res, next) {
+  const promise1 = pool.query("SELECT * FROM payment WHERE u_id=?", [
+    req.params.id,
+  ]);
+
+  Promise.all([promise1])
+    .then((results) => {
+      const [payments, paymentFields] = results[0];
+      res.json({
+        payment: payments,
+        error: null,
+      });
+    })
+    .catch((err) => {
+      return res.status(500).json(err);
+    });
+});
 
 
 exports.router = router;

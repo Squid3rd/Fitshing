@@ -107,11 +107,19 @@
                       />
                     </figure>
                   </div>
-                  <div v-else>
+                  <div v-else-if="images">
                     <figure class="image is-1by1">
                       <img :src="imagePath(images)" alt="Placeholder image" />
                     </figure>
                     <!-- <button class="button is-success" :disabled="verifie">Verify Image</button> -->
+                  </div>
+                  <div v-else>
+                    <figure class="image is-1by1">
+                      <img
+                        src="../../assets/image/user.png"
+                        alt="Placeholder image"
+                      />
+                    </figure>
                   </div>
                 </div>
                 <div class="column">
@@ -332,7 +340,15 @@ export default {
         console.log(e);
       });
   },
+
   methods: {
+
+    // goBackAndReload() {
+    // this.$router.go(-1); // Go back to the previous route
+    // this.$nextTick(() => {
+    //   window.location.reload(); // Reload the current route
+    // });},
+    
     // Image Select
     selectImages(event) {
       this.verifie = false;
@@ -347,7 +363,7 @@ export default {
 
     // Image Change
     async changeImage() {
-      window.location.reload()
+      
       let formData = new FormData();
       formData.append("imagesC", this.imagesC[0]);
 
@@ -355,7 +371,8 @@ export default {
       axios
         .put(`/profile/edit/image/${this.$route.params.id}`, formData)
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
+          window.location.reload()
         })
         .catch((err) => {
           console.log(err);
@@ -400,6 +417,8 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.$router.go(-1)
+          // window.history.back()
+          // this.goBackAndReload();
           // location.reload()
         })
         .catch((err) => {
@@ -426,6 +445,7 @@ export default {
         axios
           .put(`/profile/edit/password/${this.$route.params.id}`, {
             password: this.password,
+            conpass: this.conpass,
           })
           .then((response) => {
             console.log(response.data);

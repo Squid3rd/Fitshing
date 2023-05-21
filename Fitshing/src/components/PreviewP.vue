@@ -16,7 +16,7 @@
           v-for="image in images"
           :key="image.ex_id"
         >
-          <div class="card p-2 mt-6" style="max-width: 95%">
+        <div class="card p-2 mt-6" style="max-width: 95%">
             <img :src="imagePath(image.file_path)" alt="Placeholder image" />
           </div>
         </div>
@@ -117,6 +117,7 @@ export default {
       images: [],
       excerise:[],
       type:[],
+      cart:[],
       error: null,
       purchase_amount: 1,
       showedit: false,
@@ -126,19 +127,29 @@ export default {
       ex_priceChange: "",
       ex_infoChange: "",
       type1Change: "",
-      cart:[],
+      
     };
   },
   mounted() {
     this.cart = JSON.parse(localStorage.cart);
-    this.getDetailProduct(this.$route.params.id);
     this.getProduct();
-    // for(let i=0;i<this.excerise.length;i++){
-    //       if(this.excerise[i].type1 == this.product.type1){
-    //         this.type.push(this.excerise[i])
-    //       }
-    //     }
+    this.getDetailProduct(this.$route.params.id);
   },
+  // created() {
+  //   axios
+  //     .get(`http://localhost:3000/product/${this.$route.params.id}`)
+  //     .then((response) => {
+  //       this.ex_nameChange = response.data.product.ex_name;
+  //       this.amountChange = response.data.product.amount;
+  //       this.ex_priceChange = response.data.product.ex_price;
+  //       this.ex_infoChange = response.data.product.ex_info;
+  //       this.type1Change = response.data.product.type1;
+  //       this.imageChange = response.data.images;
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // },
   methods: {
     getProduct() {
       axios
@@ -202,6 +213,41 @@ export default {
           });
       }
     },
+    // async updateProduct() {
+    //   console.log(this.ex_nameChange);
+
+    //   let formData1 = new FormData();
+    //     formData1.append('ex_name', this.ex_nameChange);
+    //     formData1.append('ex_info', this.ex_infoChange);
+    //     formData1.append('amount', this.amountChange);
+    //     formData1.append('ex_price', this.ex_priceChange);
+    //     formData1.append('type1', this.type1Change);
+    //     formData1.append('images', this.imageChange);
+
+    //   console.log(formData1.get('ex_name'));
+
+    //   // const peter = {
+    //   //   ex_name: this.ex_nameChange,
+    //   //   ex_info: this.ex_infoChange,
+    //   //   amount: this.amountChange,
+    //   //   ex_price: this.ex_priceChange,
+    //   //   type1: this.type1Change,
+    //   // };
+
+    //   console.log(formData1);
+    //   axios
+    //     .put(`/product/` + this.$route.params.id , formData1, {
+    //       headers: {
+    //         "Content-Type": "multipart/form-data",
+    //       },
+    //     })
+    //     .then((response) => {
+    //       console.log(response.data);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // },
   },
 };
 </script>

@@ -75,7 +75,7 @@ import AdminVue from "./components/Admin.vue";
             }"
           ></i>
         </div>
-        <div class="navbar-dropdown is-mobile">
+        <div class="navbar-dropdown  is-mobile">
           <div v-if="!user" class="navbar-item">
             <router-link to="/login">
               <strong>Login</strong>

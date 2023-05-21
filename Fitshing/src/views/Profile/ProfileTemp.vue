@@ -23,6 +23,7 @@
                       cols="20"
                       rows="5"
                     ></textarea>
+                    <p class="help is-danger" v-if='msg.Specialize'>{{ msg.Specialize }}</p>
                   </div>
                 </div>
               </article>
@@ -36,6 +37,7 @@
                       cols="20"
                       rows="5"
                     ></textarea>
+                    <p class="help is-danger" v-if='msg.Certificate'>{{ msg.Certificate }}</p>
                   </div>
                 </div>
               </article>
@@ -45,11 +47,12 @@
                   <div class="control">
                     <div class="select">
                       <select name="amount_t" v-model="amount_t">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                    </select>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                      </select>
                     </div>
+                    <p class="help is-danger" v-if='msg.Amount'>{{ msg.Amount }}</p>
                   </div>
                 </div>
               </article>
@@ -65,11 +68,11 @@
                       cols="30"
                       rows="15"
                     ></textarea>
+                    <p class="help is-danger" v-if='msg.Info'>{{ msg.Info }}</p>
                   </div>
                 </div>
               </article>
             </div>
-            
           </div>
         </div>
         <hr />
@@ -117,13 +120,15 @@
                   <div class="columns is-centered px-3">
                     <div class="column is-3">
                       <div class="columns is-centered m-3">
-                        <figure class="image is-128x128">
-                          <img
-                            class="is-rounded"
-                            :src="imagePath(items.image)"
-                            alt="Placeholder image"
-                          />
-                        </figure>
+
+
+                              <img
+                                class="is-rounded locked-image"
+                                :src="imagePath(items.image)"
+                                alt="Placeholder image"
+                              />
+
+                  
                       </div>
                       <div class="columns is-centered m-3">
                         <p class="title">
@@ -165,7 +170,9 @@
                     <div class="column is-1">
                       <button
                         class="button is-danger is-pulled-right"
-                        @click="rejectRequestTrainer(items.u_id), this.$router.go(0)"
+                        @click="
+                          rejectRequestTrainer(items.u_id), this.$router.go(0)
+                        "
                       >
                         <i class="fa fa-times" aria-hidden="true"></i>
                       </button>
@@ -218,13 +225,13 @@
                   <div class="columns is-centered px-3">
                     <div class="column is-3">
                       <div class="columns is-centered m-3">
-                        <figure class="image is-128x128">
-                          <img
-                            class="is-rounded"
-                            :src="imagePath(items.image)"
-                            alt="Placeholder image"
-                          />
-                        </figure>
+  
+                              <img
+                                class="is-rounded locked-image"
+                                :src="imagePath(items.image)"
+                                alt="Placeholder image"
+                              />
+
                       </div>
                       <div class="columns is-centered m-3">
                         <p class="subtitle is-5">
@@ -252,7 +259,9 @@
                     <div class="column is-2">
                       <button
                         class="button is-danger is-pulled-right"
-                        @click="rejectRequestUser(items.t_id), this.$router.go(0)"
+                        @click="
+                          rejectRequestUser(items.t_id), this.$router.go(0)
+                        "
                       >
                         <i class="fa fa-times" aria-hidden="true"></i>
                       </button>
@@ -268,6 +277,61 @@
           <button
             class="button is-danger"
             @click="modal_do_sub = !modal_do_sub"
+          >
+            Back
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Payment Show -->
+  <div class="modal" v-bind:class="{ 'is-active': modal_do_pay }" v-if="user">
+    <div class="modal-background"></div>
+    <div class="modal-card" style="max-width: 960px; width: 90%">
+      <section class="modal-card-body has-background-black">
+        <div class="box has-background-info has-text-info-light">
+          <div class="field is-grouped is-grouped-centered">
+            <h1 class="is-size-3 has-text-weight-bold">Payment Bill</h1>
+          </div>
+        </div>
+        <div class="columns is-centered" v-if="payment.length > 0">
+          <div class="box">
+            <div class="table">
+              <thead>
+                <tr>
+                  <th>Product id</th>
+                  <th>Product</th>
+                  <th>Amount</th>
+                  <th>Price</th>
+                  <th>Type</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="items in payment" v-if="payment.length > 0">
+                  <td>{{ items.p_id }}</td>
+                  <td>{{ items.slip_info }}</td>
+                  <td>{{ items.amount }}</td>
+                  <td>{{ items.total_price }}</td>
+                  <td>{{ items.type }}</td>
+                  <td>{{ items.date }}</td>
+                </tr>
+              </tbody>
+            </div>
+          </div>
+          
+        </div>
+        <div class="columns is-centered" v-else>
+          <div class="box">
+            <div>Youn don't have any payment?</div>
+          </div>
+        </div>
+        <hr />
+        <div class="field is-grouped is-grouped-right pt-2">
+          <button
+            class="button is-danger"
+            @click="modal_do_pay = !modal_do_pay"
           >
             Back
           </button>
@@ -449,6 +513,12 @@
                 >
                   Subscribe
                 </button>
+                <button
+                  class="button is-warning ml-3"
+                  @click="modal_do_pay = !modal_do_pay"
+                >
+                  Payment
+                </button>
               </div>
               <div v-else-if="user.role === 'trainer'" class="column">
                 <button class="button is-info" disabled>{{ user.role }}</button>
@@ -488,7 +558,7 @@ export default {
   data() {
     return {
       editoff: true,
-      data_user: [this.user],
+      // data_user: [this.user],
       age: "",
       height: "",
       weight: "",
@@ -504,8 +574,11 @@ export default {
       modal_do_train: false,
       modal_do_sub: false,
       modal_do_req: false,
+      modal_do_pay: false,
       request: [],
       userreq: [],
+      payment: [],
+      msg:[]
       // user: null
     };
   },
@@ -522,6 +595,7 @@ export default {
   mounted() {
     this.getRequest(this.$route.params.id);
     this.getAccept(this.$route.params.id);
+    this.getPayment(this.$route.params.id);
   },
   methods: {
     getRequest(rid) {
@@ -544,16 +618,39 @@ export default {
           console.log(err);
         });
     },
+    getPayment() {
+      axios
+        .get(`/payment/${this.$route.params.id}`)
+        .then((response) => {
+          this.payment = response.data.payment;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     imagePath(file_path) {
       return "http://localhost:3000/" + file_path;
     },
     async addTrainer() {
-      axios
+      if(!this.certificate || this.certificate.length < 25){
+        alert("Invalid Certificate input!")
+      }
+      else if(!this.specialize || this.specialize.length < 25){
+        alert("Invalid Specialize input!")
+      }
+      else if(!this.info || this.info.length < 25){
+        alert("Invalid Info input!")
+      }
+      else if(this.amount_t === 0){
+        alert("Invalid Amount of Member!")
+      }
+      else{
+        axios
         .put(`/trainer/${this.$route.params.id}`, {
           specialize: this.specialize,
           certificate: this.certificate,
           info: this.info,
-          amount_t: this.amount_t
+          amount_t: this.amount_t,
         })
         .then((response) => {
           console.log(response.data);
@@ -562,6 +659,8 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+      }
+      
     },
     async acceptRequest(u_id) {
       axios
@@ -582,8 +681,8 @@ export default {
           .then((response) => {
             console.log("Delete Request Complete");
             return axios.put(`/request/delete/${this.$route.params.id}`, {
-            another : `${u_id}`,
-        });
+              another: `${u_id}`,
+            });
           })
           .catch((error) => {
             alert(error);
@@ -598,15 +697,63 @@ export default {
           .then((response) => {
             console.log("Delete Request Complete");
             return axios.put(`/request/delete/${u_id}`, {
-            another : `${this.$route.params.id}`,
-        });
+              another: `${this.$route.params.id}`,
+            });
           })
           .catch((error) => {
             alert(error);
           });
       }
     },
+    validateInfo(value) {
+          if (value.length < 25) {
+            this.msg['Info'] = 'Must be 25 characters! or more';
+          } else {
+            this.msg['Info'] = '';
+          }
+    },
+    validateSpecialize(value) {
+          if (value.length < 25) {
+            this.msg['Specialize'] = 'Must be 25 characters! or more';
+          } else {
+            this.msg['Specialize'] = '';
+          }
+    },
+    validateCertificate(value) {
+          if (value.length < 25) {
+            this.msg['Certificate'] = 'Must be 25 characters! or more';
+          } else {
+            this.msg['Certificate'] = '';
+          }
+    },
+    validateAmount(value) {
+          if (value === 0) {
+            this.msg['Amount'] = 'Please Select Amount of Member';
+          } else {
+            this.msg['Amount'] = '';
+          }
+    },
+    
   },
+  watch:{
+    info(value){
+      this.info = value;
+      this.validateInfo(value);
+    },
+    specialize(value){
+      this.specialize = value;
+      this.validateSpecialize(value);
+    },
+    amount_t(value){
+      this.amount_t = value;
+      this.validateAmount(value);
+    },
+    certificate(value){
+      this.certificate = value;
+      this.validateCertificate(value);
+    },
+
+  }
 };
 </script>
 

@@ -5,11 +5,15 @@ const { timeStamp } = require("console");
 
 router = express.Router();
 
+// validate
+// const addRequestSchema = Joi.object({
+//   requestinfo: Joi.string().required().min(25).max(150),
+// })
+
 // Add Request
 router.post("/request/:id", async (req, res, next) => {
-  console.log(req.body)
   //     try {
-  //         await loginSchema.validateAsync(req.body, { abortEarly: false })
+  //         await addRequestSchema.validateAsync(req.body, { abortEarly: false })
   // } catch (err) {
   //         return res.status(400).send(err)
   // }
