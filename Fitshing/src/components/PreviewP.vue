@@ -193,11 +193,23 @@ export default {
       }
     },
     AddCart(product) {
-      if (this.cart.includes(product, -1)) {
-        alert("คุณมีสินค้านี้ในตระก้าแล้ว");
-      } else {
+      if(this.cart.length >=0){
+        console.log(this.cart.length)
+        for(let i = 0;this.cart.length >i;i++){
+          if(this.cart[i].ex_id == product.id){
+            alert("คุณมีสินค้านี้ในตระก้าแล้ว")
+            return false
+            break;
+          }
+        }
+      if (this.cart.includes(product,-1)) {
+        alert("คุณมีสินค้านี้ในตระก้าแล้ว")
+      }
+      else {
         this.cart.push(product);
-        product.quantity = this.purchase_amount;
+        product.quantity = 1;
+
+      }
       }
       localStorage.setItem("cart", JSON.stringify(this.cart));
     },

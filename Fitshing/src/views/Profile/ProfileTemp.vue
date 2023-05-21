@@ -375,8 +375,8 @@
     <div class="columns hero-body is-fullheight">
       <div class="container" style="width: 50%">
         <section
-          class="is-large has-background-grey-light"
-          style="border-radius: 1em"
+          class="is-large"
+          style="border-radius: 1em; background-color:#ffe7cc;"
         >
           <div class="columns p-5">
             <div class="column is-3">

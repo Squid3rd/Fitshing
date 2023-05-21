@@ -1,5 +1,6 @@
 <template>
    <section class="hero container" style="">
+    
     <div class="hero-body ">
       <div class="">
         <div class="columns">
@@ -33,7 +34,7 @@
                 font-size: 1.25rem;
               "
             >
-              <router-link to="/cart">
+              <!-- <router-link to="/cart">
                 <button
                   v-if="cart.length != 0"
                   class="button is-warning ml-4"
@@ -41,7 +42,7 @@
                 >
                   Cart ({{ cart.length }})
                 </button>
-              </router-link>
+              </router-link> -->
             </div>
           </div>
         </div>
@@ -137,9 +138,11 @@ export default {
   },
   methods: {
     check(product){
+      // console.log(this.cart[0].ex_id)
         if(this.cart.includes(product)){
           return true
         }
+
       },
     getProduct() {
       axios
@@ -169,12 +172,23 @@ export default {
       localStorage.setItem("cart", JSON.stringify(this.cart));
     },
     AddCart(product) {
+      if(this.cart.length >=0){
+        console.log(this.cart.length)
+        for(let i = 0;this.cart.length >i;i++){
+          if(this.cart[i].ex_id == product.id){
+            alert("คุณมีสินค้านี้ในตระก้าแล้ว")
+            return false
+            break;
+          }
+        }
       if (this.cart.includes(product,-1)) {
         alert("คุณมีสินค้านี้ในตระก้าแล้ว")
-      } else {
+      }
+      else {
         this.cart.push(product);
         product.quantity = 1;
 
+      }
       }
       localStorage.setItem("cart", JSON.stringify(this.cart));
     },
