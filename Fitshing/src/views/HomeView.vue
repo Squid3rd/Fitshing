@@ -97,12 +97,12 @@ export default {
         return "https://bulma.io/images/placeholders/640x360.png";
       }
     },
-    shortTitle(content) {
-      if (content.length > 30) {
-        return content.substring(0, 27) + "...";
-      }
-      return content;
-    },
+    // shortTitle(content) {
+    //   if (content.length > 30) {
+    //     return content.substring(0, 27) + "...";
+    //   }
+    //   return content;
+    // },
   },
 };
 </script>

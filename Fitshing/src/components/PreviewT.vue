@@ -46,13 +46,15 @@
   </div>
 
   <!-- Preview Section -->
-  <section class="hero is-fullheight" >
-    <div class="container has-background-success-light mt-6 mb-6 p-5" style="border-radius: 10px; box-shadow:0.4em 0.4em 0.8em #0004;">
+  <section class="hero is-fullheight container " >
+    <div class="has-background-success-light mt-6 mb-6 p-5 m-6" style="border-radius: 10px; box-shadow:0.4em 0.4em 0.8em #0004;">
       <div class="columns ">
         <!-- Trainer All Part -->
         <div class="column is-4 is-offset-1 mt-5">
-          <div class="card p-3" style="width: 100%">
-            <img :src="imagePath(trainer.image)" alt="Placeholder image" />
+          <div style="max-width:400px; max-height:350px; position:relative; top:20px;">
+            <div class="card p-3">
+            <img :src="imagePath(trainer.image)" style="object-fit:contain; width:360px; height:250px;" alt="Placeholder image" />
+            </div>
           </div>
         </div>
         <div class="column is-6 is-offset-1 mt-5">

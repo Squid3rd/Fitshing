@@ -1,9 +1,9 @@
 <template>
-    <div class="column is-multiline px-3 cardd">
+    <div class="column  is-multiline px-3 cardd">
       <div class="card">
         <div class="card-image">
-            <figure class="image is-4by3">
-                <img :src="imagePath(item.file_path)" alt="Placeholder image" />
+            <figure class="image">
+                <img style="object-fit: scale-down; width:320px; height:290px;" :src="imagePath(item.file_path)" alt="Placeholder image" />
             </figure>
         </div>
         <div class="card-content">
@@ -45,6 +45,7 @@ export default {
       }
     },
     shortTitle(content) {
+      console.log(content)
       if (content.length > 25) {
         return content.substring(0, 23) + "...";
       }

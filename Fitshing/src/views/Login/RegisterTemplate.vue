@@ -376,8 +376,8 @@ export default {
     validateusername(value) {
       if (value.length === 0) {
         this.msg["username"] = "Please enter your Username";
-      } else if (value.length < 3) {
-        this.msg["username"] = "Must be 3 characters!";
+      } else if (value.length < 5) {
+        this.msg["username"] = "Must be 5 characters!";
       } else {
         this.msg["username"] = "";
       }

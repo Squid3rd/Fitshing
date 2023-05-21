@@ -17,14 +17,14 @@
           :key="image.ex_id"
         >
         <div class="card p-2 mt-6" style="max-width: 95%">
-            <img :src="imagePath(image.file_path)" alt="Placeholder image" />
+            <img :src="imagePath(image.file_path)" style="object-fit: scale-down; width:320px; height:290px;" alt="Placeholder image" />
           </div>
         </div>
         <div class="column is-5 is-offset-1 mt-6">
           <p class="title is-3">{{ product.ex_name }}</p>
           <p class="title is-5">Type : {{ product.typeofproduct }}</p>
           <div
-            class="description has-background-white m-2"
+            class="has-background-white m-2"
             style="border: 1px solid #0004; border-radius: 2px; height: 200px"
           >
             {{ product.ex_info }}
