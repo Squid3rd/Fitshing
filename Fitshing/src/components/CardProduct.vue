@@ -12,7 +12,7 @@
         <footer class="card-footer p-1 is-flex justify-content-center">
           <div class="column">
             <router-link :to="`/product/preview/${item.ex_id}`">
-              <button class="button is-centered is-info" >View Detail</button>
+              <button class="button is-centered is-info buttom2" >View Detail</button>
             </router-link>
           </div>
           <!-- <a href="#" class="card-footer-item">Save</a> -->

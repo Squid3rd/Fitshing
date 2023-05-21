@@ -384,3 +384,22 @@ body * {
   transition: all 0.2s;
   transform: translate(0px, -7px);
 }
+.cart:hover{
+  transition: all 0.2s;
+  transform: rotateZ(-5deg) ;
+}
+.buttom:hover{
+  /* transition: all .3s ease-in-out 0s; */
+  /* transform: scale(1.1,1.1); */
+  /* width: 110px; */
+  animation: bt 1s alternate;
+  animation-fill-mode: forwards;
+}
+@keyframes bt {
+  0% {width: 110px;}
+  100%{width: 150px;}
+}
+.buttom2:hover{
+  transition: all 0.1s;
+  transform: translateY(-4px) scale(1.1,1.1);
+}

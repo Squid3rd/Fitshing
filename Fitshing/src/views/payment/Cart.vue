@@ -11,9 +11,9 @@
         </div>
         <div class="column is-5 has-text-right">
           <router-link to="/product">
-            <button class="button is-info is-light">All Product</button>
+            <button class="button is-info is-light buttom2">All Product</button>
           </router-link>
-          <button class="button is-danger is-light ml-1" @click="clearCart()">
+          <button class="button is-danger is-light ml-1 buttom2" @click="clearCart()">
             ลบทั้งหมด
           </button>
           <hr class="" style="background-color: rgb(184, 184, 184)" />
@@ -86,7 +86,7 @@
                   <div class="column has-text-centered" v-if="user">
                     <router-link to="/bill">
                       <button
-                        class="button is-success is-light is-fullwidth"
+                        class="button is-success is-light is-fullwidth buttom2"
                       >
                         ชำระเงิน
                       </button>

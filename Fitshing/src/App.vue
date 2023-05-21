@@ -54,7 +54,7 @@ import AdminVue from "./components/Admin.vue";
 
     <div class="column is-1 has-text-centered">
       <router-link to="/Cart">
-        <p class="icon has-text-info mt-5">
+        <p class="icon has-text-info mt-5 cart">
           <i class="fa fa-shopping-cart is-size-1 has-text-light"></i>
         </p>
       </router-link>

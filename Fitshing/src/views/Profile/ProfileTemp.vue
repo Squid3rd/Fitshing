@@ -371,12 +371,12 @@
   </section>
 
   <!-- Show Profile -->
-  <section class="hero is-fullheight" v-if="user">
+  <section class="hero is-fullheight" style="" v-if="user">
     <div class="columns hero-body is-fullheight">
       <div class="container" style="width: 50%">
         <section
           class="is-large"
-          style="border-radius: 1em; background-color:#ffe7cc;"
+          style="border-radius: 1em; background-color:#f8cba6; box-shadow:0.5em 0.5em .4em #0005;"
         >
           <div class="columns p-5">
             <div class="column is-3">
@@ -402,7 +402,7 @@
               </div>
               <div class="column is-centered">
                 <router-link :to="`/profile/edit/${user.id}`">
-                  <button class="button is-success">Edit Profile</button>
+                  <button class="button is-success buttom">Edit Profile</button>
                 </router-link>
               </div>
             </div>
@@ -508,13 +508,13 @@
                   {{ user.role }}
                 </button>
                 <button
-                  class="button is-info ml-3"
+                  class="button is-info ml-3 buttom2"
                   @click="modal_do_sub = !modal_do_sub"
                 >
                   Subscribe
                 </button>
                 <button
-                  class="button is-warning ml-3"
+                  class="button is-warning ml-3 buttom2"
                   @click="modal_do_pay = !modal_do_pay"
                 >
                   Payment
@@ -524,25 +524,25 @@
                 <button class="button is-info" disabled>{{ user.role }}</button>
                 <span v-if="user.status === 0">
                   <button
-                    class="button is-warning ml-3"
+                    class="button is-warning ml-3 buttom2"
                     @click="modal_do_train = !modal_do_train"
                   >
                     Add Trainer
                   </button>
                 </span>
                 <span v-else>
-                  <button class="button is-danger ml-3" disabled>
+                  <button class="button is-danger ml-3 buttom2" disabled>
                     Add Trainer
                   </button>
                   <button
-                    class="button ml-3"
+                    class="button ml-3 buttom2"
                     @click="modal_do_req = !modal_do_req"
                   >
                     Check
                   </button>
                 </span>
                 <button
-                  class="button is-warning ml-3"
+                  class="button is-warning ml-3 buttom2"
                   @click="modal_do_pay = !modal_do_pay"
                 >
                   Payment

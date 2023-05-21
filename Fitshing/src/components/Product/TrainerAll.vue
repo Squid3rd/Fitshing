@@ -1,7 +1,7 @@
 <template>
   <section class="hero is-fullheight">
-      <div class="columns hero-body is-centered is-fullheight">
-        <div class="container has-background-black p-5" >
+      <div class="columns hero-body is-centered ">
+        <div class="container p-5" >
           <div class="field has-addons has-addons-right">
             <form action="">
               <select v-model="sort1" class="button">
