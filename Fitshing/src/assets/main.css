@@ -403,3 +403,17 @@ body * {
   transition: all 0.1s;
   transform: translateY(-4px) scale(1.1,1.1);
 }
+.script{
+  animation: set 1s alternate ease;
+  animation-fill-mode: forwards;
+}
+@keyframes set {
+  from {
+    left: 100%;
+    opacity: 0;
+  }
+  to{
+    left: 70%;
+    opacity: 1;
+  }
+}
