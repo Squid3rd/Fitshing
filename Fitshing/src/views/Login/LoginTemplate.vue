@@ -2,15 +2,18 @@
   <section class="hero is-fullheight">
     <div class="columns hero-body is-centered is-fullheight">
       <div class="column is-half">
-        <form class="box p-5 m-5" @submit="onSubmit">
+        <form class="box p-5 m-5" @submit.prevent="onSubmit">
           <div class="box has-background-danger has-text-info-light">
             <div class="field is-grouped is-grouped-left">
               <h1 class="is-size-3">LOG IN</h1>
             </div>
           </div>
 
+          <div v-if="errorMessage" class="notification is-danger is-light">
+            {{ errorMessage }}
+          </div>
+
           <div class="field">
-            <!-- <label class="label">Email</label> -->
             <div class="control has-icons-left">
               <span class="icon has-text-info">
                 <i class="fa fa-user-circle-o"></i>
@@ -19,7 +22,7 @@
                 v-model="username"
                 class="input"
                 required
-                type="email"
+                type="text"
                 placeholder="Username"
               />
             </div>
@@ -40,7 +43,6 @@
                 placeholder="Password"
                 required
               />
-
             </div>
             <p class="help is-danger" v-if="msg.password">
                 {{ msg.password }}
@@ -48,11 +50,14 @@
           </div>
 
           <div class="field is-grouped is-grouped-right pt-2">
-            <a class="button is-primary is-rounded ml-5" @click="onSubmit()">Login</a>
-           
-              <!-- <router-link to="/register">
-                <a class="button is-primary is-rounded ml-5">Register</a>
-              </router-link> -->
+            <button
+              type="submit"
+              class="button is-primary is-rounded ml-5"
+              :class="{ 'is-loading': isLoading }"
+              :disabled="isLoading"
+            >
+              Login
+            </button>
           </div>
           <div class="field is-grouped is-grouped-right pt-2">
               <p>
@@ -77,34 +82,39 @@ export default {
       password: "",
       username: "",
       msg: [],
+      errorMessage: "",
+      isLoading: false,
     };
   },
   methods: {
     async onSubmit() {
+      this.errorMessage = "";
+      this.isLoading = true;
 
       const data = {
          username: this.username,
          password: this.password
        }
-       try{
+       try {
         let res = await axios.post('/login', data)
-           const token = res.data.token                                
-           localStorage.setItem('token', token)
-           this.$emit('auth-change')
-           this.$router.push({path: '/'})
-         
-       }catch(error){
-        console.log(data)
-        console.log(error.response.data)
-        // alert(error)
+        const token = res.data.token
+        localStorage.setItem('token', token)
+        this.$emit('auth-change')
+        this.$router.push({ path: '/' })
+       } catch (error) {
+        if (error.response && error.response.data) {
+          this.errorMessage = error.response.data.message || "Incorrect username or password";
+        } else {
+          this.errorMessage = "Unable to connect to server";
+        }
+       } finally {
+        this.isLoading = false;
        }
-      
     },
     validateusername(value) {
       if (value.length === 0) {
         this.msg["username"] = "Please enter your Username";
-      }
-      else{
+      } else {
         this.msg["username"] = "";
       }
     },
@@ -116,7 +126,7 @@ export default {
       }
     },
   },
-  watch:{
+  watch: {
     username(value) {
       this.username = value;
       this.validateusername(value);

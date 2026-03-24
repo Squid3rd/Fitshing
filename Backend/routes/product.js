@@ -3,47 +3,23 @@ const pool = require("../config");
 const multer = require("multer");
 const path = require("path");
 const Joi = require('joi')
-const fs = require("fs");
-const { timeStamp } = require('console');
+const fs = require("fs").promises;
+const { isLoggedIn, isAdmin } = require('../middlewares')
 
-router = express.Router();
+const router = express.Router();
 
-router.get("/product", async function (req, res, next) {
-  try {
-    const [rows, fields] = await pool.query('SELECT * FROM exercise RIGHT OUTER JOIN ex_image using (ex_id) left outer join ex_type on (exercise.type1 = ex_type.id);')
-    return res.json(rows)
-  } catch (err) {
-    console.log(err);
-    next(err)
+// File filter for image uploads
+const imageFileFilter = (req, file, cb) => {
+  const allowedTypes = /jpeg|jpg|png|gif|webp/;
+  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = allowedTypes.test(file.mimetype);
+  if (extname && mimetype) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only image files (jpeg, jpg, png, gif, webp) are allowed'));
   }
-});
+};
 
-// View Preview
-router.get("/product/:id", function (req, res, next) {
-
-  const promise1 = pool.query("SELECT * FROM exercise left outer join ex_type on (exercise.type1 = ex_type.id) LEFT OUTER JOIN ex_image using (ex_id) WHERE ex_id=?", [
-    req.params.id,
-  ]);
-  const promise2 = pool.query("SELECT * FROM ex_image WHERE ex_id=?", [
-    req.params.id,
-  ]);
-
-  Promise.all([promise1, promise2])
-    .then((results) => {
-      const [products, productFields] = results[0];
-      const [images, imageFields] = results[1];
-      res.json({
-        product: products[0],
-        images: images,
-        error: null,
-      });
-    })
-    .catch((err) => {
-      return res.status(500).json(err);
-    });
-});
-
-// Upload Image
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
     callback(null, "./static/uploads/exercise");
@@ -55,11 +31,57 @@ const storage = multer.diskStorage({
     );
   },
 });
-const upload = multer({ storage: storage,
-  limits: { fileSize: 1000000 } });
+const upload = multer({ storage: storage, limits: { fileSize: 1000000 }, fileFilter: imageFileFilter });
 
+// Get all products (supports pagination: ?page=1&limit=20)
+router.get("/product", async function (req, res, next) {
+  try {
+    const page = parseInt(req.query.page) || 0;
+    const limit = parseInt(req.query.limit) || 0;
 
-// Validate
+    if (page > 0 && limit > 0) {
+      const offset = (page - 1) * limit;
+      const [[{ total }]] = await pool.query('SELECT COUNT(*) as total FROM exercise');
+      const [rows] = await pool.query(
+        'SELECT * FROM exercise RIGHT OUTER JOIN ex_image USING (ex_id) LEFT OUTER JOIN ex_type ON (exercise.type1 = ex_type.id) LIMIT ? OFFSET ?',
+        [limit, offset]
+      );
+      return res.json({ data: rows, total, page, limit, totalPages: Math.ceil(total / limit) });
+    }
+
+    const [rows] = await pool.query(
+      'SELECT * FROM exercise RIGHT OUTER JOIN ex_image USING (ex_id) LEFT OUTER JOIN ex_type ON (exercise.type1 = ex_type.id)'
+    );
+    return res.json(rows);
+  } catch (err) {
+    next(err)
+  }
+});
+
+// View product preview (single query with JOIN, images extracted from results)
+router.get("/product/:id", async function (req, res, next) {
+  try {
+    const [rows] = await pool.query(
+      "SELECT e.*, t.name as type_name, i.file_path, i.date as image_date " +
+      "FROM exercise e LEFT JOIN ex_type t ON e.type1 = t.id " +
+      "LEFT JOIN ex_image i USING (ex_id) WHERE e.ex_id = ?",
+      [req.params.id]
+    );
+
+    if (!rows.length) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    const images = rows.map(r => ({ file_path: r.file_path, date: r.image_date }));
+    const { file_path, image_date, ...product } = rows[0];
+    product.file_path = file_path;
+
+    res.json({ product, images, error: null });
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+});
+
 const addproductSchema = Joi.object({
   ex_name: Joi.string().required().max(150),
   ex_info: Joi.string().required().max(240),
@@ -69,339 +91,169 @@ const addproductSchema = Joi.object({
 })
 
 // Add Product
-router.post("/product",  upload.single('images'), async function (req, res, next) {
-
+router.post("/product", isLoggedIn, isAdmin, upload.single('images'), async function (req, res, next) {
   try {
     await addproductSchema.validateAsync(req.body, { abortEarly: false })
   } catch (err) {
-    console.log(err)
     return res.status(400).json(err.message)
-
   }
 
-    const images = req.file.path.substr(6);
-  
-    const ex_name = req.body.ex_name;
-    const ex_info = req.body.ex_info;
-    const amount = req.body.amount;
-    const ex_price = req.body.ex_price;
-    const type1 = req.body.type1;
-  
-    console.log(ex_name)
-    console.log(ex_info)
-    console.log(amount)
-    console.log(ex_price)
-    console.log(type1)
-
-    const conn = await pool.getConnection();
-    await conn.beginTransaction();
-  
-    try {
-      let results = await conn.query(
-        "INSERT INTO exercise(ex_name, ex_info, amount, ex_price, type1) " +
-        "VALUES(?, ?, ?, ?, ?);",
-        [ex_name, ex_info, amount, ex_price, type1]
-      );
-
-      const exerciseId = results[0].insertId;
-
-      await conn.query(
-        "INSERT INTO ex_image(ex_id, file_path, date) VALUES(?, ?, CURRENT_TIMESTAMP)",
-        [exerciseId, images]
-      );
-  
-        await conn.commit()
-        res.status(201).send()
-    } catch (err) {
-        console.log(err)
-        await conn.rollback();
-        res.status(400).json(err.toString());
-    } finally {
-        conn.release()
-  
-    }
-  });
-  
-  // Delete Product
-  router.delete("/product/:id", async function (req, res, next) {
-
-    const conn = await pool.getConnection();
-    await conn.beginTransaction();
-  
-    try {
-      //Delete files from the upload folder
-      const [images,imageFields] = await conn.query(
-        "SELECT * FROM ex_image WHERE ex_id = ?",
-        [req.params.id]
-      );
-
-      const appDir = path.dirname(require.main.filename); 
-      images.forEach((e) => {
-        const p = path.join(appDir, 'static', e.file_path);
-        fs.unlinkSync(p);
-      });
-  
-      // Delete images
-      await conn.query("DELETE FROM ex_image WHERE ex_id = ?", [
-        req.params.id,
-      ]);
-
-      // Delete the Product
-      const [
-        rows2,
-        fields2,
-      ] = await conn.query("DELETE FROM exercise WHERE ex_id = ?", [
-        req.params.id,
-      ]);
-  
-      if (rows2.affectedRows === 1) {
-        await conn.commit();
-        res.status(204).send();
-      } else {
-        throw "Cannot delete the Product";
-      }
-    } catch (err) {
-      console.log(err)
-      await conn.rollback();
-      return res.status(500).json(err);
-    } finally {
-      conn.release();
-    }
-  });
-
-  // Validate
-  const updateproductSchema = Joi.object({
-    ex_name: Joi.string().required().max(150),
-    ex_info: Joi.string().required().max(240),
-    ex_price: Joi.number().required(),
-    amount: Joi.number().required(),
-    type1: Joi.number().required(),
-  })
-
-  // Update Product 
-  router.put("/product/:id", async function (req, res, next) {
-  
-    try {
-      await updateproductSchema.validateAsync(req.body, { abortEarly: false })
-    } catch (err) {
-      console.log(err)
-      return res.status(400).json(err.message)
-  
-    }
-
-    const ex_name = req.body.ex_name;
-    const ex_info = req.body.ex_info;
-    const amount = req.body.amount;
-    const ex_price = req.body.ex_price;
-    const type1 = req.body.type1;
-    // const ex_id = req.body.ex_id;
-  
-    console.log(req.params.ex_name)
-    console.log(req.params.id)
-    const conn = await pool.getConnection()
-    await conn.beginTransaction();
-  
-    try {
-      let results = await conn.query(
-        "UPDATE exercise SET ex_name=?, ex_info=?, amount=?, ex_price=?, type1=? WHERE ex_id=?",
-        [ex_name, ex_info, amount, ex_price, type1, req.params.id]
-      )
-  
-      await conn.commit()
-      res.send("success!");
-    } catch (err) {
-      await conn.rollback();
-      next(err);
-    } finally {
-      console.log('finally')
-      console.log(ex_price)
-      conn.release();
-    }
-    return;
-  });
-
-  // Update Image Product
-  router.put("/product/update/image/:id", upload.single('imagesC'), async function (req, res, next) {
-
-    const imagesC = req.file.path.substr(6);
-
-    const conn = await pool.getConnection()
-    await conn.beginTransaction();
-  
-    try {
-      // Get Path files from the upload folder
-      const [
-          images,
-          imageFields,
-      ] = await conn.query(
-          "SELECT `file_path` FROM `ex_image` WHERE `ex_id` = ?",
-          [req.params.id]
-      );
-
-      // Update File from path
-      const appDir = path.dirname(require.main.filename); // Get app root directory
-      console.log(appDir)
-      const p = path.join(appDir, 'static', images[0].file_path);
-      fs.unlinkSync(p);
-
-      console.log("ddd")
-    // console.log
-      // Delete Data from Table images
-      const [rows1, fields1] = await conn.query(
-          'update `ex_image` set file_path = ? WHERE `ex_id`=?', [imagesC ,req.params.id]
-      )
-
-      // commit
-      await conn.commit()
-      res.json({ message: "Update image Complete" })
-  } catch (error) {
-      next(error)
-      await conn.rollback();
-      // res.status(500).json(error)
-  } finally {
-      conn.release();
-  }
-  });
-
-  // Delete Image Product
-  router.put("/product/delete/image/:id", upload.single('imagesC'), async function (req, res, next) {
-
-    const imagesC = req.file.path.substr(6);
-  
-    try {
-      // Get Path files from the upload folder
-      const [
-          images,
-          imageFields,
-      ] = await conn.query(
-          "SELECT `file_path` FROM `ex_image` WHERE `ex_id` = ?",
-          [req.params.id]
-      );
-
-      // Delete File from path
-      const appDir = path.dirname(require.main.filename); // Get app root directory
-      console.log(appDir)
-      const p = path.join(appDir, 'static', images[0].file_path);
-      fs.unlinkSync(p);
-
-      // Delete Data from Table images
-      const [rows1, fields1] = await conn.query(
-          'DELETE FROM `ex_image` WHERE `ex_id`=?', [req.params.id]
-      )
-
-      // commit
-      await conn.commit()
-      res.json({ message: "Delete image Complete" })
-  } catch (error) {
-      next(error)
-      await conn.rollback();
-      // res.status(500).json(error)
-  } finally {
-      conn.release();
-  }
-  });
-
-const InserpaymentSchema = Joi.object({
-  type: Joi.string().valid('Mobile Banking', 'Credit/Debit', 'Cash on Delivery').required(),
-  quantity: Joi.number().required(),
-  ex_id: Joi.number().required(),
-  slip_info: Joi.string().required(),
-  total_price: Joi.number().required(),
-  u_id: Joi.number().required(),
-})
-
-
-//insert to payment
-router.post("/payment", async function (req, res, next) {
-
-  try {
-    await InserpaymentSchema.validateAsync(req.body, { abortEarly: false })
-  } catch (err) {
-    console.log(err)
-    return res.status(400).json(err.message)
-
-  }
-    const quantity = req.body.quantity;
-    const ex_id = req.body.ex_id;
-    const slip_info = req.body.slip_info;
-    const total_price = req.body.total_price;
-    const u_id = req.body.u_id;
-    const type = req.body.type;
-
-
-    const conn = await pool.getConnection();
-    await conn.beginTransaction();
-  
-    try {
-      let [rows,fields] = await conn.query(
-        "INSERT INTO payment(slip_info,date, amount, total_price, u_id, type) " +
-        "VALUES(?,  CURRENT_TIMESTAMP, ?, ?, ?, ?);",
-        [slip_info, quantity, total_price, u_id, type]
-      );
-      let [rowsEx,fieldsEx] = await conn.query(
-        "UPDATE exercise SET amount = amount - ? WHERE ex_id=?",[quantity,ex_id]);
-
-      // const exerciseId = results[0].insertId;
-
-      // await conn.query(
-      //   "INSERT INTO ex_image(ex_id, file_path, date) VALUES(?, ?, CURRENT_TIMESTAMP)",
-      //   [exerciseId, images]
-      // );
-      // console.log(rows)
-        await conn.commit()
-        res.status(201).send()
-    } catch (err) {
-        console.log(err)
-        await conn.rollback();
-        res.status(400).json(err.toString());
-    } finally {
-        conn.release()
-  
-    }
-  });
-
-// Delete Product
-router.delete("/product/:id", async function (req, res, next) {
+  const images = req.file.path.substr(6);
+  const { ex_name, ex_info, amount, ex_price, type1 } = req.body;
 
   const conn = await pool.getConnection();
   await conn.beginTransaction();
 
   try {
-    //Delete files from the upload folder
-    const [images,imageFields] = await conn.query(
+    let results = await conn.query(
+      "INSERT INTO exercise(ex_name, ex_info, amount, ex_price, type1) VALUES(?, ?, ?, ?, ?);",
+      [ex_name, ex_info, amount, ex_price, type1]
+    );
+
+    const exerciseId = results[0].insertId;
+
+    await conn.query(
+      "INSERT INTO ex_image(ex_id, file_path, date) VALUES(?, ?, CURRENT_TIMESTAMP)",
+      [exerciseId, images]
+    );
+
+    await conn.commit()
+    res.status(201).json({ message: "Product created" })
+  } catch (err) {
+    await conn.rollback();
+    res.status(400).json({ message: err.toString() });
+  } finally {
+    conn.release()
+  }
+});
+
+// Delete Product
+router.delete("/product/:id", isLoggedIn, isAdmin, async function (req, res, next) {
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+
+  try {
+    const [images] = await conn.query(
       "SELECT * FROM ex_image WHERE ex_id = ?",
       [req.params.id]
     );
 
-    const appDir = path.dirname(require.main.filename); 
-    images.forEach((e) => {
+    const appDir = path.dirname(require.main.filename);
+    await Promise.all(images.map(async (e) => {
       const p = path.join(appDir, 'static', e.file_path);
-      fs.unlinkSync(p);
-    });
+      try { await fs.unlink(p); } catch {}
+    }));
 
-    // Delete images
-    await conn.query("DELETE FROM ex_image WHERE ex_id = ?", [
-      req.params.id,
-    ]);
+    await conn.query("DELETE FROM ex_image WHERE ex_id = ?", [req.params.id]);
 
-    // Delete the Product
-    const [
-      rows2,
-      fields2,
-    ] = await conn.query("DELETE FROM exercise WHERE ex_id = ?", [
-      req.params.id,
-    ]);
+    const [rows2] = await conn.query("DELETE FROM exercise WHERE ex_id = ?", [req.params.id]);
 
     if (rows2.affectedRows === 1) {
       await conn.commit();
       res.status(204).send();
     } else {
-      throw "Cannot delete the Product";
+      throw new Error("Cannot delete the Product");
     }
   } catch (err) {
-    console.log(err)
     await conn.rollback();
-    return res.status(500).json(err);
+    return res.status(500).json({ message: err.toString() });
+  } finally {
+    conn.release();
+  }
+});
+
+const updateproductSchema = Joi.object({
+  ex_name: Joi.string().required().max(150),
+  ex_info: Joi.string().required().max(240),
+  ex_price: Joi.number().required(),
+  amount: Joi.number().required(),
+  type1: Joi.number().required(),
+})
+
+// Update Product
+router.put("/product/:id", isLoggedIn, isAdmin, async function (req, res, next) {
+  try {
+    await updateproductSchema.validateAsync(req.body, { abortEarly: false })
+  } catch (err) {
+    return res.status(400).json(err.message)
+  }
+
+  const { ex_name, ex_info, amount, ex_price, type1 } = req.body;
+
+  const conn = await pool.getConnection()
+  await conn.beginTransaction();
+
+  try {
+    await conn.query(
+      "UPDATE exercise SET ex_name=?, ex_info=?, amount=?, ex_price=?, type1=? WHERE ex_id=?",
+      [ex_name, ex_info, amount, ex_price, type1, req.params.id]
+    )
+
+    await conn.commit()
+    res.json({ message: "success!" });
+  } catch (err) {
+    await conn.rollback();
+    next(err);
+  } finally {
+    conn.release();
+  }
+});
+
+// Update Image Product
+router.put("/product/update/image/:id", isLoggedIn, isAdmin, upload.single('imagesC'), async function (req, res, next) {
+  const imagesC = req.file.path.substr(6);
+
+  const conn = await pool.getConnection()
+  await conn.beginTransaction();
+
+  try {
+    const [images] = await conn.query(
+      "SELECT `file_path` FROM `ex_image` WHERE `ex_id` = ?",
+      [req.params.id]
+    );
+
+    const appDir = path.dirname(require.main.filename);
+    const p = path.join(appDir, 'static', images[0].file_path);
+    try { await fs.unlink(p); } catch {}
+
+    await conn.query(
+      'UPDATE `ex_image` SET file_path = ? WHERE `ex_id`=?', [imagesC, req.params.id]
+    )
+
+    await conn.commit()
+    res.json({ message: "Update image Complete" })
+  } catch (error) {
+    await conn.rollback();
+    next(error)
+  } finally {
+    conn.release();
+  }
+});
+
+// Delete Image Product
+router.put("/product/delete/image/:id", isLoggedIn, isAdmin, async function (req, res, next) {
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+
+  try {
+    const [images] = await conn.query(
+      "SELECT `file_path` FROM `ex_image` WHERE `ex_id` = ?",
+      [req.params.id]
+    );
+
+    const appDir = path.dirname(require.main.filename);
+    const p = path.join(appDir, 'static', images[0].file_path);
+    try { await fs.unlink(p); } catch {}
+
+    await conn.query(
+      'DELETE FROM `ex_image` WHERE `ex_id`=?', [req.params.id]
+    )
+
+    await conn.commit()
+    res.json({ message: "Delete image Complete" })
+  } catch (error) {
+    await conn.rollback();
+    next(error)
   } finally {
     conn.release();
   }

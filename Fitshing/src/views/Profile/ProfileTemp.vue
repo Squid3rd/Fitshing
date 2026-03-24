@@ -659,24 +659,24 @@ export default {
           amount_t: this.amount_t,
         })
         .then((response) => {
-          console.log(response.data);
-          location.reload();
+          this.$emit('auth-change');
+          this.$router.go(0);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
       }
-      
+
     },
     async acceptRequest(u_id) {
       axios
         .put(`/request/accept/${this.$route.params.id}`, { t_id: u_id })
         .then((response) => {
-          console.log(response.data);
-          location.reload();
+          this.$emit('auth-change');
+          this.$router.go(0);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     },
     async rejectRequestUser(u_id) {
@@ -739,26 +739,32 @@ export default {
             this.msg['Amount'] = '';
           }
     },
-    
+    _debounce(fn, delay) {
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+      };
+    },
+  },
+  created() {
+    this._debouncedValidateInfo = this._debounce((v) => this.validateInfo(v), 300);
+    this._debouncedValidateSpecialize = this._debounce((v) => this.validateSpecialize(v), 300);
+    this._debouncedValidateCertificate = this._debounce((v) => this.validateCertificate(v), 300);
   },
   watch:{
     info(value){
-      this.info = value;
-      this.validateInfo(value);
+      this._debouncedValidateInfo(value);
     },
     specialize(value){
-      this.specialize = value;
-      this.validateSpecialize(value);
+      this._debouncedValidateSpecialize(value);
     },
     amount_t(value){
-      this.amount_t = value;
       this.validateAmount(value);
     },
     certificate(value){
-      this.certificate = value;
-      this.validateCertificate(value);
+      this._debouncedValidateCertificate(value);
     },
-
   }
 };
 </script>

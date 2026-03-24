@@ -253,27 +253,34 @@ export default {
             this.msg['Info'] = '';
           }
     },
+    _debounce(fn, delay) {
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+      };
+    },
+  },
+  created() {
+    // Debounced validators for text fields
+    this._debouncedValidateProduct = this._debounce((v) => this.validateProduct(v), 300);
+    this._debouncedValidateInfo = this._debounce((v) => this.validateInfo(v), 300);
   },
   watch:{
     ex_name(value){
-      this.ex_name = value;
-      this.validateProduct(value);
+      this._debouncedValidateProduct(value);
     },
     ex_price(value){
-      this.ex_price = value;
       this.validatePrice(value);
     },
     amount(value){
-      this.amount = value;
       this.validateAmount(value);
     },
     type1(value){
-      this.type1 = value;
       this.validateType(value);
     },
     ex_info(value){
-      this.ex_info = value;
-      this.validateInfo(value);
+      this._debouncedValidateInfo(value);
     }
   }
 };

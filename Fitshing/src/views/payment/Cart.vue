@@ -1,5 +1,5 @@
 <template>
-  <section class="hero container is-medium" style="">
+  <section class="hero container is-medium">
     <div class="hero-body">
       <div class="columns">
       <div class="container">
@@ -7,7 +7,7 @@
       <div class="columns is-gapless">
         <div class="column is-3">
           <p class="subtitle is-3">Cart</p>
-          <hr class="" style="background-color: rgb(184, 184, 184)" />
+          <hr style="background-color: rgb(184, 184, 184)" />
         </div>
         <div class="column is-5 has-text-right">
           <router-link to="/product" >
@@ -16,7 +16,7 @@
           <button class="button is-danger is-light ml-1 buttom2" @click="clearCart()">
             ลบทั้งหมด
           </button>
-          <hr class="" style="background-color: rgb(184, 184, 184)" />
+          <hr style="background-color: rgb(184, 184, 184)" />
         </div>
         <div class="column is-4 is-offset-0 has-text-left ml-2">
           <p class="subtitle is-3">รายการคำสั่งซื้อ</p>
@@ -25,31 +25,28 @@
       </div>
       <div class="tile is-ancestor">
         <div class="tile is-vertical is-8">
-          <!-- สินค้าแต่ละชิ้น loop ตรงนี้-->
-          <div class="has-text-centered mb-5" v-if="checkCart()">
+          <div class="has-text-centered mb-5" v-if="isCartEmpty">
             <router-link to="/product" >
             <p class="has-text-danger subtitle is-3 mt-3">!! คุณยังไม่มีสินค้าในตะกร้าเลยนะคับ !!</p>
             </router-link>
           </div>
-          <div class="m-2 cart-product" v-for="(items, index) of cart">
+          <div class="m-2 cart-product" v-for="(items, index) in cart" :key="index">
             <div class="tile is-parent columns">
               <div class="column is-3">
                 <figure class="image mt-5">
-                   <img :src="imagePath(items.file_path)" alt="Placeholder image" />
-                      </figure>
+                   <img :src="imagePath(items.file_path)" alt="Product image" />
+                </figure>
               </div>
               <div class="column is-6">
                 <p class="title is-4">{{ items.ex_name }}</p>
-                <p class="subtitle is-5">${{ items.ex_price }}</p>
+                <p class="subtitle is-5">&#3647;{{ items.ex_price }}</p>
                 <p>{{ items.ex_info }}</p>
-                <!-- <p></p>จำนวนชิ้น -->
-                <!-- content -->
               </div>
               <div class="column is-2">
-                  <div class="num-block ">
+                  <div class="num-block">
                     <div class="num-in">
-                      <span  class="minus dis" @click="disFromCart(items)"></span>
-                      <input type="text" class="in-num" :value="items.quantity" />
+                      <span class="minus dis" @click="disFromCart(items)"></span>
+                      <input type="text" class="in-num" :value="items.quantity" readonly />
                       <span class="plus" @click="plusFromCart(items)"></span>
                     </div>
                   </div>
@@ -65,44 +62,33 @@
               </div>
             </div>
           </div>
-          <!-- สินค้าแต่ละชิ้น loop ตรงนี้ -->
         </div>
         <div class="tile is-vertical is-4">
           <div class="bill ml-5">
             <article class="tile is-child">
               <div class="content m-5">
-                <div class="columns" v-for="(items, index) in cart">
+                <div class="columns" v-for="(items, index) in cart" :key="index">
                   <div class="column is-10">
-                    <p class="">{{ items.ex_name }}</p>
+                    <p>{{ items.ex_name }}</p>
                   </div>
                   <div class="column">
-                    <p class="">
-                      x <span>{{ items.quantity }}</span>
-                    </p>
+                    <p>x <span>{{ items.quantity }}</span></p>
                   </div>
                 </div>
                 <div class="columns">
-                  <div class="column is-8"><p class="">ราคารวม</p></div>
+                  <div class="column is-8"><p>ราคารวม</p></div>
                   <div class="column has-text-right">
-                    <p class="">{{sumary}} บาท</p>
+                    <p>{{ summary }} บาท</p>
                   </div>
                 </div>
                 <div class="columns">
-                  <div class="column has-text-centered" v-if="checkCart()">
-                    <!-- <router-link to="/bill">
-                      <button
-                        class="button is-success is-light is-fullwidth buttom2"
-                      >
-                        ชำระเงิน
-                      </button>
-                    </router-link> -->
+                  <div class="column has-text-centered" v-if="isCartEmpty">
+                    <!-- Empty cart - no checkout button -->
                   </div>
                   <div class="column has-text-centered" v-else-if="user">
                     <router-link to="/bill">
-                      <button
-                        class="button is-success is-light is-fullwidth buttom2"
-                      >
-                        r
+                      <button class="button is-success is-light is-fullwidth buttom2">
+                        ชำระเงิน
                       </button>
                     </router-link>
                   </div>
@@ -123,64 +109,54 @@
   </div>
       </div>
     </div>
-      </section>
+  </section>
 </template>
 
 <script>
-import axios from "@/plugins/axios";
+const API_BASE = "http://localhost:3000/";
+
 export default {
   props: ['user'],
   data() {
     return {
       cart: [],
+      _saveTimer: null,
     };
   },
   created() {
-    this.cart = JSON.parse(localStorage.cart);
-    this.getProduct();
+    this.cart = JSON.parse(localStorage.getItem('cart') || '[]');
   },
   methods: {
-    checkCart(){
-      if(this.cart.length == 0){
-        return true
-      }
-    },
-    getProduct() {
-      axios
-        .get("/product")
-        .then((response) => {
-          this.product = response.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-        this.cart = JSON.parse(localStorage.cart);
-    },
-    
     imagePath(file_path) {
       if (file_path) {
-        return "http://localhost:3000/" + file_path;
-      } else {
-        return "https://bulma.io/images/placeholders/640x360.png";
+        return API_BASE + file_path;
       }
+      return "https://bulma.io/images/placeholders/640x360.png";
+    },
+    saveCart() {
+      clearTimeout(this._saveTimer);
+      this._saveTimer = setTimeout(() => {
+        localStorage.setItem("cart", JSON.stringify(this.cart));
+      }, 200);
     },
     plusFromCart(product) {
-      if (this.cart.includes(product) && product.quantity  < product.amount) {
-
-        product.quantity = product.quantity + 1;
-        localStorage.setItem("cart", JSON.stringify(this.cart));
+      if (product.quantity < product.amount) {
+        product.quantity += 1;
+        this.saveCart();
       }
     },
     disFromCart(product) {
-      if(product.quantity > 1){
-      product.quantity -= 1;
-      localStorage.setItem("cart", JSON.stringify(this.cart));
+      if (product.quantity > 1) {
+        product.quantity -= 1;
+        this.saveCart();
       }
-      
     },
-    removeFromcart(product){
-      this.cart.splice(this.cart.indexOf(product), 1);
-      localStorage.setItem("cart", JSON.stringify(this.cart));
+    removeFromcart(product) {
+      const index = this.cart.findIndex(item => item.ex_id === product.ex_id);
+      if (index > -1) {
+        this.cart.splice(index, 1);
+        this.saveCart();
+      }
     },
     clearCart() {
       this.cart = [];
@@ -188,8 +164,11 @@ export default {
     },
   },
   computed: {
-    sumary() {
-      return this.cart.reduce((num, int) => num + int.ex_price * int.quantity, 0);
+    isCartEmpty() {
+      return this.cart.length === 0;
+    },
+    summary() {
+      return this.cart.reduce((total, item) => total + item.ex_price * item.quantity, 0);
     },
   },
 };

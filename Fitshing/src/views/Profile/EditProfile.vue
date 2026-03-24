@@ -367,15 +367,14 @@ export default {
       let formData = new FormData();
       formData.append("imagesC", this.imagesC[0]);
 
-      console.log("Update image");
       axios
         .put(`/profile/edit/image/${this.$route.params.id}`, formData)
         .then((response) => {
-          // console.log(response.data);
-          window.location.reload()
+          this.$emit('auth-change');
+          this.$router.go(0);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     },
 

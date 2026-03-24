@@ -123,35 +123,45 @@ export default {
   data() {
     return {
       user: null,
-      cart:[],
     };
+  },
+  computed: {
+    token() {
+      const t = localStorage.getItem("token");
+      return t && t !== 'null';
+    }
   },
   created() {
     this.onAuthChange();
-    // this.cart = JSON.parse(localStorage.cart);
   },
   methods: {
     onAuthChange() {
       const token = localStorage.getItem("token");
-      if (token) {
+      if (token && token !== 'null') {
         this.getUser();
+      } else {
+        this.user = null;
       }
     },
-    getUser() {
-      axios
-        .get("/user/me")
-        .then((res) => {
-          this.user = res.data;
-        })
-        .catch((e) => console.log(e.response.data));
+    async getUser() {
+      try {
+        const res = await axios.get("/user/me");
+        this.user = res.data;
+      } catch (e) {
+        localStorage.removeItem("token");
+        this.user = null;
+      }
     },
     async logout() {
-      // this.$router.go({ name: '/home' });
-      this.cart = []
-      localStorage.setItem("cart", JSON.stringify(this.cart));
-      location.reload()
-      localStorage.setItem("token", null);
-      // this.$router.push("/login");
+      try {
+        await axios.post("/logout");
+      } catch (e) {
+        // Continue logout even if API fails
+      }
+      localStorage.removeItem("token");
+      localStorage.setItem("cart", JSON.stringify([]));
+      this.user = null;
+      this.$router.push({ name: 'home' });
     },
   },
 };

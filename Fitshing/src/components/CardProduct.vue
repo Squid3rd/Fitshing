@@ -3,7 +3,7 @@
       <div class="card">
         <div class="card-image">
             <figure class="image is-4by3">
-                <img :src="imagePath(item.file_path)" alt="Placeholder image" />
+                <img :src="imagePath(item.file_path)" alt="Placeholder image" loading="lazy" />
             </figure>
         </div>
         <div class="card-content">
@@ -15,7 +15,6 @@
               <button class="button is-centered is-info buttom2" >View Detail</button>
             </router-link>
           </div>
-          <!-- <a href="#" class="card-footer-item">Save</a> -->
         </footer>
       </div>
 </div>
@@ -25,27 +24,19 @@
 defineProps({
     item: Object
 })
-
 </script>
 
 <script>
+const API_BASE = "http://localhost:3000/";
+
 export default {
   name: "cardproduct",
-  data() {
-    return {
-      
-    };
-  },
   methods:{
-    async reloadPage() {
-    window.location.reload();
-  },
     imagePath(file_path) {
       if (file_path) {
-        return "http://localhost:3000/" + file_path;
-      } else {
-        return "https://bulma.io/images/placeholders/640x360.png";
+        return API_BASE + file_path;
       }
+      return "https://bulma.io/images/placeholders/640x360.png";
     },
     shortTitle(content) {
       if (content.length > 19) {

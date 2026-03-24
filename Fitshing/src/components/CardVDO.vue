@@ -4,7 +4,7 @@
         <router-link :to="`/preview/vdo/${item.id}`">
             <div class="card-image">
         <figure class="image is-4by3">
-          <img :src="imagePath(item.image1)" alt="Placeholder image" />
+          <img :src="imagePath(item.image1)" alt="Placeholder image" loading="lazy" />
         </figure>
       </div>
         </router-link>
@@ -24,20 +24,16 @@ defineProps({
 </script>
 
 <script>
+const API_BASE = "http://localhost:3000/";
+
 export default {
 name: 'cardVDO',
-data(){
-    return{
-        
-    }
-},
 methods:{
     imagePath(file_path) {
       if (file_path) {
-        return "http://localhost:3000/" + file_path;
-      } else {
-        return "https://bulma.io/images/placeholders/640x360.png";
+        return API_BASE + file_path;
       }
+      return "https://bulma.io/images/placeholders/640x360.png";
     },
     shortTitle(content) {
       if (content.length > 25) {
@@ -50,5 +46,4 @@ methods:{
 </script>
 
 <style>
-
 </style>

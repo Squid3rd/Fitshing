@@ -1,26 +1,37 @@
-// import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { computed, ref, reactive, onMounted } from "vue";
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-export const useproductStore = defineStore('product', () => {
+import { ref } from "vue";
+import axios from '@/plugins/axios';
 
-    const dbproduct = ref([])
+export const useProductStore = defineStore('product', () => {
+    const products = ref([])
+    const isLoading = ref(false)
 
-    const fetchproduct = async () => {
-        const fetchingData = await axios.get('http://localhost:3000/product')
-        dbproduct.value = fetchingData.data;
-      }
-    
-    const fetchdetailproduct = async (id) => {
-      const fetchingData = (await axios.get(`http://localhost:3000/preview/${id}`)).data[0]
-      dbproduct.value = fetchingData.data;
+    const fetchProducts = async () => {
+        isLoading.value = true
+        try {
+            const res = await axios.get('/product')
+            products.value = res.data
+        } catch (err) {
+            console.error('Failed to fetch products:', err)
+        } finally {
+            isLoading.value = false
+        }
     }
 
-    
-  return { 
-    dbproduct,
-    fetchproduct,
-    fetchdetailproduct
-}
+    const fetchProductDetail = async (id) => {
+        try {
+            const res = await axios.get(`/product/${id}`)
+            return res.data
+        } catch (err) {
+            console.error('Failed to fetch product detail:', err)
+            return null
+        }
+    }
+
+    return {
+        products,
+        isLoading,
+        fetchProducts,
+        fetchProductDetail,
+    }
 })

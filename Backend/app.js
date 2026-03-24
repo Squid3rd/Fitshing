@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 const cors = require("cors")
 const app = express()
@@ -24,6 +25,15 @@ app.use(paymentRouter.router)
 app.use(vdoRouter.router)
 
 
-app.listen(3000, () => {
-  console.log('Start server at port 3000.')
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(err.status || 500).json({
+    message: err.message || 'Internal Server Error'
+  })
+})
+
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
+  console.log(`Start server at port ${PORT}.`)
 })

@@ -24,7 +24,6 @@ import CardTrainer from "../components/CardTrainer.vue";
   <div class="bor1">
     <div class="task-container columns px-6 py-6 is-mobile is-multiline">
       <CardProductVue v-for="item in product.slice(-5).reverse()" :item="item" />
-      <!-- <CardProductVue v-for="item in productStore.dbproduct?.slice(0,4)" :item="item"/> -->
     </div>
   </div>
   <h1
@@ -37,7 +36,6 @@ import CardTrainer from "../components/CardTrainer.vue";
       <CardProductVue v-for="item in product.slice(random1, random2)" :item="item" />
     </div>
   </div>
-  <!-- <CardProductVue v-for="item in productStore.dbproduct?.slice(0,4)" :item="item"/> -->
   <h1
     class="has-text-danger-dark has-background-info-light is-size-2 has-text-centered has-text-weight-bold"
   >
@@ -51,67 +49,46 @@ import CardTrainer from "../components/CardTrainer.vue";
 </template>
 
 <script>
+import { useProductStore } from "@/stores/product";
 import axios from "@/plugins/axios";
+
 export default {
   name: "home",
   data() {
     return {
-      product: [],
       trainer: [],
-      cart:[],
-      random1: "",
-      random2: "",
-      change:false,
-      // numRandom: "",
+      random1: 0,
+      random2: 5,
+      change: false,
     };
   },
-  mounted() {
-    this.getProduct();
+  computed: {
+    product() {
+      return useProductStore().products;
+    },
+  },
+  async mounted() {
+    const productStore = useProductStore();
+    if (productStore.products.length === 0) {
+      productStore.fetchProducts();
+    }
     this.getTrainer();
     if (localStorage.getItem("cart") === null) {
-        localStorage.setItem("cart", JSON.stringify(this.cart));
+      localStorage.setItem("cart", JSON.stringify([]));
     }
   },
-  created(){
-    this.RandomNumber();
-    this.random2 = this.random1 + 5
+  created() {
+    this.random1 = Math.floor(Math.random() * 15);
+    this.random2 = this.random1 + 5;
   },
   methods: {
-    RandomNumber() {
-      this.random1 = Math.floor(Math.random() * 15);
-    },
-    getProduct() {
-      axios
-        .get("/product")
-        .then((response) => {
-          this.product = response.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    getTrainer() {
-      axios
-        .get("/trainer")
-        .then((response) => {
-          this.trainer = response.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    imagePath(file_path) {
-      if (file_path) {
-        return "http://localhost:3000/" + file_path;
-      } else {
-        return "https://bulma.io/images/placeholders/640x360.png";
+    async getTrainer() {
+      try {
+        const response = await axios.get("/trainer");
+        this.trainer = response.data;
+      } catch (err) {
+        console.error(err);
       }
-    },
-    shortTitle(content) {
-      if (content.length > 30) {
-        return content.substring(0, 27) + "...";
-      }
-      return content;
     },
   },
 };

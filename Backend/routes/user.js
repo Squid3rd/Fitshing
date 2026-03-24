@@ -7,7 +7,19 @@ const path = require("path");
 const { generateToken } = require("../utils/token");
 const { isLoggedIn } = require('../middlewares')
 const fs = require("fs");
-router = express.Router();
+const router = express.Router();
+
+// File filter for image uploads
+const imageFileFilter = (req, file, cb) => {
+  const allowedTypes = /jpeg|jpg|png|gif|webp/;
+  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = allowedTypes.test(file.mimetype);
+  if (extname && mimetype) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only image files (jpeg, jpg, png, gif, webp) are allowed'));
+  }
+};
 
 // SET STORAGE
 const storage = multer.diskStorage({
@@ -21,9 +33,8 @@ const storage = multer.diskStorage({
       );
     },
   });
-  const upload = multer({ storage: storage });
+const upload = multer({ storage: storage, fileFilter: imageFileFilter });
 
-  // Joi Lidate
 const passwordValidator = (value, helpers) => {
     if (value.length < 8) {
         throw new Joi.ValidationError('Password must contain at least 8 characters')
@@ -62,15 +73,10 @@ router.post('/register', upload.single('images'), async (req, res, next) => {
     try {
         await signupSchema.validateAsync(req.body, { abortEarly: false })
     } catch (err) {
-      console.log(err)
         return res.status(400).send(err)
     }
 
     const images = req.file.path.substr(6);
-
-    // if (!file) {
-    //     return res.status(400).json({ message: "Please upload a file" });
-    //   }
 
     const conn = await pool.getConnection()
     await conn.beginTransaction()
@@ -79,8 +85,7 @@ router.post('/register', upload.single('images'), async (req, res, next) => {
     const fname = req.body.fname
     const lname = req.body.lname
     const username = req.body.username
-    const password = await bcrypt.hash(req.body.password, 5)
-    const con_password = req.body.con_password
+    const password = await bcrypt.hash(req.body.password, 10)
     const phone = req.body.phone
     const gender = req.body.gender
     const role = req.body.role
@@ -88,8 +93,6 @@ router.post('/register', upload.single('images'), async (req, res, next) => {
     const weight = req.body.weight
     const height = req.body.height
 
-    console.log(role)
-    
     try {
         let results = await conn.query(
             'INSERT INTO users(username, password, fname, lname, email, phone, gender, image, status, role, age, weight, height) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?)',
@@ -105,105 +108,98 @@ router.post('/register', upload.single('images'), async (req, res, next) => {
             )
         }
 
-        conn.commit()
-        res.status(201).send()
-        res.json({ message: "Register Complete" })
+        await conn.commit()
+        res.status(201).json({ message: "Register Complete" })
     } catch (err) {
-        conn.rollback()
-        // res.status(400).json(err.toString());
+        await conn.rollback()
+        res.status(400).json({ message: err.toString() })
     } finally {
         conn.release()
     }
 });
 
 const loginSchema = Joi.object({
-         username: Joi.string().required(),
-         password: Joi.string().required()
- })
+    username: Joi.string().required(),
+    password: Joi.string().required()
+})
 
- router.post('/login', async (req, res, next) => {
-         try {
-             await loginSchema.validateAsync(req.body, { abortEarly: false })
-     } catch (err) {
-             return res.status(400).send(err)
-     }
-     const username = req.body.username
-     const password = req.body.password
+router.post('/login', async (req, res, next) => {
+    try {
+        await loginSchema.validateAsync(req.body, { abortEarly: false })
+    } catch (err) {
+        return res.status(400).send(err)
+    }
+    const username = req.body.username
+    const password = req.body.password
 
-     const conn = await pool.getConnection()
-     await conn.beginTransaction()
+    const conn = await pool.getConnection()
+    await conn.beginTransaction()
 
-     try {
-             // Check if username is correct
-             const [users] = await conn.query(
-                 'SELECT * FROM users WHERE username=?', 
-                 [username]
-             )
-             const user = users[0]
-             if (!user) {    
-                 throw new Error('Incorrect username or password')
-         }
+    try {
+        const [users] = await conn.query(
+            'SELECT * FROM users WHERE username=?',
+            [username]
+        )
+        const user = users[0]
+        if (!user) {
+            throw new Error('Incorrect username or password')
+        }
 
-             // Check if password is correct
-             if (!(await bcrypt.compare(password, user.password))) {
-                 throw new Error('Incorrect username or password')
-         }
+        if (!(await bcrypt.compare(password, user.password))) {
+            throw new Error('Incorrect username or password')
+        }
 
-             // Check if token already existed
-             const [tokens] = await conn.query(
-                 'SELECT * FROM tokens WHERE u_id=?', 
-                 [user.id]
-             )
-             let token = tokens[0]?.token
-             if (!token) {
-                 // Generate and save token into database
-                 token = generateToken()
-                 await conn.query(
-                     'INSERT INTO tokens(u_id, token) VALUES (?, ?)', 
-                     [user.id, token]
-                 )
-         }
+        const [tokens] = await conn.query(
+            'SELECT * FROM tokens WHERE u_id=?',
+            [user.id]
+        )
+        let token = tokens[0]?.token
+        if (!token) {
+            token = generateToken()
+            await conn.query(
+                'INSERT INTO tokens(u_id, token) VALUES (?, ?)',
+                [user.id, token]
+            )
+        }
 
-             conn.commit()
-             res.status(200).json({'token': token})
-     } catch (error) {
-             conn.rollback()
-             res.status(400).json(error.toString())
-     } finally {
-             conn.release()
-     }
- });
+        await conn.commit()
+        res.status(200).json({ 'token': token })
+    } catch (error) {
+        await conn.rollback()
+        res.status(400).json({ message: error.message })
+    } finally {
+        conn.release()
+    }
+});
 
- router.get('/user/me', isLoggedIn, async (req, res, next) => {
-     // req.user ถูก save ข้อมูล user จาก database ใน middleware function "isLoggedIn"
-     res.json(req.user)
- })
+router.get('/user/me', isLoggedIn, async (req, res, next) => {
+    res.json(req.user)
+})
+
+// Logout - invalidate token
+router.post('/logout', isLoggedIn, async (req, res, next) => {
+    try {
+        await pool.query('DELETE FROM tokens WHERE u_id = ?', [req.user.id])
+        res.json({ message: 'Logged out successfully' })
+    } catch (err) {
+        next(err)
+    }
+})
 
 // Get User Profile
-router.get("/user/:id", function (req, res, next) {
-
-    const promise1 = pool.query("SELECT * FROM users WHERE id=?", [
-        req.params.id,
-      ]);
-
-      console.log(promise1)
-    
-      Promise.all([promise1])
-        .then((results) => {
-          const [userinfos, userinfoFields] = results[0];
-          res.json({
+router.get("/user/:id", async function (req, res, next) {
+    try {
+        const [userinfos] = await pool.query("SELECT * FROM users WHERE id=?", [req.params.id]);
+        res.json({
             userinfo: userinfos[0],
             error: null,
-          });
-          console.log(userinfos[0])
-        })
-        .catch((err) => {
-          console.log(req.params.id)
-          return res.status(500).json(err);
         });
-  });
+    } catch (err) {
+        return res.status(500).json(err);
+    }
+});
 
-  const updateSchema = Joi.object({
+const updateSchema = Joi.object({
     email: Joi.string().required().email(),
     phone: Joi.string().required().pattern(/0[0-9]{9}/),
     fname: Joi.string().required().max(150),
@@ -216,131 +212,97 @@ router.get("/user/:id", function (req, res, next) {
 })
 
 // Update Profile
-router.put("/profile/edit/:id", async function (req, res, next) {
-  
-  try {
-    await updateSchema.validateAsync(req.body, { abortEarly: false })
-} catch (err) {
-  console.log(err)
-    return res.status(400).send(err)
-}
+router.put("/profile/edit/:id", isLoggedIn, async function (req, res, next) {
+    try {
+        await updateSchema.validateAsync(req.body, { abortEarly: false })
+    } catch (err) {
+        return res.status(400).send(err)
+    }
 
-  const email = req.body.email
-  const fname = req.body.fname
-  const lname = req.body.lname
-  const username = req.body.username
-  const phone = req.body.phone
-  const gender = req.body.gender
-  const age = req.body.age
-  const weight = req.body.weight
-  const height = req.body.height
-  // const ex_id = req.body.ex_id;
+    const { email, fname, lname, username, phone, gender, age, weight, height } = req.body
 
-  console.log(req.params.ex_name)
-  console.log(req.params.id)
-  const conn = await pool.getConnection()
-  await conn.beginTransaction();
+    const conn = await pool.getConnection()
+    await conn.beginTransaction();
 
-  try {
-    let results = await conn.query(
-      "UPDATE users SET username=?, fname=?, lname=?, email=?, phone=?, gender=?, weight=?, height=?, age=?  WHERE id=?",
-      [username, fname, lname, email, phone, gender, weight, height, age, req.params.id]
-    )
+    try {
+        await conn.query(
+            "UPDATE users SET username=?, fname=?, lname=?, email=?, phone=?, gender=?, weight=?, height=?, age=? WHERE id=?",
+            [username, fname, lname, email, phone, gender, weight, height, age, req.params.id]
+        )
 
-    await conn.commit()
-    res.send("success!");
-  } catch (err) {
-    await conn.rollback();
-    next(err);
-  } finally {
-    console.log('finally')
-    conn.release();
-  }
-  return;
+        await conn.commit()
+        res.json({ message: "success!" });
+    } catch (err) {
+        await conn.rollback();
+        next(err);
+    } finally {
+        conn.release();
+    }
 });
 
 const passwordSchema = Joi.object({
-  password: Joi.string().required().custom(passwordValidator),
-  conpass: Joi.string().required().valid(Joi.ref('password')),
+    password: Joi.string().required().custom(passwordValidator),
+    conpass: Joi.string().required().valid(Joi.ref('password')),
 })
 
 // Update Password
-router.put("/profile/edit/password/:id", async function (req, res, next) {
-  
-  try {
-    await passwordSchema.validateAsync(req.body, { abortEarly: false })
-} catch (err) {
-  console.log(err)
-    return res.status(400).send(err)
-}
+router.put("/profile/edit/password/:id", isLoggedIn, async function (req, res, next) {
+    try {
+        await passwordSchema.validateAsync(req.body, { abortEarly: false })
+    } catch (err) {
+        return res.status(400).send(err)
+    }
 
-  const password = await bcrypt.hash(req.body.password, 5)
-  const conpass = req.body.con_password
+    const password = await bcrypt.hash(req.body.password, 10)
 
-  const conn = await pool.getConnection()
-  await conn.beginTransaction();
+    const conn = await pool.getConnection()
+    await conn.beginTransaction();
 
-  try {
-    let results = await conn.query(
-      "UPDATE users SET password=? WHERE id=?",
-      [password, req.params.id]
-    )
+    try {
+        await conn.query(
+            "UPDATE users SET password=? WHERE id=?",
+            [password, req.params.id]
+        )
 
-    await conn.commit()
-    res.send("success!");
-  } catch (err) {
-    await conn.rollback();
-    next(err);
-  } finally {
-    console.log('finally')
-    conn.release();
-  }
-  return;
+        await conn.commit()
+        res.json({ message: "success!" });
+    } catch (err) {
+        await conn.rollback();
+        next(err);
+    } finally {
+        conn.release();
+    }
 });
 
-// Update Proile Image
-router.put("/profile/edit/image/:id", upload.single('imagesC'), async function (req, res, next) {
+// Update Profile Image
+router.put("/profile/edit/image/:id", isLoggedIn, upload.single('imagesC'), async function (req, res, next) {
+    const imagesC = req.file.path.substr(6);
 
-  const imagesC = req.file.path.substr(6);
+    const conn = await pool.getConnection()
+    await conn.beginTransaction();
 
-  const conn = await pool.getConnection()
-  await conn.beginTransaction();
+    try {
+        const [images] = await conn.query(
+            "SELECT image FROM users WHERE id = ?",
+            [req.params.id]
+        );
 
-  console.log(imagesC)
+        const appDir = path.dirname(require.main.filename);
+        const p = path.join(appDir, 'static', images[0].image);
+        fs.unlinkSync(p);
 
-  try {
-    // Get Path files from the upload folder
-    const [
-        images,
-        imageFields,
-    ] = await conn.query(
-        "SELECT image FROM users WHERE id = ?",
-        [req.params.id]
-    );
+        await conn.query(
+            'UPDATE users SET image = ? WHERE id=?', [imagesC, req.params.id]
+        )
 
-    // // Update File from path
-    const appDir = path.dirname(require.main.filename); // Get app root directory
-    console.log(appDir)
-    const p = path.join(appDir, 'static', images[0].image);
-    fs.unlinkSync(p);
-    
-    // Delete Data from Table images
-    const [rows1, fields1] = await conn.query(
-        'update users set image = ? WHERE id=?', [imagesC ,req.params.id]
-    )
-
-    // commit
-    await conn.commit()
-    res.json({ message: "Update image Complete" })
-} catch (error) {
-    next(error)
-    await conn.rollback();
-    // res.status(500).json(error)
-} finally {
-    conn.release();
-}
+        await conn.commit()
+        res.json({ message: "Update image Complete" })
+    } catch (error) {
+        await conn.rollback();
+        next(error)
+    } finally {
+        conn.release();
+    }
 });
-
-
 
 exports.router = router

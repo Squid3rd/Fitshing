@@ -134,10 +134,10 @@ CREATE TABLE `payment` (
   `p_id` int unsigned NOT NULL AUTO_INCREMENT,
   `slip_info` varchar(255) NOT NULL,
   `amount` int NOT NULL,
-  `date` varchar(255) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `total_price` float(8,2) NOT NULL,
+  `type` varchar(50) NOT NULL DEFAULT 'Cash on Delivery',
   `u_id` int NOT NULL,
-  `o_id` int NOT NULL,
   PRIMARY KEY (`p_id`),
   UNIQUE KEY `p_id_UNIQUE` (`p_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -162,7 +162,7 @@ DROP TABLE IF EXISTS `request`;
 CREATE TABLE `request` (
   `r_id` int unsigned NOT NULL AUTO_INCREMENT,
   `request_info` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `status_r` tinyint(1) NOT NULL DEFAULT '0',
   `u_id` int NOT NULL,
   `t_id` int NOT NULL,
   PRIMARY KEY (`r_id`),
@@ -187,7 +187,7 @@ DROP TABLE IF EXISTS `tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tokens` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `token` varchar(255) NOT NULL,
   `u_id` int NOT NULL,
   PRIMARY KEY (`id`),
@@ -213,9 +213,10 @@ DROP TABLE IF EXISTS `trainer`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `trainer` (
   `t_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `fname` int NOT NULL,
-  `lname` int NOT NULL,
-  `info` int NOT NULL,
+  `certificate` varchar(255) NOT NULL DEFAULT '-',
+  `specialize` varchar(255) NOT NULL DEFAULT '-',
+  `info` varchar(255) NOT NULL DEFAULT '-',
+  `amount_t` int NOT NULL DEFAULT 0,
   `u_id` int NOT NULL,
   PRIMARY KEY (`t_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -275,6 +276,9 @@ CREATE TABLE `users` (
   `status` int DEFAULT '0',
   `image` varchar(255) DEFAULT NULL,
   `role` varchar(255) DEFAULT 'user',
+  `age` int DEFAULT NULL,
+  `weight` float DEFAULT NULL,
+  `height` float DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -298,5 +302,20 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+--
+-- Table structure for table `vdo_clip`
+--
+
+DROP TABLE IF EXISTS `vdo_clip`;
+CREATE TABLE `vdo_clip` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `clip_name` varchar(255) NOT NULL,
+  `info` varchar(255) DEFAULT NULL,
+  `link_vdo` varchar(500) NOT NULL,
+  `image1` varchar(255) DEFAULT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dump completed on 2023-04-30 14:51:36
